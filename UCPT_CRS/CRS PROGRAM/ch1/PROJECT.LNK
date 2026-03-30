@@ -1,0 +1,69 @@
+#BLINKER EXECUTABLE DUAL 1024
+BLINKER OVERLAY OPSIZE 50
+BLINKER OVERLAY PAGEFRAME ON
+BLINKER MESSAGE WINK
+#BLINKER INCREMENTAL On
+#BLINKER HOST MESSAGE ON
+BLINKER EXECUTABLE CLIPPER F:99
+BLINKER EXECUTABLE NODELETE
+
+OUTPUT project
+beginarea
+file menu
+file prj01
+file prj02
+file prj03
+file prj04
+file prj05
+file prj06
+file prj07
+file prj08
+file prj09
+file prj10
+file prj11
+file prj12
+file prj13
+file prj14
+file prj15
+file prj16
+file prj17
+file prj18
+file prj19
+file prj20
+file prj21
+file prj22
+file prj23
+file prj24
+file prj25
+file prj26
+file prj27
+file prj28
+file prj29
+file prj30
+file prj31
+file prj32
+file prj35
+file prj36
+file prj37
+file prj38
+file prj39
+file prj40
+file prj41
+file prjlib
+file nulsys
+file uclmlib
+endarea
+#search nanfor
+lib clipper
+lib llibg
+lib terminal
+lib extend
+lib grump
+lib samples
+search blxclp52
+lib blxclp53
+#lib novlib
+lib novterm
+lib dbfcdx
+lib _dbfcdx
+lib dttm

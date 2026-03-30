@@ -1,0 +1,40 @@
+# include "box.ch"
+
+
+ Function Test2()
+ Local Choice
+ Local Items    := {" UCLM  "," METC  "," SHORT COURSES "," ELEM/HIGH "}
+ cls
+eval( { |x| x:= Pop_menu(10,10,15,30,items),if(x==1,func1(),if(x==2,func2(),if(x==3,func3(),func4()))) })
+ Return Nil
+
+
+
+ Function Pop_menu(nTop,nLeft,nBottom,nRight,aItems)
+ Local cScreen
+ Local nChoice
+ Local cLastcolor := Setcolor("W+/B,W+/BG,,,GR+/B")
+ cScreen := SaveScreen(nTop,nLeft,nBottom,nRight)
+ @ nTop,nLeft,nBottom,nRight BOX B_THICK
+ nChoice := ACHOICE(++nTop,++nLeft,--nBottom,--nRight,aItems)
+ Restscreen(--nTop,--nLeft,++nBottom,++nRight,cScreen)
+ Setcolor(cLastcolor)
+ Return nChoice
+
+
+ Function BROWUC()
+  ? "First Function"
+ Return Nil
+
+ Function BROWME()
+  ? "Second Function"
+ Return Nil
+
+ Function BROWST()
+  ? "Third Function"
+ Return Nil
+
+ Function BROWEL()()
+  ? "Fourth Function"
+ Return Nil
+# DEFINE LINES_18      chr(27) + 'C' + chr(18)

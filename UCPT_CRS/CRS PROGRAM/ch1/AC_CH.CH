@@ -1,0 +1,145 @@
+* ---- COLOR SCHEME
+*      SET(_SET_COLOR,"n/bg,w+/rb,r/w,g/rb,n+/w,w+/b")
+*                       1     2    3    4    5    6
+*      1 (n)  - text color (unselected text)
+*      1 (bg) - background color (unselected text)
+*      2 (w+) - text color (selected text)
+*      2 (rb) - background color (selected text)
+
+# DEFINE  NORM_COLOR  "B+/W+,W+/R,,,W+/B"
+# DEFINE  Y_BLUE      "GR+/B"         // YELLOW TEXT, BLUE BACKGROUND
+# DEFINE  W_MAGE      "W+/RB"         // WHITE TEXT, MAGENTA BACKGROUND
+# DEFINE  W_BLUE      "W+/B"          // WHITE TEXT, BLUE BACKGROUND
+# DEFINE  ST_COLOR    "N+/W+"         // BLACK text, WHITE BACKGROUND
+# DEFINE  COL_COLOR   "+W/B, +W/R, W+/BG, W+/BG, W+/G, B+/G, R+/N, W+/R, RB+/N, W+ RB"
+# DEFINE  MESSBLANK   "                                                                              "
+# DEFINE  MESSAGE1    " ESC-Previous                                                                 "
+# DEFINE  MESSAGE2    " ESC-Previous  F4-Lookup                                                      "
+# DEFINE  MESSAGE3    " ESC-Cancel  [F10]-Save                                                       "
+# DEFINE  MESSAGE4    " ESC-Cancel  [ENTER]-Add/Edit  DEL-Delete                                     "
+# DEFINE  MESSAGE5    " ESC-Cancel  [ENTER]-Add/Edit  F7-Delete                                      "
+# DEFINE  MESSAGE6    " F7-View Study Load  F8-Debit  F9-Credit  INS-Add payment                     "
+# DEFINE  MESSAGE7    " ESC-Prev  F4-Lookup  DEL-Delete  F6-Print  CTRL+P-Post  ENTER-Edit  F10-Save "
+# DEFINE  MESSAGE8    " F7-View Study Load                                                           "
+# DEFINE  MESSAGE9    " ESC-Previous  F6-Print                                                       "
+# DEFINE  MESSAGE10   " ESC-Previous  F4-View Permit  F6-Print All                                   "
+# DEFINE  MESSAGE11   " ESC-Previous  F4-View Account  F6-Print                                      "
+# DEFINE  MESSAGE12   " ESC-Previous  F4-View                                                        "
+# DEFINE  MESSAGE13   " ESC-Previous  F6-Print  F9-Change View                                       "
+# DEFINE  MESSAGE14   " ESC-Previous  F6-Print  F9-View Assessment Notice                            "
+# DEFINE  MESSAGE15   " ESC-Cancel  [F10]-Save  [ENTER]-Edit                                         "
+# DEFINE  MESSAGE16   " ESC-Cancel  [F7]-View Study Load                                             "
+# DEFINE  MESSAGE17   " ESC-Cancel  [F7]-Delete                                                      "
+# DEFINE  MESSAGE18   " ESC-Previous  F4-View Statistics  F6-Print                                   "
+
+
+# DEFINE  THUD TONE(60,0.5)
+# DEFINE  BADKEY TONE(480,0.25); TONE(240,0.25)
+
+# DEFINE  lstr(n)  LTRIM(STR(n))
+# DEFINE  INIT_R1  4
+# DEFINE  INIT_R2  (MAXROW()-4)
+# DEFINE  INIT_C1  10
+# DEFINE  INIT_C2  (MAXCOL()-10)
+# DEFINE  DATE_TODAY cmonth(date())+" "+str(day(date()),2)+", "+str(year(date()),4)
+
+# DEFINE  FREEZE_COL 1
+
+# DEFINE REGULAR_CELL {1,2}
+# DEFINE BLOCKED_CELL {3,4}
+# DEFINE CHECKED_CELL {5,6}
+# DEFINE NEGVAL_CELL  {7,8}
+# DEFINE DATE_CELL    {9,10}
+
+*-------------------------------------------------------------------------------
+* Printer output header
+*-------------------------------------------------------------------------------
+
+*-------------------------------------------------------------------------------
+* Define index name
+*-------------------------------------------------------------------------------
+//# DEFINE SM1P    "d:\ac\c999sm1p.dbf"
+//# DEFINE SM1PI   "d:\ac\cdx\c999sm1p.cdx"
+//# DEFINE ACCP    "d:\ac\a999accp.dbf"
+//# DEFINE ACCPI   "d:\ac\cdx\a999accp.cdx"
+//# DEFINE PRCP    "d:\ac\a999PRCP.dbf"
+//# DEFINE PRCPI   "d:\ac\cdx\a999PRCP.cdx"
+*-------------------------------------------------------------------------------
+* Tuition Fee
+*-------------------------------------------------------------------------------
+# DEFINE FUNIT   1
+# DEFINE FREG    2
+# DEFINE FLIBR   3
+# DEFINE FMED    4
+# DEFINE FATH    5
+# DEFINE FGUID   6
+# DEFINE FAUD    7
+# DEFINE FSTUD   8
+# DEFINE FCULT   9
+# DEFINE FUPG    10
+# DEFINE FOTH1   11
+# DEFINE FOTH2   12
+# DEFINE FOTH3   13
+# DEFINE FOTH4   14
+# DEFINE FMISC   15
+# DEFINE TREG    16
+
+*-------------------------------------------------------------------------------
+* Browser constants
+*-------------------------------------------------------------------------------
+# DEFINE TERMCOORD_  {5,12,15,67}
+# DEFINE TERMHEADS_  {"Term","Description","Status"}
+# DEFINE TERMCOLS_   {"termcode","termdesc","termstatus"}
+
+# DEFINE COLPCOORD_  {5,14,20,66}
+# DEFINE COLPHEADS_  {"Code","Course","Major","Description"}
+# DEFINE COLPCOLS_   {"colcod","coldesabr","colmajcod","coldesful"}
+
+# DEFINE SM1PCOORD_  {5,6,20,74}
+# DEFINE SM1PHEADS_  {"ID No.","Last","First","M","Crs","Maj","Year"}
+# DEFINE SM1PCOLS_   {"sm1idno","sm1lstnam","sm1fstnam","sm1midnam","sm1colcod","sm1majcod","sm1yrlvl"}
+
+# DEFINE PRCPCOORD_  {6,20,19,59}
+# DEFINE PRCPHEADS_  {"Code","Description"}
+# DEFINE PRCPCOLS_   {"prccode","prcdescr"}
+
+*--- Added By Edgar for Cashier Routine ---------------------------------------
+
+# DEFINE PYCDCOORD_  {6,20,19,59}
+# DEFINE PYCDHEADS_  {"Code","Description"}
+# DEFINE PYCDCOLS_   {"procode","prodesc"}
+
+*-------------------------------------------------------------------------------
+* Account Master File Constant (a999accp.dbf)
+*-------------------------------------------------------------------------------
+# DEFINE ACCIDNO      1
+# DEFINE ACCLNME      2
+# DEFINE ACCFNME      3
+# DEFINE ACCMNME      4
+# DEFINE ACCFEEYR     5     // fee year
+# DEFINE ACCTOTUNT    6     // total units
+# DEFINE ACCFEEUNT    7     // fee per unit
+# DEFINE ACCASST      8     // assessment
+# DEFINE ACCOLDBAL    9     // old balance
+# DEFINE ACCADJ      10     // adjustment
+# DEFINE ACCDISC     11     // discount
+# DEFINE ACCTOTDUE   12     // total due
+# DEFINE ACCAMTPAID  13     // amount paid
+# DEFINE ACCBALTOT   14     // total balance
+# DEFINE ACCTUITION  15     // tuition fee
+# DEFINE ACCOTHERS   16     // registration fee
+# DEFINE ACCMISC     17     // miscellaneous
+# DEFINE ACCLAB      18     // laboratory
+
+*-------------------------------------------------------------------------------
+* Student Master File Constant (c999sm1p.dbf)
+*-------------------------------------------------------------------------------
+# DEFINE SM1IDNO    1
+# DEFINE SM1LNME    2
+# DEFINE SM1FNME    3
+# DEFINE SM1MNME    4
+# DEFINE SM1COLCOD  5
+# DEFINE SM1MAJCOD  6
+# DEFINE SM1YRLVL   7
+# DEFINE SM1LASTTRM 8
+# DEFINE SM1SEX     9

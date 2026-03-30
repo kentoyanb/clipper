@@ -1,0 +1,529 @@
+
+# include "ERROR.CH"
+# include "TBROWSE.CH"
+# include "INKEY.CH"
+# include "SETCURS.CH"
+# include "ord.ch"
+# DEFINE  DEF_HSEP   "ÂÄ"
+# DEFINE  DEF_CSEP   "³"
+# DEFINE  DEF_FSEP   "ÁÄ"
+# DEFINE  COL_COLOR "+W/B, +W/B, W+/BG, W+/BG, W+/G, 15/12, 15/12, N/W, N/W, W+/RB"
+# DEFINE  TB_REFRESH_RATE 1
+
+
+Function chrep01()
+
+ // Save old settings
+ Local oldscreen := savescreen(0,0,maxrow(),maxcol())
+ Local oldcolor  := setcolor()
+ Local oldcursor := setcursor()
+ Local sch_term  := space(05)
+ Local term_stat := {}
+ Local getlist   := {}
+ Local from_d    := ctod('  /  /  ')
+ Local to_d      := ctod('  /  /  ')
+ Local fname     := space(07)
+ Local term_desc := space(40)
+ Local choice    := space(01)
+ Local key
+
+
+// Set environment settings
+SET( _SET_CURSOR, SC_SPECIAL1)
+SET( _SET_DATEFORMAT, "MM-DD-YYYY")
+SET( _SET_ESCAPE, .T. )
+SET( _SET_CONFIRM, .T.)
+SET( _SET_COLOR ,"W+/B,W+/RB,,,GR+/B")
+savescreen(0,0,maxrow(),maxcol())
+
+ Do while .T.
+
+  REP01SCR()
+
+  fname  := ideal_file()
+  from_d := date()
+  to_d   := date()
+
+  @ 06,08 get sch_term   picture "99999" when term_pre_valid(@sch_term)   == .T. valid get_term(06,31,40,@sch_term,@term_desc,term_stat) == .T.
+  @ 07,08 get from_d     picture "@D"
+  @ 08,08 get to_d       picture "@D"
+  @ 09,08 get fname      picture "@!"   valid !empty(fname) .and. check_file(fname) == .T.
+  read
+
+     If Lastkey() == K_ESC
+        Post_Valid_Dbf()
+        Choice :=  Alert("Are you sure you want to exit?",{"Exit","Cancel"})
+        If Choice == 1
+            Exit
+         Else
+            loop
+          Endif
+    Endif
+
+
+      Browse_rep01(sch_term,term_desc,from_d,to_d,fname)
+
+   // Flush the array variable and other variables
+      Asize(term_stat,0)        // Array of Term Status
+      term_desc := space(40)
+      fname     := space(07)
+      from_d    := ctod('  /  /  ')
+      to_d      := ctod('  /  /  ')
+ Enddo
+
+setcolor(oldcolor)
+setcursor(oldcursor)
+restscreen(0,0,maxrow(),maxcol(),oldscreen)
+Return Nil
+
+//----------------------------------------------------------------------------
+
+ Function Browse_rep01(vterm,term_desc,from_d,to_d,fname)
+
+ Local items  := {" Refno"," Idno "," Lastname+Firstname+Middle"," Course+Major+Year & Level"}
+ Local paym  := "f:\arunlib\a"+substr(vterm,3,3)+"paym.dbf"
+ Local paymi := "f:\arunlib\cdx\a"+substr(vterm,3,3)+"paym.cdx"
+ Local newdbf
+ Local newcdx
+ Local oldcursor := setcursor(SC_NONE)
+ Local Browse
+ Local search_key      := ""
+ Local B_COL           := 15
+ Local Key_Counter     := 1
+ Local Nrecno          := 0
+ Local key             := 0
+ Local Choice
+ Local oldrecpos
+
+ dbusearea(.T.,"DBFCDX",paym,"paym",.T.,.F.)
+ paym->(ordlistadd(paymi))
+ ordsetfocus("Sdate")
+ set scope to transform(from_d,"99-99-9999"),transform(to_d,"99-99-9999")
+
+ // Create and copy to a new file
+    Copy Structure to "F:\arunlib\temp\"+fname+".dbf"
+    Copy to "F:\arunlib\temp\"+fname+".dbf"
+    set scope to
+    paym->(ordlistclear())
+    paym->(dbclosearea())
+
+
+//  Use now the new created file
+    newdbf := "F:\arunlib\temp\"+fname+".dbf"
+    newcdx := "F:\arunlib\temp\"+fname+".cdx"
+
+   dbusearea(.T.,"DBFCDX",newdbf,"newdbf",.T.,.T.)
+// Create new index file
+    Index on newdbf->payrefno tag trefno to &newcdx;
+        Eval(GaugeDisp(newcdx,"trefno")) Every 50  USECURRENT
+    Index on newdbf->sm1idno  tag tidno  to &newcdx;
+        Eval(GaugeDisp(newcdx,"tidno")) Every 50   USECURRENT
+    Index on newdbf->paynamto tag tname  to &newcdx;
+        Eval(GaugeDisp(newcdx,"tname")) Every 50   USECURRENT
+//    Index on xget_cr(pad(newdbf->sm1colcod+newdbf->sm1majcod,3,' '))+newdbf->sm1yrlvl tag tcourse to &newcdx;
+//      Eval(GaugeDisp(newcdx,"tcourse")) Every 50 USECURRENT
+      Index on newdbf->sm1colcod+newdbf->sm1majcod+newdbf->sm1yrlvl tag tcourse to &newcdx;
+        Eval(GaugeDisp(newcdx,"tcourse")) Every 50 USECURRENT
+        newdbf->(dbclosearea())
+
+ // Use as refresh
+
+  dbusearea(.T.,"DBFCDX",newdbf,"newdbf",.T.,.F.)
+  newdbf->(ordlistadd(newcdx))
+  ordsetfocus("trefno")
+
+
+ Browse           := TBrowseDB(06,1,20,78)
+ Browse:headsep   := DEF_HSEP
+ Browse:colsep    := DEF_CSEP
+ Browse:footsep   := DEF_FSEP
+ Browse:AddColumn(TBColumnNew("SEQ."         ,{ || transform(newdbf->(ordkeyno()),"9999.")}))
+ Browse:AddColumn(TBColumnNew("REF-NO"       ,{ || newdbf->payrefno}))
+ Browse:AddColumn(TBColumnNew("ID-NO"        ,{ || newdbf->sm1idno }))
+ Browse:AddColumn(TBColumnNew("STUDENT-NAME" ,{ || pad(newdbf->paynamto,25,' ')}))
+// Browse:AddColumn(TBColumnNew("CRS.   "      ,{ || xget_cr(pad(newdbf->sm1colcod+newdbf->sm1majcod,3,' ')) }))
+ Browse:AddColumn(TBColumnNew("CRS.   "      ,{ || newdbf->sm1colcod+newdbf->sm1majcod }))
+ Browse:AddColumn(TBColumnNew("YR"           ,{ || newdbf->sm1yrlvl}))
+ Browse:AddColumn(TBColumnNew("AMOUNT"       ,{ || transform(newdbf->payamt,"999,999.99")}))
+ Browse:AddColumn(TBColumnNew("TYPE"         ,{ || IF(newdbf->paytype == '1',"CASH ","CHECK")}))
+ Browse:AddColumn(TBColumnNew("DATE"         ,{ || newdbf->paydte}))
+ Browse:AddColumn(TBColumnNew("CASHIER"      ,{ || newdbf->payentusr}))
+ Browse:Colpos := Browse:freeze
+ Browse:Colorspec  := COL_COLOR
+
+
+ Do While .T.
+
+    Do While !browse:stabilize() .and. ( key := inkey() ) == 0
+    Enddo
+
+      If browse:Stable
+         Browse:ColorRect({BROWSE:ROWPOS,1,Browse:ROWPOS,Browse:COLCOUNT},{3,4})
+         Browse:Configure():RefreshAll()
+         Key := inkey(0)
+     Endif
+
+  
+   DO Case
+      Case  key == K_F3
+                   oldrecpos := recno()
+                   chrepprint(term_desc,from_d,to_d)
+                   newdbf->(dbgoto(oldrecpos))
+                   Browse:Forcestable():Refreshall()
+      Case  key == K_F10
+             Choice := pop_menu(17,40,22,70,items)
+
+               Do Case
+                  Case Choice == 1
+                       Browse:Forcestable()
+                       ordsetfocus("trefno")
+                       Browse:Forcestable():gotop():Refreshall()
+                  Case Choice == 2
+                       Browse:Forcestable()
+                       ordsetfocus("tidno")
+                       Browse:Forcestable():gotop():Refreshall()
+                  Case Choice == 3
+                       Browse:Forcestable()
+                       ordsetfocus("tname")
+                       Browse:Forcestable():gotop():Refreshall()
+                  Case Choice == 4
+                       Browse:Forcestable()
+                       ordsetfocus("tcourse")
+                       Browse:Forcestable():gotop():Refreshall()
+               Endcase
+
+      Case  Key == K_ESC
+             newdbf->(dbclosearea())
+             FERASE(newdbf)
+             FERASE(newcdx)
+             EXIT
+      Case Key == K_DOWN
+           Browse:down()
+      Case Key == K_UP
+           Browse:up()
+      Case Key == K_PGDN
+           Browse:pageDown()
+      Case Key == K_PGUP
+           Browse:pageUp()
+      Case Key == K_CTRL_PGDN
+           Browse:goBottom()
+      Case Key == K_CTRL_PGUP
+           Browse:goTop()
+      Case Key == K_HOME
+           Browse:home()
+      Case Key == K_END
+           Browse:end()
+      Case Key == K_LEFT
+           Browse:PanLeft()
+      Case Key == K_RIGHT
+           Browse:Panright()
+      Case WAS_IN1(CHR(Key))  == .T.
+             Search_key := Stuff(Search_key,key_counter,1,chr(Key))
+               @ 21,B_COL say Upper(Chr(Key))
+                 B_COL++
+                 Key_counter++
+
+               If newdbf->(dbseek(Upper(Search_key))) == .T.
+                  nrecno := Recno()
+                  Do while !browse:stabilize()
+                  Enddo
+                   If browse:stable
+                      newdbf->(dbgoto(nrecno))
+                      browse:Refreshall()
+                   Endif
+               Endif
+
+
+      CASE Key == K_BS .And. Empty(Search_Key)
+                     Key_Counter := 1
+                     B_COL       := 15
+                     Search_Key  := ""
+
+      CASE Key == K_BS .And. !Empty(Search_key)
+
+                     If Key_Counter <= 1
+                         Key_Counter := 1
+                         B_COL       := 15
+                         Search_Key  := ""
+                      Else
+                        Key_Counter--
+                        B_COL--
+                     Endif
+
+                    Search_key := Stuff(Search_Key,Key_counter,1,'')
+                      @ 21,B_COL say " "
+
+                   If newdbf->(dbseek(UPPER(Search_Key))) == .T.
+
+                       nrecno := Recno()
+                       Do while !browse:stabilize()
+                       Enddo
+
+                       If browse:stable
+                          newdbf->(dbgoto(nrecno))
+                          browse:refreshall()
+                       Endif
+                   Endif
+
+  ENDCASE
+
+
+// Reset B_COL, Search_key,Key_counter
+
+    If Key == K_END  .or. key == K_HOME .or. key == K_UP .or. key == K_DOWN  .or.;
+       Key == K_PGDN .or. key == K_PGUP .or. key == K_CTRL_PGUP .or. key == K_CTRL_PGDN
+
+         B_COL          := 15
+         @ 21,B_COL SAY SPACE(50)
+         Search_key     := ""
+         Key            := ""
+         Key_counter    := 1
+    Endif
+
+ ENDDO
+
+ setcursor(oldcursor)
+ Return Nil
+
+      
+
+
+Function REP01SCR()
+//----------------------------------------------------------------------------
+         //  12345678901234567890123456789012345678901234567890123456789012345678901234567890
+@ 01,0 say 'ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿'
+@ 02,0 say '³                    University of Cebu in Lapulapu and Mandaue                ³'
+@ 03,0 say '³                       A.C Cortes Avenue, Mandaue City 6014                   ³'
+@ 04,0 say '³                            SUMMARY OF COLLECTION                             ³'
+@ 05,0 say 'ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´'
+@ 06,0 say '³ Term:                                                                        ³'
+@ 07,0 say '³ From:                                                                        ³'
+@ 08,0 say '³ To  :                                                                        ³'
+@ 09,0 say '³ File:                                                                        ³'
+@ 10,0 say '³                                                                              ³'
+@ 11,0 say '³                                                                              ³'
+@ 12,0 say '³                                                                              ³'
+@ 13,0 say '³                                                                              ³'
+@ 14,0 say '³                                                                              ³'
+@ 15,0 say '³                                                                              ³'
+@ 16,0 say '³                                                                              ³'
+@ 17,0 say '³                                                                              ³'
+@ 18,0 say '³                                                                              ³'
+@ 19,0 say '³                                                                              ³'
+@ 20,0 say 'ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´'
+@ 21,0 say '³ Search Key :                                                                 ³'
+@ 22,0 say 'ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´'
+@ 23,0 say '³ ESC-EXIT    F3- Print Summary  F10 Change View Order                         ³'
+@ 24,0 say 'ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ'
+Return Nil
+
+
+Function Ideal_file()
+Local Retval
+Local Counter := 0
+ Do while counter <= 999
+   If !File("F:\ARUNLIB\TEMP\CHRE"+padl(alltrim(str(counter)),3,"0")+".*")
+      Retval := "CHRE"+padl(alltrim(str(counter)),3,"0")
+      Exit
+   Else
+    Counter++
+   Endif
+ Enddo
+Return Retval
+
+
+Function Check_file(afile)
+Local Retval := .F.
+
+ If !file("F:\ARUNLIB\TEMP\"+afile+".*")
+     Retval := .T.
+   Else
+   Alert("File already exist!",{"Cancel"})
+    Retval  := .F.
+ Endif
+Return Retval
+
+
+Function Gaugedisp(idxdbf,idxtag)
+   Local aGauge
+//   @ 08,06 TO 15,64  DOUBLE
+//   @ 08,06 CLEAR TO 15,64
+//   @ 09,10 Say "File Name :"+Upper(idxdbf)
+//   @ 10,10 Say "Tag       :"+idxtag
+//   @ 11,10 Say Replicate(Chr(219), 49)
+   aGauge := GaugeNew( 12, 05, 14, 65, "GR+/GR", "GR+/GR")
+   GaugeDisplay(aGauge)
+   GaugeUpdate(agauge,recno()/Lastrec(),.T.)
+Return Nil
+
+
+Function chrepprint(term_desc,from_d,to_d)
+Local Header1 := "University of Cebu in Lapulapu and Mandaue"
+Local Header2 := "Cashier Department"
+Local Header3 := "Summary of Collection from "+transform(from_d,"99-99-9999")+" to "+transform(to_d,"99-99-9999")
+Local Page    := 1
+Local Margin  := 5
+Local oldpage := 0
+Local counter := 1
+Local line    := 8
+Local choice
+Local g_total := 0
+
+  Do While .T.
+
+   If !isprinter()
+        inkey(1)
+        Choice := Alert("Printer not ready or offline please check and try again!",{"Retry","Cancel"})
+            If Choice == 2
+               Exit
+            Endif
+   Endif
+
+           Set Device to printer
+           Set Printer On
+           PrintStyle("line",2)
+           PrintStyle("line",2)
+
+  newdbf->(dbgotop())
+  Do While !newdbf->(eof())
+
+     If oldpage != page
+        setprc(0,0)
+         @ 01,155/2-len(Header1)/2 say Header1
+         @ 02,155/2-len(Header2)/2 say Header2
+         @ 03,155/2-len(Header3)/2 say Header3
+         @ 04,01  say "Page # "+transform(page,"9999.")+"          "+term_desc+space(50)+"Date & Time Generated: "+DtoC(Date())+" : "+ampm(time())
+         @ 05,01  say "----------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+         @ 06,01  say " SEQ. IDNO     STUDENT(S) NAME                 CTRG COURSE/YR        REFNO        PAY-DATE   TYPE    PAY-AMOUNT   PARTICULAR(S)                 CASHIER/TIME/STATION  "
+         @ 07,01  say "----------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+         //            9999. 9999999  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  AAAA AAAAAAAAAAAAAA AAAAAAAAAAA 99-99-9999 AAAA  9,999,999.99   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+         //            12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567
+         //                                                                                          Grand total   99,999,999.99
+        oldpage := page
+     Endif
+
+         @ Line,03  say Ltrim(Transform(Counter,"9999."))
+         @ Line,07  say newdbf->sm1idno
+         @ Line,16  say PAD(newdbf->paynamto,30," ")
+         @ Line,48  say newdbf->paycate
+         @ Line,53  say display_course(newdbf->sm1idno,newdbf->sm1colcod,newdbf->sm1majcod,newdbf->sm1yrlvl)
+         @ Line,70  say newdbf->payrefno
+         @ Line,82  say Transform(newdbf->paydte,"99-99-9999")
+         @ Line,93  say IF(newdbf->paytype == "0","CHECK","CASH")
+         @ Line,99  say Transform(newdbf->payamt,"9,999,999.99")
+         @ Line,114 say getpcd(newdbf->procode)
+         @ Line,145 say newdbf->payentusr+transform(newdbf->payentime,"99999")+newdbf->payentws
+           Line++
+           Counter++
+           g_total += newdbf->payamt
+        
+
+        If Line > 62
+           @ Line,01  say "--------------------Continuing-Page--------------------Continuing-Page--------------------Continuing-Page-------------------Continuing-Page-----------------------"
+           Eject
+           Line := 8
+           Page++
+           Eject
+        Endif
+
+     skip+1
+     loop
+   Enddo
+
+      IF  newdbf->(eof())
+                  @ Line,01  say "--------------------Final-Page-Nothing--Follows-----------------------------------------Final-Page-Nothing--Follows-----------------------------------------------"
+                    Line++
+                    Line++
+                  @ Line,79  say "================================================="
+                    Line++
+                  @ Line,79  say "Grand Total "
+                  @ Line,99  say transform(g_total,"99,999,999.99")
+                    Line++
+                  @ Line,79  say "================================================="
+              Eject
+           Endif
+
+
+
+   setprc(0,0)
+   PrintStyle("line",66)
+   Set Device To Screen
+   Set Printer Off
+   Exit
+Enddo
+
+Return Nil
+
+/*------Function-header-ends-Here--------------------------------------------*/
+
+Function getpcd(paycode)
+Local oldalias := alias()
+Local oldrec   := recno()
+Local oldindex := ordbagname(indexord())
+Local oldkey   := ordkey()
+Local oldfocus := ordsetfocus()
+Local retval
+Local pycd     := "f:\arunlib\a999pycd.dbf"
+Local pycdi    := "f:\arunlib\cdx\a999pycd.cdx"
+
+dbusearea(.T.,"DBFCDX",pycd,"pycd",.T.,.F.)
+dbsetindex(pycdi)
+set order to tag py_code
+pycd->(dbgotop())
+
+   If pycd->(dbseek(trim(paycode))) == .T.
+      retval :=  pycd->prodesc
+   endif
+
+pycd->(dbclosearea())
+
+dbselectarea(oldalias)
+ordsetfocus(oldfocus)
+Return Retval
+
+
+Function Display_Course(Idno,course,major,yr)
+Local Retval   := space(13)
+Local oldalias := alias()
+Local oldrec   := recno()
+Local oldindex := ordbagname(indexord())
+Local oldkey   := ordkey()
+Local oldfocus := ordsetfocus()
+Local cour_1
+Local cour_2
+Local studstat := {}
+Local llfound  := .F.
+
+asize(studstat,15)
+
+cour_1 := xget_cr(pad(course+major,3,' '))
+cour_1 := cour_1+'-'+yr
+
+llfound := xsearch_studno(Idno,studstat)
+dbselectarea(oldalias)
+ordsetfocus(oldfocus)
+
+
+
+
+If llfound == .T.
+//cour_2 := xget_cr(pad(studstat[05]+studstat[06],3,' '))
+  cour_2 := studstat[05]+studstat[06]
+cour_2 := cour_2+'-'+studstat[07]
+
+   If cour_2 != cour_1
+     retval := cour_1+'->'+cour_2
+   Else
+     retval := cour_2
+   Endif
+Endif
+
+dbselectarea(oldalias)
+ordsetfocus(oldfocus)
+
+asize(studstat,0)
+Return retval
+
+
+
+

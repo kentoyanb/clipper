@@ -1,0 +1,223 @@
+static function dispsummary(nline,nrow,cperiod)
+local namt := 0 , nexamf := 0 , nadj := 0 , ndue, namtpd := 0, ngrant, nshare := 0,subsidy :=0, wsub;
+//wsub 1= private 0= public
+
+//TODO DAPAT DILI NI CYA MURAG DEFAULT VALUES DAPAT ANG FEE YEAR KY MAG DEPENDE SA KUNG UNSA DPAT GEKAN DB?
+if(a999accp->accfeeyr == "16")//FEE YEAR IS 16
+    if a999accp->accpbcprv == "1" //public 
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              nshare = 0
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              nshare = 4000
+       endif  
+       ngrant = "PUBLIC"
+       subsidy = 20000.00
+
+    elseif a999accp->accpbcprv == "2"//private with esc
+       
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              nshare = 2000
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              nshare = 6000
+       endif
+       ngrant = "PRIVATE WITH ESC"
+       subsidy = 16000.00
+    elseif a999accp->accpbcprv == "3"
+       
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              nshare = 10000
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              nshare = 14000
+       endif
+       
+       ngrant = "NONE"
+    elseif a999accp->accpbcprv == "4"
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              nshare = 10000
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              nshare = 14000
+       endif
+       ngrant = "NONE"
+    endif
+            // nexamf = (nshare -( a999accp->accsytadsc + (a999accp->accadj* -1)))/5
+
+end if
+
+if(a999accp->accfeeyr == "17")//FEE YEAR IS 17
+
+    if a999accp->accpbcprv == "1" //public
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              //nshare = 5000
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              //nshare = 6000
+       endif 
+       ngrant = "PUBLIC"
+       subsidy = 10000
+       //20000.00
+
+    elseif a999accp->accpbcprv == "2" //private with esc 
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              //nshare = 7000
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              //nshare = 8000
+       endif 
+       ngrant = "PRIVATE WITH ESC"
+       subsidy = 8000
+       //16000.00
+
+    elseif a999accp->accpbcprv == "3"
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              //nshare = 15000
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              //nshare = 16000
+       endif 
+       ngrant = "NONE"
+       
+    elseif a999accp->accpbcprv == "4"
+       if a999accp->acccolcod == "GS" .or. a999accp->acccolcod == "HU" .or. a999accp->acccolcod == "ST"
+              //nshare = 10000
+       elseif a999accp->acccolcod == "TM" .or. a999accp->acccolcod == "PB"
+              //nshare = 14000
+       endif
+       ngrant = "NONE"
+    endif
+end if
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //(NSHARE -(DISCOUNT + ADJUST* -1))/4 
+        //TODO!
+        //NSHARE = STUDENT SHARE
+
+
+        //if(a999accp->accbalold > 0)
+          //TODO KUNG NAAY BALANCE           
+            if((a999accp->accsytass + a999accp->accbalold >= subsidy) .and. (a999accp->accbalold == 0))
+                nshare = a999accp->accsytass + a999accp->accbalold - subsidy
+                //nexamf = (nshare -( a999accp->accsytadsc + (a999accp->accadj* -1)))/4
+            elseif(a999accp->accbalold > 0)
+                nshare = (a999accp->accsytass + a999accp->accbalold) - subsidy
+            //else
+                //nshare = nshare + a999accp->accbalold    
+            endif
+            //nexamf = (nshare - (a999accp->accadj* -1))/4
+            
+            //nexamf = (nshare -( a999accp->accsytadsc + (a999accp->accadj* -1)))/4
+
+        //else
+            //nexamf = (nshare - (a999accp->accadj* -1))/4
+           // nshare = a999accp->accsytass
+            //nexamf = (nshare -( a999accp->accsytadsc + (a999accp->accadj* -1)))/4
+       // endif
+do case
+        case nline == 1
+                @ prow()+nrow,29 say "OLD ACCOUNT......"
+                @ prow()+00,47 say transform(a999accp->accbalold,"999,999.99")
+        case nline == 2
+                //@ prow()+01,29 say " "
+                @ prow()+nrow,29 say "ASSESSMENT ......"
+                @ prow()+00,47 say transform(a999accp->accsytass,"999,999.99")
+        case nline == 3
+                @ prow()+nrow,29 say "TOTAL ..........."
+                @ prow()+00,47 say transform(a999accp->accsytass+a999accp->accbalold,"999,999.99")
+        case nline == 4
+                @ prow()+nrow,29 say "STUDENT SHARE.............."
+                @ prow()+00,56 say transform(nshare,"999,999.99")
+        case nline == 5
+                @ prow()+nrow,29 say "LESS: PAYMENT"
+                @ prow()+00,47 say transform(a999accp->accamtpd,"999,999.99")
+        case nline == 6
+                @ prow()+nrow,29 say "LESS: DISCOUNT...."
+                @ prow()+00,47 say transform(a999accp->accsytadsc,"999,999.99")
+        case nline == 7
+                @ prow()+nrow,29 say "LESS: ADJUSTMENT."
+                @ prow()+00,47 say if(a999accp->accadj < 0,transform(a999accp->accadj,"999,999.99"),transform(namt,"999,999.99"))
+        case nline == 8
+                @ prow()+nrow,29 say "BALANCE................"
+                @ prow()+00,56 say transform(nshare -( a999accp->accsytadsc + (a999accp->accadj* -1) + a999accp->accamtpd),"999,999.99")
+                
+                /*
+                  if(a999accp->accbalold >0)
+                          // NSHARE + OLD BALANCE - (DISCOUNT + ADJUSTMENT* -1) + AMOUNT PAID 
+                           @ prow()+00,56 say transform((nshare + a999accp->accbalold) -( a999accp->accsytadsc + (a999accp->accadj* -1) + a999accp->accamtpd),"999,999.99")
+                  else
+                          //NSHARE - (DISCOUNT + ADJUST*-1) + AMOUNT PAID
+                           @ prow()+00,56 say transform(nshare -( a999accp->accsytadsc + (a999accp->accadj* -1) + a999accp->accamtpd),"999,999.99")
+                           
+                  endif
+                */
+
+        case nline == 9
+                        nexamf = (nshare -( a999accp->accsytadsc + (a999accp->accadj* -1)))/4
+
+                        if cperiod == "1"
+                                 ndue = "DECEMBER"
+
+                                 //new trapping 12-05-2017
+                                 if((a999accp->accamtpd) <  (nexamf) )
+                                      nexamf := (nexamf) - (a999accp->accamtpd)
+                                 elseif((a999accp->accamtpd) >=  (nexamf))
+                                      nexamf := 0
+                                 endif
+                        elseif cperiod == "2"
+                                 ndue = "JANUARY"
+                                 //nexamf = nexamf - a999accp->accamtpd
+                                 //(nexamf * 2) - a999accp->accamtpd
+                                 //nexamf = (nexamf * 2) - (a999accp->accamtpd+a999accp->accsytadsc)
+
+                                 //new trapping 12-05-2017
+                                 if((a999accp->accamtpd) <  (nexamf * 2) )
+                                      nexamf := (nexamf * 2) - (a999accp->accamtpd)
+                                 elseif((a999accp->accamtpd+a999accp->accsytadsc) >=  (nexamf * 2))
+                                      nexamf := 0
+                                 endif
+                        elseif cperiod == "3"
+                                 ndue = "FEBRUARY"
+                                 //nexamf = nexamf - a999accp->accamtpd
+                                // nexamf = (nexamf * 3) - (a999accp->accamtpd)
+
+                                 //new trapping 12-05-2017
+                                 if((a999accp->accamtpd) <  (nexamf * 3) )
+                                      nexamf := (nexamf * 3) - (a999accp->accamtpd)
+                                 elseif((a999accp->accamtpd) >=  (nexamf * 3))
+                                      nexamf := 0
+                                 endif 
+                        elseif cperiod == "4"
+                                 ndue = "MARCH"
+                                 //nexamf = a999accp->accbaltot
+                                 //nexamf = nshare - (a999accp->accamtpd + a999accp->accsytadsc + (a999accp->accadj* -1))
+
+                                 if((a999accp->accamtpd) <  (nexamf * 4) )
+                                      nexamf := (nexamf * 4) - (a999accp->accamtpd)
+                                 elseif((a999accp->accamtpd+a999accp->accsytadsc) >=  (nexamf * 4))
+                                      nexamf := 0
+                                 endif
+                        endif
+                 if nexamf < 0
+                         namt := 0
+                 else
+                         namt := nexamf
+                 endif
+                 @ prow()+01,28 say " "
+                 @ prow()+00,29 say "DUE FOR " + ndue + "...."
+
+                 //@ prow()+00, 28 say 
+                 if(a999accp->accbalold>0)
+                         //@ prow()+00,56 say transform(int(namt)+a999accp->accbalold,"999,999.99")
+                         @ prow()+00,56 say transform(int(namt),"999,999.99")
+                 else
+                         @ prow()+00,56 say transform(int(namt),"999,999.99")
+                 endif
+        case nline == 10
+                 @ prow()+nrow,29 say "GRANT: " + ngrant
+        case nline == 12
+               if  a999prcp->(dbseek(a999accp->acccode))
+                 @ prow()+nrow,29 say "TYPE OF SCHOLARSHIP: " + a999prcp->prcdescr
+               else
+                 @ prow()+nrow,29 say "TYPE OF SCHOLARSHIP: "
+               endif
+        case nline == 14
+                 @ prow()+nrow,29 say "LAST SCHOOL ATTENDED: "
+
+endcase
+return(nil)

@@ -1,0 +1,24 @@
+makepath[.prg]= "g:\ac"
+makepath[.obj]= "g:\clip53\obj"
+makepath[.ch]=  "g:\clip53\include"
+makepath[.lib]= "g:\clip53\lib"
+.prg.obj:
+         set clippercmd=/N /M /W
+         clipper $*
+.lnk.exe:
+
+ac1.obj      : ac1.prg
+uclmlib.obj  : uclmlib.prg
+ac01.obj     : ac01.prg
+ac02.obj     : ac02.prg
+ac03.obj     : ac03.prg
+ac04.obj     : ac04.prg
+ac05.obj     : ac05.prg
+ac06.obj     : ac06.prg
+ac08.obj     : ac08.prg
+ac09.obj     : ac09.prg
+ac11.obj     : ac11.prg
+acbrow.obj   : acbrow.prg
+acindex.obj  : acindex.prg
+aclib.obj    : aclib.prg
+ac1.exe      : ac1.lnk

@@ -1,0 +1,297 @@
+// General informative reports of collection
+# include "ERROR.CH"
+# include "TBROWSE.CH"
+# include "INKEY.CH"
+# include "SETCURS.CH"
+# include "ord.ch"
+# DEFINE  DEF_HSEP   "ÂÄ"
+# DEFINE  DEF_CSEP   "³"
+# DEFINE  DEF_FSEP   "ÁÄ"
+# DEFINE  COL_COLOR "+W/B, +W/B, W+/BG, W+/BG, W+/G, 15/12, 15/12, N/W, N/W, W+/RB"
+# DEFINE  TB_REFRESH_RATE 1
+
+
+Function chrep03()
+
+ // Save old settings
+ Local oldscreen := savescreen(0,0,maxrow(),maxcol())
+ Local oldcolor  := setcolor()
+ Local oldcursor := setcursor()
+ Local sch_term  := space(05)
+ Local term_stat := {}
+ Local getlist   := {}
+ Local from_d    := ctod('  /  /  ')
+ Local to_d      := ctod('  /  /  ')
+ Local fname     := space(07)
+ Local term_desc := space(40)
+ Local choice    := space(01)
+ Local key
+
+
+// Set environment settings
+SET( _SET_CURSOR, SC_SPECIAL1)
+SET( _SET_DATEFORMAT, "MM-DD-YYYY")
+SET( _SET_ESCAPE, .T. )
+SET( _SET_CONFIRM, .T.)
+SET( _SET_COLOR ,"W+/B,W+/RB,,,GR+/B")
+savescreen(0,0,maxrow(),maxcol())
+
+ Do while .T.
+
+  REP02SCR()
+
+  fname  := ideal_file()
+  from_d := date()
+  to_d   := date()
+
+
+  @ 06,08 get sch_term   picture "99999" when term_pre_valid(@sch_term)   == .T. valid get_term(06,31,40,@sch_term,@term_desc,term_stat) == .T.
+  @ 07,08 get from_d     picture "@D"
+  @ 08,08 get to_d       picture "@D"
+  @ 09,08 get fname      picture "@!"   valid !empty(fname) .and. check_file(fname) == .T.
+  read
+
+     If Lastkey() == K_ESC
+        Post_Valid_Dbf()
+        Choice :=  Alert("Are you sure you want to exit?",{"Exit","Cancel"})
+        If Choice == 1
+            Exit
+         Else
+            loop
+          Endif
+    Endif
+
+
+     Gather_Report(from_d,to_d, sch_term,fname)
+
+   // Flush the array variable and other variables
+      Asize(term_stat,0)        // Array of Term Status
+      term_desc := space(40)
+      fname     := space(07)
+      from_d    := ctod('  /  /  ')
+      to_d      := ctod('  /  /  ')
+ Enddo
+
+setcolor(oldcolor)
+setcursor(oldcursor)
+restscreen(0,0,maxrow(),maxcol(),oldscreen)
+Return Nil
+
+//----------------------------------------------------------------------------
+
+      
+
+
+Function REP02SCR()
+//----------------------------------------------------------------------------
+         //  12345678901234567890123456789012345678901234567890123456789012345678901234567890
+@ 01,0 say 'ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿'
+@ 02,0 say '³                    University of Cebu in Lapulapu and Mandaue                ³'
+@ 03,0 say '³                       A.C Cortes Avenue, Mandaue City 6014                   ³'
+@ 04,0 say '³                          GENERAL SUMMARY OF COLLECTION                       ³'
+@ 05,0 say 'ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´'
+@ 06,0 say '³ Term:                                                                        ³'
+@ 07,0 say '³ From:                                                                        ³'
+@ 08,0 say '³ To  :                                                                        ³'
+@ 09,0 say '³ Name:                                                                        ³'
+@ 10,0 say '³                                                                              ³'
+@ 11,0 say '³                                                                              ³'
+@ 12,0 say '³                                                                              ³'
+@ 13,0 say '³                                                                              ³'
+@ 14,0 say '³                                                                              ³'
+@ 15,0 say '³                                                                              ³'
+@ 16,0 say '³                                                                              ³'
+@ 17,0 say '³                                                                              ³'
+@ 18,0 say '³                                                                              ³'
+@ 19,0 say '³                                                                              ³'
+@ 20,0 say '³                                                                              ³'
+@ 21,0 say '³                                                                              ³'
+@ 22,0 say 'ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´'
+@ 23,0 say '³ ESC-EXIT                                                                     ³'
+@ 24,0 say 'ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ'
+Return Nil
+
+Function Gather_Report(from_d, to_d, vterm,fname)
+ Local paym    := "f:\arunlib\a"+substr(vterm,3,3)+"paym.dbf"
+ Local paymi   := "f:\arunlib\cdx\a"+substr(vterm,3,3)+"paym.cdx"
+ Local newdbf
+ Local newcdx
+ Local newstr
+ Local Line         := 1
+ Local lin_total    := 0  // total created lines
+ Local rec_total    := 0  // total record counted per course
+ local cou_total    := 0  // total collection for year level
+ local acc_total    := 0  // total account level collection
+ local gra_total    := 0  // overall grand total
+ Local oldcourse
+ Local oldprocode
+ Local l_output
+ Local f_str
+ Local items       := {" Printer "," Screen "}
+ Local choice
+
+
+ l_output := pop_menu(11,20,14,35,items)
+
+
+
+ dbusearea(.T.,"DBFCDX",paym,"paym",.T.,.F.)
+ paym->(ordlistadd(paymi))
+ ordsetfocus("Sdate")
+ set scope to transform(from_d,"99-99-9999"),transform(to_d,"99-99-9999")
+
+ // Create and copy to a new file
+    Copy Structure to "F:\arunlib\temp\"+fname+".dbf"
+    Copy to "F:\arunlib\temp\"+fname+".dbf"
+    set scope to
+    paym->(ordlistclear())
+    paym->(dbclosearea())
+
+//  Use now the new created file
+    newdbf := "F:\arunlib\temp\"+fname+".dbf"
+    newcdx := "F:\arunlib\temp\"+fname+".cdx"
+    newstr := "F:\arunlib\temp\"+fname+".txt"
+
+   dbusearea(.T.,"DBFCDX",newdbf,"newdbf",.T.,.T.)
+// Create new index file
+    Index on newdbf->procode+newdbf->sm1colcod+newdbf->sm1majcod+newdbf->sm1yrlvl tag tlist to &newcdx;
+    Eval(GaugeDisp(newcdx,"tlist")) Every 50  USECURRENT
+    newdbf->(dbclosearea())
+
+ // Use as refresh
+   dbusearea(.T.,"DBFCDX",newdbf,"newdbf",.T.,.F.)
+   newdbf->(ordlistadd(newcdx))
+   ordsetfocus("tlist")
+   newdbf->(dbgotop())
+   Browse()
+
+
+    Set Device to printer
+    If l_output == 2
+     Set print to &newstr
+    Endif
+
+    Set Printer On
+    PrintStyle("line",2)
+    PrintStyle("line",2)
+    setprc(0,0)
+
+
+    //Initial value
+      oldprocode := "XXXX"
+ 
+   Do while .t.
+          Do Case
+             Case !isprinter()
+                inkey(1)
+                Choice := Alert("Printer not ready or offline please check and try again!",{"Retry","Cancel"})
+                If Choice == 2
+                   Exit
+                Endif
+                   loop
+             Case (oldprocode != newdbf->procode) .AND. newdbf->(!eof())
+                    @ Line,1 say "<< Account Category >> "+newdbf->procode
+                      Line++
+                    @ Line,1 say "***************************************************************************"
+                      Line++
+                    @ Line,1 say "For the period of : "+transform(from_d,"99-99-9999")+" to "+transform(to_d,"99-99-9999")
+                      Line++
+                    @ Line,1 say "############################################### Total Collection           "
+                      Line++
+                    @ Line,1 say "Seq.   Course/Yr  Occurance                     Per Course & Level         "
+                      Line++
+                    @ Line,1 say "***************************************************************************"
+                      Line++
+                     oldprocode := newdbf->procode
+             Case newdbf->(eof())
+              //   display grand total
+                    @ Line,1 say"***************************************************************************"
+                      Line++
+                    @ Line,51 say "========================"
+                      Line++
+                    @ Line,30 say "GRAND TOTAL: "
+                    @ Line,50 say transform(gra_total,"999,999,999.99")
+                      Line++
+                    @ Line,1 say"***************************************************************************"
+                   exit
+          Endcase
+
+      oldcourse := newdbf->sm1colcod+newdbf->sm1majcod+newdbf->sm1yrlvl
+
+      Do while oldprocode == newdbf->procode
+
+               
+            Do while oldcourse == newdbf->sm1colcod+newdbf->sm1majcod+newdbf->sm1yrlvl
+              rec_total++
+              cou_total += newdbf->payamt
+              acc_total += newdbf->payamt
+              gra_total += newdbf->payamt
+              newdbf->(dbskip())
+           Enddo
+
+
+           If oldcourse != newdbf->sm1colcod+newdbf->sm1majcod+newdbf->sm1yrlvl
+                  ++lin_total
+                  @ Line,01 say Transform(lin_total,"9999")+'.'
+               IF !empty(newdbf->sm1colcod+newdbf->sm1majcod)
+                  @ Line,08 say  newdbf->sm1colcod+newdbf->sm1majcod
+                  @ Line,16 say  newdbf->sm1yrlvl
+               ELSE
+                  @ Line,08 say "######"
+                  @ Line,16 say "#"
+               ENDIF
+
+                @ Line,20 say  transform(rec_total,"9999.")
+                @ Line,27 say  "<------------------>"
+                @ Line,50 say  transform(cou_total,"999,999,999.99")
+                Line++
+               oldcourse := newdbf->sm1colcod+newdbf->sm1majcod+newdbf->sm1yrlvl
+               rec_total := 0
+               cou_total := 0
+            Endif
+         Enddo
+
+             //Display total account total
+                    @ Line,51 say "------------------------"
+                      Line++
+                    @ Line,42 say "TOTAL: "
+                    @ Line,50 say transform(acc_total,"999,999,999.99")
+                      Line++
+                      Line++
+                    acc_total  := 0
+                    oldprocode := "XXXX"
+   Enddo
+
+
+               
+
+  
+  setprc(0,0)
+  PrintStyle("line",66)
+  Set Device To Screen
+  If l_output == 2
+   Set print to
+  Endif
+   Set Printer Off
+
+ 
+ If l_output == 2
+  f_str := memoread(newstr)
+  memoedit(f_str,6,2,21,78,.F.,,86)
+Endif
+
+// Close and destroy created file
+  newdbf->(dbclosearea())
+If l_output == 2
+  FERASE(newstr)
+Endif
+  FERASE(newdbf)
+  FERASE(newcdx)
+
+Return Nil
+
+
+
+
+
+                                               

@@ -1,0 +1,16 @@
+//makepath[.prg]= "d:\ac"
+//makepath[.obj]= "d:\clip53\obj"
+//makepath[.ch]=  "d:\clip53\include"
+//makepath[.lib]= "d:\clip53\lib"
+.prg.obj:
+         set clippercmd=/N /M /W
+ W      clipper $*
+.lnk.exe:
+  blinker @tmpidx
+menu.obj    : menu.prg
+tmpidx.obj  : tmpidx.prg
+prj01.obj   : prj01.prg
+prj02.obj   : prj02.prg
+prjlib.obj  : prjlib.prg
+uclmlib.obj : uclmlib.prg
+tmpidx.exe  : tmpidx.lnk

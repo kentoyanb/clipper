@@ -1,0 +1,23 @@
+# include "INKEY.CH"
+
+ 
+ Function test
+  local x := 0
+
+   cls
+   Do while .t.
+
+     if x != seconds()
+         @ 1,1 say seconds()
+         @ 2,1 say time()
+           x = seconds()
+         if x >= 57600.00
+          exit
+         endif
+     Endif
+
+
+
+     Endif
+   Enddo
+ Return Nil

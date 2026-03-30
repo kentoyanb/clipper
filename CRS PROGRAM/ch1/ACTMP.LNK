@@ -1,0 +1,30 @@
+#BLINKER EXECUTABLE DUAL 1024
+BLINKER OVERLAY OPSIZE 100
+BLINKER OVERLAY PAGEFRAME ON
+#BLINKER MESSAGE WINK
+#BLINKER INCREMENTAL On
+#BLINKER HOST MESSAGE ON
+BLINKER EXECUTABLE CLIPPER F:99
+#BLINKER EXECUTABLE NODELETE
+
+OUTPUT actmp
+beginarea
+file ac01tmp
+file uclmlib
+file acbrow
+file acindex
+file aclib
+file nulsys
+endarea
+#search nanfor
+lib llibg
+lib clipper
+lib dbfcdx
+lib _dbfcdx
+lib terminal
+lib extend
+lib samples
+#lib blxclp53
+#lib novlib
+lib novterm
+lib dttm

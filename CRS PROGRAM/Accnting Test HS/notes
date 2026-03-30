@@ -1,0 +1,110 @@
+
+required amount = ((student share + balance sa student share sa previous term (+-) + adjustment (+-)) - discount(walay labot ang uc discount)
+
+required amount = ((required amount / months) * period) - amount paid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+elseif cperiod == "5"
+                        //nexamf := (a999accp->accsytass-500)/9
+                        @ prow()+nrow+1,32 say "DUE FOR NOVEMBER"
+                        /*if (a999accp->accamtpd+a999accp->accsytadsc) < (nexamf * 5)
+                           nexamf := (nexamf * 5) - (a999accp->accamtpd+a999accp->accsytadsc)
+                        elseif (a999accp->accamtpd+a999accp->accsytadsc) >= (nexamf * 5)
+                           nexamf := 0
+                        endif*/
+                        if(a999accp->accbalold > 0)
+                              nexamf = (a999accp->accbalold - (a999accp->accamtpd+a999accp->accsytadsc))/5
+                              if (a999accp->accamtpd+a999accp->accsytadsc) < nexamf
+                                 nexamf := nexamf
+                              elseif (a999accp->accamtpd+a999accp->accsytadsc)  >= nexamf 
+                                 nexamf := 0
+                              endif
+                        else                            
+                            nexamf := 0
+                        endif                 
+                elseif cperiod == "6"
+                        @ prow()+nrow+1,32 say "DUE FOR DECEMBER"
+                        if(a999accp->accbalold > 0)
+                              nexamf = (a999accp->accbalold - (a999accp->accamtpd+a999accp->accsytadsc))/5
+                              if (a999accp->accamtpd+a999accp->accsytadsc) < (nexamf * 2)
+                                 nexamf := nexamf * 2 - a999accp->accamtpd+a999accp->accsytadsc
+                              elseif (a999accp->accamtpd+a999accp->accsytadsc)  >= nexamf * 2
+                                 nexamf := 0
+                              endif
+                        else                            
+                            nexamf := 0
+                        endif
+                elseif cperiod == "7"
+                        @ prow()+nrow+1,32 say "DUE FOR JANUARY"
+                        if(a999accp->accbalold > 0)
+                              nexamf = (a999accp->accbalold - (a999accp->accamtpd+a999accp->accsytadsc))/5
+                              if (a999accp->accamtpd+a999accp->accsytadsc) < (nexamf * 3)
+                                 nexamf := nexamf * 3 - (a999accp->accamtpd+a999accp->accsytadsc)
+                              elseif (a999accp->accamtpd+a999accp->accsytadsc)  >= (nexamf * 3)
+                                 nexamf := 0
+                              endif
+                        else                            
+                            nexamf := 0
+                        endif
+                elseif cperiod == "8"
+                        @ prow()+nrow+1,32 say "DUE FOR FEBRUARY"
+                        if(a999accp->accbalold > 0)
+                            nexamf = (a999accp->accbalold - (a999accp->accamtpd+a999accp->accsytadsc))/5
+                            if (a999accp->accamtpd+a999accp->accsytadsc) < (nexamf * 4)
+                                nexamf := nexamf * 4 - (a999accp->accamtpd+a999accp->accsytadsc)
+                            elseif (a999accp->accamtpd+a999accp->accsytadsc)  >= (nexamf * 4)
+                                nexamf := 0
+                            endif
+                        else
+                            nexamf := 0
+                        endif
+                elseif cperiod == "9"
+                        @ prow()+nrow+1,32 say "DUE FOR MARCH"
+                        if a999accp->accbaltot <= 0
+                           nexamf := 0
+                        else
+                           nexamf := a999accp->accbalold - (a999accp->accamtpd+a999accp->accsytadsc)
+                        endif
+                endif

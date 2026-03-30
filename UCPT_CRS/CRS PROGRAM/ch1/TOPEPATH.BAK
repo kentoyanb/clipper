@@ -1,0 +1,6 @@
+@echo off
+set path=c:\#root\clip53\bin;c:\#root\clip53\ng;c:\windows\;c:\windows\command
+set lib=c:\#root\clip53\lib
+set include=c:\#root\clip53\include
+set obj=c:\#root\clip53\obj
+ng

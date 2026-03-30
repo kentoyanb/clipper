@@ -1,0 +1,47 @@
+#BLINKER EXECUTABLE DUAL 1024
+BLINKER OVERLAY OPSIZE 50
+BLINKER OVERLAY PAGEFRAME ON
+BLINKER MESSAGE WINK
+BLINKER INCREMENTAL On
+#BLINKER HOST MESSAGE ON
+BLINKER EXECUTABLE CLIPPER F:99
+BLINKER EXECUTABLE NODELETE
+
+OUTPUT ch
+beginarea
+file ch
+file ch01
+file ch02
+file ch03a
+file ch03b
+file ch03c
+file ch03d
+file ch03e
+file chrep01
+file chrep03
+file chrep04
+file chrep05
+file chrep06
+file chmain
+file amttocha
+file chlib
+file uclmlib
+file aclib
+file acbrow
+file search_l
+file chmove
+file chtran
+#file nulsys
+endarea
+#search nanfor
+#lib llibg
+lib terminal
+lib clipper
+lib extend
+lib samples
+lib blxclp52
+#lib novlib
+lib novterm
+lib dttm
+lib dbfcdx
+lib _dbfcdx

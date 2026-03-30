@@ -1,0 +1,202 @@
+Latest Basic Education for accounting
+	- file name: hs10232017 (number indicates date of last update)
+	-file name: hs10252017 - fix ang statement of account
+	-file name : hs11032017 - fix elem and junior high printing 
+	-file name: hs11092017 - fix exam report for senior and junior per strand and grade
+	- file name: hs11102017 - fix exam report for elementary and junior high by student printing
+	- file name: hs11202017 - change footers
+	- file name: hs11212017 - fix computation, minus already the discount
+	- file name: hs11242017 - fix computation for examination report for EJH
+	- file name: hs11272017 - continuation in fixing computation for exam permit for EJH
+	- file name: hs12042017 - continue fixing exam permit for EJH
+	- file name: hs12052017 - fix computation for senior high (to be check pa jd)
+	- file name : hs1032018 - fix computation for sernior high 2nd period. (usab nsad computation for february)
+	-file name: hs192018 - add default value to be subtract in balance
+	- file name: hs2192018 - add adjustment label to display the adjustment entry that is debitted
+	-file name : hs2282018 - fix computation kung naay bayronon like tuition mo add sa dugang bayronon
+	-file name: hs452018 - revise account receivable for basic ed display balance only
+	- file name: hs4102018- revise account receivable for elem , junior, senior
+	- file name: hs5312018 - REMOVED SOME SUB MENUS IN UTILITY AND MAINTENANCE, change log in form ui
+			       - diri nlng ge add ang ge update nga computation
+				 sa new computation for Basic Education
+				 * from -> nexamf := (a999accp->accsytass-500)/9 to ->nexamf := (a999accp->accbaltot)/9
+				 * den ang condition from (a999accp->accamtpd + a999accp->accsytadsc) to -> a999accp->accamtpd + a999accp->accsytadsc + a999accp->accadj)
+				* add year level input to trap section that belongs to that yr level jud,
+				* change concat 2 from 1 in concating idno during creating of accounts
+				* from ->->nexamf := (a999accp->accbaltot)/9 TO nexamf := (a999accp->accsytass-500)/9
+				*updated the student subsidy
+	-file name: hs102418 - (ADDED TRAPING PRA DILI MA DOUBLE ENTRY ANG STUDENT)
+			* from ->->nexamf := (a999accp->accbaltot)/9 TO nexamf := (a999accp->accsytass-500)/9
+			*updated the student subsidy
+			*removed recompute sa grade level printing
+			*add trapping sa forwarding, para elem og junior high bawal e forward kung 2nd sem;
+			 bawal na mag forward ang college codes sa basic ed accounting program. ge copy from hs1162019.exe
+			*add trapping sa assessment entry for college codes
+			*- add trapping para sa mga privilege nga dapat mga college codes ray mo display sa privilege reports ge copy from hs1222019.exe
+			
+	file hs3182019 copy to hs102418
+		-added function to recompute by basic ed code
+		-trap para di maka view ang enrolled sa college sa menu sa 		Accounts Information Reports
+		-trap para di maview ang college codes sa menus in Payment and Adjustment
+		- Payment and Adjust Entry trap sa elem and jh nga di maka 		entry kung dili 1st semester
+		-trap para di maview ang college code sa menus sa School Fees
+		-trap para scho and priv nga di ma view ang college code and di ka entry if dili first semester ang elem/jh
+	-	trap sa special course and general system task
+		-cannot create new student without course
+		- added subsidy entry by basic ed code**
+		 -dapat butangan ilhananan nga subsidy ang payments - **ok na
+	files hs6172019 copy to hs102418
+	    - added trapping sa summary of school fees income to display basic ed course only
+	file hs6282019 copy to hs102418
+	    - fix during forwarding, remove ang e update ang colcod if enrolled ang student ky maoy maka cause og error during forwarding
+	    - usab sa exam permit computation nsad.
+	file hs6282019 copy to hs102418
+	    - added trapping para subsidy for ejh and sh
+	    - added menu in payment entry if payment entry is subsidy
+	file hs6282019 copy to hs102418 ->JULY 24, 2019
+	    - fix examrep computation to ejh and sh
+	file hs6282019 copy to hs102418.exe -> 7/30/2019
+	   -updates sa upgrading student balances per term so far ok siya naa lang jd di malikayan nga lapses sa data
+	   -update code sa students balances(term)
+           -update in post assessment, updates sa column asspstdte when the data is posted
+           -fix summary of special courses fees income
+	FILE HS6282019
+            - add table a999prm.dbf para sa promotional discount
+            - should be by strand and year level (g11 or g12) 
+	    - add less:promotional discount during creation of assessment
+            - add sa column sa report school fees income
+             -butangan lng sad cguro sa exam permit*
+	file hs6282019 copy to hs102418.exe -> 11/19/2019
+	    - added column feegrdlvl in a999feeyr
+            - added grade level input sa work with fee year
+	file hs6282019 copy to hs102418.exe ->2/21/2020 
+	    - added old account row in examination permit elem/jh
+	    - fix ang pag kuha sa feeyear niya nga naay grade level
+	    - modify exam permit
+
+	
+
+Latest College for accounting
+	- file name: acctg10232017 (number indicates date of last update) - SAYOP ANG ASSESSMENT ENTRY
+	- file name: acctg10242017
+	- file name: college10252017 - fix ang statement of account.
+	- file name: college11092017 - fix exam rep for college code printing
+	- file name: college11152017 - fix diplay and printing of privilege discount
+	-file name : college11212017 - modify printing of billing statement
+	-file name : college2232018 - update sysent.prg fix dtoc argument error and concat "1" in acctidno for college
+	- file name: college3202018 - fix ang assessment entry ky na apil og compile ang kato bag.o computation ge trap nato
+	- file name: college3262018 - updates sa assessment
+	 - file name: college4202018 - rebirth assessment code sa karaan ge usab ang run assessment by college
+	-file name: college5312018 - GE REMOVE ANG COMMENTED NGA * FEEUNIT sa computation for assesment, REMOVED SOME SUB MENUS IN UTILITY AND MAINTENANCE
+	-file name: col6282018 - solve assessment by college if dili fee yr 18 ky dpat di ma over writan ang fee yr 18 nga accounts(by account and by college)
+				- fix computation per individual assessment
+	-file name: col7172018 - solve examination permit
+	-file name: col1012018 - display laboratory subject in examination permit
+	-file name: col102418- (ADDED TRAPING PRA DILI MA DOUBLE ENTRY ANG STUDENT), REQUIRED -COLCODE, FEEYR
+			     - ADD COLUMN "PAYMENT FOR" SA STATEMENT OF ACCOUNT 
+			     - add column payments made in school fees income
+		             - add trapping sa assessment entry by student di e include sa compute ang naay splitcode
+			     - add trapping sa forwarding, nga di pde e forward ang basic ed codes sa college accounting program
+			     - add trapping sa assessment entry nga di pde ang basic ed codes ge copy from col1172019.exe
+			     - add trapping para sa mga privilege nga dapat mga college codes ray mo display sa privilege reports copy from col2112019.exe
+	-file name: col3182019 copy to col102418
+		-added function to recompute by college code
+		-trap para di maka view ang enrolled sa BasicEd sa menu sa Accounts Information Reports
+		-same update sa basic ed in entry menu
+		-trapping sa special course entry
+		-cannot create new student without course
+	-FILE NAME:  COL6102019 copy to col102418
+		-display lec + lab hrs in assessment entry display for only fee year 18- 19and not cs only
+	file name  col6172019 copy to col102418
+		-added trapping summary of school fees income to display college codes course only
+	file name col712019 copy to col102418
+		- fix during forwarding, remove ang e update ang colcod if enrolled ang student ky maoy maka cause og error during forwarding
+	file name col7262019.exe copy to col102418.exe -> 7/30/2019
+		- updates sa upgrading student balances per term so far ok siya naa lang jd di malikayan nga lapses sa data
+		- update assessment entry nga mo compute na sa lec and lab hrs per college code assessment creation for all fee year
+		- update in post assessment, updates sa column asspstdte when the data is posted
+		- update code sa students balances(term)
+		- update sa rebuild para sa payp index searching para student balances by term
+		- fix summary of special courses fees income
+	file name COL7262019.EXE copy to col102418.exe - 8/07/2019
+		- update sa payment entry, adjustment entry, update payment records nga dapat mo encode na sila sa course code / training(short term code)
+	file name col7262019.exe copy to col102418.exe - 8/28/2019
+		create version 2 of update payment records para mo display ang tanan payments sa certain OR 
+		-added in rebuild.prg PAYIDNO+PAYREFNO+PAYENTTME para sa searching sa update payment record V2
+		-to copy server and rebuild payP
+                -add column ayytpayp->payname and ayytpayp->paychcknum
+	file name col7262019.exe copy to col102418.exe - 11/19/2019
+	        - fix assesment computation for lab and lec hrs sa by course assessment creation
+	file name col7262019.exe copy to col102418.exe 12/10/2019
+		- fix search student in payment entry and adjustment entry
+	file name col7262019.exe copy to col102418.exe 12/13/2019 rename to 102418.exe ky mo error sa new server ang exe?
+		- change trapping of nstp and rotc
+	file name 102418.exe 7/03/2023
+		- added LMS Fee in Fees Master File Entry
+	file name 102418.exe 7/18/2023
+		- fix ang computation bsta dili full privilege ang student, mo multiply na sya sa current total assessment
+	FILE NAME 9252020.EXE TO COPY TO 102418.EXE 7/28/2023
+		- FIX ANG PAG INPUT SA MILLIONS NGA VALUE SA SPECIAL COURSE ENTRY
+ 
+
+
+
+
+			     
+LATEST CASHIER
+	-file name: cs10252017 or cashc1 - during selecting of term no more pressing of enter key twice
+	-file name : cs1030 - fix argument error?? to be check pa jd
+	-file name: cs2018 - fix or printing and add re printing
+	-file/bat name: cs4- naa diri ang update payment records
+	-file cashier_acctg.exe - accounting program for cashier nga naay trapping para sa elem/jh payment entry
+	-file name cs2018t copied to cs2018 -> 8/1/2019
+		- updates official receipt viewer - search only using orno.
+		- update re-print or nga pde ra bisag kinsa mo reprint sa or dili na need kinsa to nga user nag entry ang maka print
+		- rebuild.prg added indexing orno+paycode, para sa reprinting of OR and payidno+payorno para OR viewing
+		-added menu for OR viewing by ID number
+	-file name cs832018 
+		- added menu school income that generates report for misellaneuous and tuition income from cashier
+		- added text input for checknumber
+		- added column in byyytpayp-> payname and paychcknum
+	-file cs2019.exe new exe file 
+	        -- added menu school income that generates report for misellaneuous and tuition income from cashier
+		- added text input for checknumber
+		- added column in byyytpayp-> payname and paychcknum
+	---------
+	 -file cs2021.exe 
+		- update ang cashlib.prg para makita ang balance sa student inig view account(F4)
+	  	- updated ang update payment records nga mo add or update payments ma save ang data sa cashier db only (2/23/2023)
+                - update ang para.dbf ge addan og cs4seqno para sa cashier 4, and update ang code para sa cs4 (6/13/2023)
+		- added reporting by chart code, display tanan na sud depende unsa ang ge entry nga chart code per term (07/10/2023)
+	-FILE test2023.exe to copy to cs2021.exe 7/28/2023
+		- added accounting information menu and account payment entry
+	
+CRS
+	-file name: crs2017 naa diri ang medical status entry.
+	-file name: crs2018 fix enroll.prg ky di mo trap og conflict
+	            - add function para mo trap sa conflict for instructor
+		    - new tor printing for main
+	updated crs kay CRS127(added trapping for instructors load that would determine instructors conflict schedule, added ML and TL in college code group)
+	- file name: rebuildsection.exe to rebuild the section.dbf that is use in sections for senior high
+	- file name : crs3252019 copy to crs2018
+		-add code kung new ang student ky automatic update ang a999feeyear sa kato nga student
+	-file crs2019t copy crs2018 
+		-add 5th year to statistics report
+		-add trapping to not include bsname sa medical record
+	        -added 5th year column in statistics report by comparison
+	-file crs2019t copy crs2018 11/22/2019
+		- change footer in instructors load printing for uc main
+	-file crs2019t2 copy to crs2019 jan-feb 2020
+		-added "phrase to put" selection in tor printing for graduated already and for NAME
+	-file 9232020 copy to crs2019 september 23, 2020
+	      - added selection for SO and autonomous for name- ge fix ang previous sayop
+
+H652025.EXE
+  - LATEST EXE FOR ACCOUNTING BASICED
+  - ADDED COLUMN IN SCHOOL FEES INCOME REPORT
+652025.EXE 
+  - LATEST EXE FOR ACCOUNTING COLLEGE
+ - ADDED COLUMN IN SCHOOL FEES INCOME REPORT
+
+
+	

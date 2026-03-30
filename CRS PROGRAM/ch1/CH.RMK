@@ -1,0 +1,30 @@
+makepath[.obj]= "g:\sc\clip53\obj"
+makepath[.ch]=  "g:\sc\clip53\include"
+makepath[.lib]= "g:\sc\clip53\lib"
+.prg.obj:
+         set clippercmd= /N /M /W /V /Z
+         clipper $< $(clippercmd)
+.lnk.exe:
+ch.obj       : ch.prg
+ch01.obj     : ch01.prg
+ch02.obj     : ch02.prg
+ch03a.obj    : ch03a.prg
+ch03b.obj    : ch03b.prg
+ch03c.obj    : ch03c.prg
+ch03d.obj    : ch03d.prg
+ch03e.obj    : ch03e.prg
+chrep01.obj  : chrep01.prg
+chrep03.obj  : chrep03.prg
+chrep04.obj  : chrep04.prg
+chrep05.obj  : chrep05.prg
+chrep06.obj  : chrep06.prg
+search_l.obj : search_l.prg
+amttocha.obj : amttocha.prg
+chlib.obj    : chlib.prg
+aclib.obj    : aclib.prg
+uclmlib.obj  : uclmlib.prg
+acbrow.obj   : acbrow.prg
+chmain.obj   : chmain.prg
+chmove.obj   : chmove.prg
+chtran.obj   : chtran.prg
+ch.exe       : ch.lnk

@@ -1,0 +1,100 @@
+set clippercmd= /N /M /W /V /Z
+clipper CH.PRG 
+201K available
+Compiling CH.PRG
+Code size 1307, Symbols 480, Constants 1061
+set clippercmd= /N /M /W /V /Z
+clipper CH01.PRG 
+201K available
+Compiling CH01.PRG
+Code size 3726, Symbols 704, Constants 1682
+set clippercmd= /N /M /W /V /Z
+clipper CH02.PRG 
+201K available
+Compiling CH02.PRG
+Code size 4651, Symbols 880, Constants 2421
+set clippercmd= /N /M /W /V /Z
+clipper CH03A.PRG 
+201K available
+Compiling CH03A.PRG
+Code size 2647, Symbols 528, Constants 2441
+set clippercmd= /N /M /W /V /Z
+clipper CH03B.PRG 
+201K available
+Compiling CH03B.PRG
+Code size 2799, Symbols 528, Constants 2465
+set clippercmd= /N /M /W /V /Z
+clipper CH03C.PRG 
+201K available
+Compiling CH03C.PRG
+Code size 2663, Symbols 528, Constants 2441
+set clippercmd= /N /M /W /V /Z
+clipper CH03D.PRG 
+201K available
+Compiling CH03D.PRG
+Code size 2671, Symbols 544, Constants 2513
+set clippercmd= /N /M /W /V /Z
+clipper CH03E.PRG 
+201K available
+Compiling CH03E.PRG
+Code size 2864, Symbols 560, Constants 2464
+set clippercmd= /N /M /W /V /Z
+clipper CHREP01.PRG 
+201K available
+Compiling CHREP01.PRG
+Code size 6041, Symbols 1840, Constants 4503
+set clippercmd= /N /M /W /V /Z
+clipper CHREP03.PRG 
+201K available
+Compiling CHREP03.PRG
+Code size 4727, Symbols 1248, Constants 3593
+set clippercmd= /N /M /W /V /Z
+clipper CHREP04.PRG 
+201K available
+Compiling CHREP04.PRG
+Code size 811, Symbols 272, Constants 2117
+set clippercmd= /N /M /W /V /Z
+clipper CHREP05.PRG 
+201K available
+Compiling CHREP05.PRG
+Code size 5331, Symbols 1616, Constants 4349
+set clippercmd= /N /M /W /V /Z
+clipper SEARCH_L.PRG 
+201K available
+Compiling SEARCH_L.PRG
+Code size 6936, Symbols 1104, Constants 2056
+set clippercmd= /N /M /W /V /Z
+clipper AMTTOCHA.PRG 
+201K available
+Compiling AMTTOCHA.PRG
+Code size 2088, Symbols 80, Constants 552
+set clippercmd= /N /M /W /V /Z
+clipper CHLIB.PRG 
+201K available
+Compiling CHLIB.PRG
+Code size 14222, Symbols 2384, Constants 5042
+set clippercmd= /N /M /W /V /Z
+clipper ACLIB.PRG 
+201K available
+Compiling ACLIB.PRG
+Code size 13688, Symbols 3072, Constants 2536
+set clippercmd= /N /M /W /V /Z
+clipper UCLMLIB.PRG 
+201K available
+Compiling UCLMLIB.PRG
+Code size 7673, Symbols 1264, Constants 1447
+set clippercmd= /N /M /W /V /Z
+clipper ACBROW.PRG 
+201K available
+Compiling ACBROW.PRG
+Code size 4214, Symbols 1008, Constants 442
+set clippercmd= /N /M /W /V /Z
+clipper CHMAIN.PRG 
+201K available
+Compiling CHMAIN.PRG
+Code size 4691, Symbols 1680, Constants 3005
+set clippercmd= /N /M /W /V /Z
+clipper CHMOVE.PRG 
+201K available
+Compiling CHMOVE.PRG
+Code size 7997, Symbols 1568, Constants 4051

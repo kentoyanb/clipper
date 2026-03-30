@@ -1,0 +1,52 @@
+makepath[.prg]= "f:\sc\hoyla"
+makepath[.obj]= "f:\obj"
+makepath[.ch]=  "f:\sc\include"
+makepath[.lib]= "f:\sc\lib"
+.prg.obj:
+         set clippercmd=/ES2  /N /M /W /R /A
+         clipper $*
+.lnk.exe:
+  blinker  @project
+Menu.obj     : menu.prg
+prj01.obj    : prj01.prg
+prj02.obj    : prj02.prg
+prj03.obj    : prj03.prg
+prj04.obj    : prj04.prg
+prj05.obj    : prj05.prg
+prj06.obj    : prj06.prg
+prj07.obj    : prj07.prg
+prj08.obj    : prj08.prg
+prj09.obj    : prj09.prg
+prj10.obj    : prj10.prg
+prj11.obj    : prj11.prg
+prj12.obj    : prj12.prg
+prj13.obj    : prj13.prg
+prj14.obj    : prj14.prg
+prj15.obj    : prj15.prg
+prj16.obj    : prj16.prg
+prj17.obj    : prj17.prg
+prj18.obj    : prj18.prg
+prj19.obj    : prj19.prg
+prj20.obj    : prj20.prg
+prj21.obj    : prj21.prg
+prj22.obj    : prj22.prg
+prj23.obj    : prj23.prg
+prj24.obj    : prj24.prg
+prj25.obj    : prj25.prg
+prj26.obj    : prj26.prg
+prj27.obj    : prj27.prg
+prj28.obj    : prj28.prg
+prj29.obj    : prj29.prg
+prj30.obj    : prj30.prg
+prj31.obj    : prj31.prg
+prj32.obj    : prj32.prg
+prj35.obj    : prj35.prg
+prj36.obj    : prj36.prg
+prj37.obj    : prj37.prg
+prj38.obj    : prj38.prg
+prj39.obj    : prj39.prg
+prj40.obj    : prj40.prg
+prj41.obj    : prj41.prg
+prjlib.obj   : prjlib.prg
+uclmlib.obj  : uclmlib.prg
+project.exe  : project.lnk

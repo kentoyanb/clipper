@@ -1,0 +1,33 @@
+#BLINKER EXECUTABLE DUAL 1024
+BLINKER OVERLAY OPSIZE 50
+BLINKER OVERLAY PAGEFRAME ON
+BLINKER MESSAGE WINK
+#BLINKER INCREMENTAL On
+#BLINKER HOST MESSAGE ON
+BLINKER EXECUTABLE CLIPPER F:99
+BLINKER EXECUTABLE NODELETE
+
+OUTPUT tmpidx
+beginarea
+file menu
+file tmpidx
+file prj01
+file prj02
+file prjlib
+file uclmlib
+file nulsys
+endarea
+#search nanfor
+lib clipper
+lib llibg
+lib terminal
+lib extend
+lib grump
+lib samples
+search blxclp52
+lib blxclp53
+#lib novlib
+lib novterm
+lib dbfcdx
+lib _dbfcdx
+lib dttm

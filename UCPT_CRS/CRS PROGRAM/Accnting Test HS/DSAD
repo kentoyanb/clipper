@@ -1,0 +1,75 @@
+*processing**
+a999accp->(sx_setscope(_TOP_SCOPE   ,memvar->grade))
+a999accp->(sx_setscope(_BOTTOM_SCOPE,memvar->grade))
+a999accp->(dbgotop())
+do while ! a999accp->(eof())
+        nbal := 0
+        //c999sm1p->(dbseek(right(a999accp->accidno,8)))
+        fask(10,"  Processing id number "+c999sm1p->sm1idno+"  "+c999sm1p->sm1colcod+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
+        
+        //if c999sm1p->sm1colcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+        //        fask(16,"  Processing COLCOD no. "+c999sm1p->sm1colcod+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
+                
+                ayytpayp->(sx_setscope(_TOP_SCOPE   ,a999accp->accidno))
+                ayytpayp->(sx_setscope(_BOTTOM_SCOPE,a999accp->accidno))
+                ayytpayp->(dbgotop())
+                do while ! ayytpayp->(eof())
+                    fask(16,"  Processing trx no. "+alltrim(ayytpayp->payrefno)+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
+                        //TODO
+                            do case
+                                    
+                                    /*
+                                    case ayytpayp->paytag == _POSTED
+                                            nbal -= ayytpayp->payamt
+                                    case ayytpayp->paytag == _DISCOUNT
+                                            nbal -= ayytpayp->payamt
+                                    case ayytpayp->paytag == _SHORT_TERM
+                                            nbal += ayytpayp->payamt
+                                    case ayytpayp->paytag == _ADJUSTMENT
+                                            nbal += ayytpayp->payamt
+                                    case ayytpayp->paytag == _FORWARDED
+                                            nbal += ayytpayp->payamt
+                                    */
+
+                                    case ayytpayp->paytag == "T" .and. ayytpayp->payadjcod =="ST" 
+                                            nbal += ayytpayp->payamt
+                                    case ayytpayp->paytag == "U" 
+                                            nbal -= ayytpayp->payamt   
+                                    case ayytpayp->paytag == _POSTED 
+                                            nbal -= ayytpayp->payamt  
+                                    case ayytpayp->paytag == _DISCOUNT
+                                            nbal -= ayytpayp->payamt
+                                    case ayytpayp->paytag $ _ADJUSTMENT+_FORWARDED
+                                            if ayytpayp->payamt < 0
+                                                nbal -= (ayytpayp->payamt * -1)
+                                            else
+                                                nbal += ayytpayp->payamt
+                                            endif
+                            endcase
+                            if nextkey() == K_ESC
+                                    exit
+                            endif
+                            ayytpayp->(dbskip())
+                    
+                enddo
+                ayytpayp->(clearscope())
+
+                if nbal > 49.99
+                        a999stcp->(dbseek(a999accp->acccolcod))
+                        sterm->(dbappend())
+                        sterm->idno     := a999accp->accidno
+                        sterm->lname    := a999accp->acclname
+                        sterm->fname    := a999accp->accfname
+                        sterm->mname    := a999accp->accmname
+                        //sterm->course   := a999stcp->stcdesabr
+                        sterm->course   := memvar->tcode //training-updating code
+                        sterm->balance  := nbal
+                endif
+
+                if nextkey() == K_ESC
+                        exit
+                endif
+                a999accp->(dbskip())
+        //endif     
+enddo
+a999accp->(clearscope())
