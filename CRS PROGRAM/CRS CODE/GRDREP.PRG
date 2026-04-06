@@ -195,13 +195,6 @@ aadd(abtext,{||space(titlepos(cyeardesc,nmaxcol))+cyeardesc})
 aadd(abtext,{||space(titlepos(cgrdesc,nmaxcol))+cgrdesc})
 aadd(abtext,{||""})
 
-/*if ctype == "P"
-        aadd(abtext,{||"        ID.NO.      LAST NAME           FIRST NAME          M  COURSE  G.P.A."})
-        aadd(abtext,{||"       --------  ---------------  ------------------------  -  ------  ------"})
-else
-        aadd(abtext,{||"        ID.NO.      LAST NAME           FIRST NAME          M  COURSE  G.W.A."})
-        aadd(abtext,{||"       --------  ---------------  ------------------------  -  ------  ------"})
-endif*/
 
 if ctype == "P"
         aadd(abtext,{||"        ID.NO.      LAST NAME           FIRST NAME          M  COURSE   TOTAL UNITS   G.P.A."})
@@ -210,15 +203,6 @@ else
         aadd(abtext,{||"        ID.NO.      LAST NAME           FIRST NAME          M  COURSE   TOTAL UNITS    G.W.A."})
         aadd(abtext,{||"       --------  ---------------  ------------------------  -  ------       --        ------"})
 endif
-
-/*
-FIRST YEAR
-
-        ID.NO.      LAST NAME           FIRST NAME          M  COURSE  G.P.A.
-       --------  ---------------  ------------------------  -  ------  ------
-1234.) 12345678  123456789012345  123456789012345678901234  1  123456  12.123
-*/
-
 
 cyytenrp->(dbsetrelation("c999sm1p",{||cyytenrp->enridno},"cyytenrp->enridno"))
 cyytenrp->(sx_setscope(_TOP_SCOPE   ,ccolcode+cyear))
@@ -1546,7 +1530,7 @@ do while ! cyytenrp->(eof())
                 mstfile->course := c999colp->coldesabr
                 mstfile->year   := cyytenrp->enryrlevl
                 mstfile->period := if(cperiod == "M","MIDTERM","FINAL  ")
-        //      mstfile->bal    := a999accp->accbaltot
+
                 if nextkey() == K_ESC
                         exit
                 endif
@@ -1640,27 +1624,7 @@ do while ! mstfile->(eof())
                                 memvar->aitems[memvar->nindex,_GRD]  := memvar->cgrade
                                 memvar->aitems[memvar->nindex,_UNTS] := memvar->cunit
                                 memvar->nindex += 1
-/*                                do case
-                                        case cpaper == "B"   Blank Form
-                                                if ! lprint
-                                                        bhead4mail(cdesc,cperiod)
-                                                        memvar->lprint := .t.
-                                                endif
-                                                outexpr(prow()+01,00,memvar->csubject)
-                                                outexpr(prow()+00,16,memvar->csubdesc)
-                                                outexpr(prow()+00,59,memvar->cgrade)
-                                                outexpr(prow()+00,65,memvar->cunit)
-                                        case cpaper == "P"   Printed Form
-                                                if ! lprint
-                                                        phead4mail(cdesc)
-                                                        memvar->lprint := .t.
-                                                endif
-                                                outexpr(prow()+01,00,memvar->csubject)
-                                                outexpr(prow()+00,15,memvar->csubdesc)
-                                                outexpr(prow()+00,62,memvar->cgrade)
-                                                outexpr(prow()+00,67,memvar->cunit)
-                                endcase
-*/
+
                         endif
                         if nextkey() == K_ESC
                                 exit
@@ -1697,39 +1661,17 @@ for i = 1 to 10
                 outexpr(prow(),03,"Total Units: "+ transform(memvar->ntotunits,"99.9"))
         case prow() == 08
                 outexpr(prow(),00,"Credits Earned: "+transform(memvar->ncredits,"99.9"))
-//        case prow() == 09
-//                outexpr(prow(),07,"G.W.A. :")
+
+
         case prow() == 14
                 outexpr(prow(),00,chr(27)+"E"+alltrim(c999sm2p->sm2gdn)+chr(27)+"F")
         case prow() == 15
                 outexpr(prow(),00,alltrim(c999sm2p->sm2malad1))
-//                outexpr(prow(),00,alltrim(c999sm2p->sm2malad1)+space(15)+IIF(mstfile->bal>0,"Has a remaining balance of P "+alltrim(transform(mstfile->bal,"999,999.99")),""))
+
         case prow() == 16
                 outexpr(prow(),00,alltrim(c999sm2p->sm2malad2)+"")
     endcase
 
-/*
-    if (i+10) <= len(memvar->aitems)
-        outexpr(prow(),35,  ""+memvar->aitems[i+10,_SUBJ]+"     "+;
-                            memvar->aitems[i+10,_GRD]+"   "+;
-                            memvar->aitems[i+10,_UNTS])
-    else
-        outexpr(prow(),35,  ""+space(28))
-    endif
-    if i <= len(memvar->aitems)
-        if ! right(cterm,1)=="4"
-        outexpr(prow(),75,  if(prow()==14,space(07),"")+""+;
-                            memvar->aitems[i,_SUBJ]+"     "+;
-                            memvar->aitems[i,_GRD]+"   "+;
-                            memvar->aitems[i,_UNTS])
-        else
-        outexpr(prow(),45,  if(prow()==14,space(07),"")+""+;
-                            memvar->aitems[i,_SUBJ]+"     "+;
-                            memvar->aitems[i,_GRD]+"   "+;
-                            memvar->aitems[i,_UNTS])
-        endif
-    endif
-*/
 
     if (i+10) <= len(memvar->aitems)
         if ! right(cterm,1)=="4"
@@ -2660,23 +2602,19 @@ do while .t.
         @ 20,02 say "TOR Date              :";
                 color memvar->colorarray[02];
                 get ctordate
-        
-        /*@ 20,02 say "TOR Serial Number     :";
-                color memvar->colorarray[02];
-                get ctorserial
-                */
-        
-        @ 21,02 say "[ 1-W/out Autonomous|2-W/Autonomous|3-Pacucoa|4-W/out STCW|5-SO|6-W/out Pacucoa]" color memvar->colorarray[02]
+
+        /*
+        @ 21,02 say "[ 1-W/out Autonomous|2-W/Autonomous|3-Pacucoa]" color memvar->colorarray[02]
+        @ 22,02 say "[ 4-W/out STCW|5-SO|6-W/out Pacucoa | 7- Marina]" color memvar->colorarray[02]
+        */
+        @ 21,02 say "[1-W/out A|2-W/ A|3-Pacucoa|4-W/out STCW|5-SO|6-W/out Pacucoa|7- Marina]" color memvar->colorarray[02]
         @ 22,02 say "Phrase To Put :";
                 color memvar->colorarray[02];
                 get question pict "@!";
-                valid question $ "123456"
+                valid question $ "1234567"
 
         read
 
-        /*if len(alltrim(sporderno))!=0 .and. len(alltrim(seriesno))!=0
-                sporder:=2
-        endif*/
 
         ctorcont  := if(!empty(ctorserial),ctorserial,strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A")
 
@@ -3384,51 +3322,35 @@ else
                 outexpr(prow()+01,02,if (left(c999colp->colnamabr2,3) == "B.S","DEGREE","TITLE")+" OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS")
                 outexpr(prow()+01,02,"OF "+format_date(cdategrad1)+".")
 
+            elseif(question == "7")
 
-                
+                outexpr(prow()+01,02,"GRADUATED "+if(!empty(chonrec),alltrim(chonrec)+" ","")+"FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol))
+                outexpr(prow()+01,02,"WITH THE "+if (left(c999colp->colnamabr2,3) == "B.S","DEGREE","TITLE")+" OF "+alltrim(c999colp->colnamdeg))
+                outexpr(prow()+01,02,"("+alltrim(c999colp->colnamabr2)+") AS OF "+format_date(cdategrad1) + " PER SPECIAL ORDER (R-VII) NO. "+alltrim(sporderno))
+                outexpr(prow()+01,02,"S. "+alltrim(seriesno)+" DATED "+format_date(sporderdte)+" ISSUED BY MARITIME INDUSTRY AUTHORITY (MARINA)")
+                outexpr(prow()+01,02,"CENTRAL VISAYAS AREA CEBU CITY.")
 
             endif
         endif
 
 
 
-/*
-else
-        outexpr(prow()+01,02,"COMPLETED  THE  THEORETICAL  REQUIREMENTS  OF THE COURSE LEADING TO THE")
-        outexpr(prow()+01,02,"DEGREE  OF  BACHELOR  OF  SCIENCE  IN "+alltrim(c999colp->colnamcol)+" "+if(alltrim(c999colp->colcod)=="MT"," (B.S.M.T.)",if(alltrim(c999colp->colcod)=="MA"," (B.S.MAR.E)","("+alltrim(c999colp->colnamabr2)+")")))
-        outexpr(prow()+01,02,"AS   REQUIRED  BY  THE   COMMISSION  ON  HIGHER  EDUCATION  (CHED)  AND")
-        outexpr(prow()+01,02,"UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+".")
-*/
-
 endif
         outexpr(prow()+01,02,replicate("-",74))
         outexpr(prow()+01,07,"(TRANSCRIPT CLOSED. ANY ENTRY BELOW THIS LINE IS NULL AND VOID.)")
 
-//        tefooter2(++npage,cpurpose,corno,npage,ctorcont)
         tefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
 return(nil)
 
 static function torfrontpage(cidno,cnceeper,cyrtaken,cexamno,cpurpose,cprepared,cchecked,corno,cdateadmit,ctorcont,cregistrar,cposition)
 ccolcod := space(2)
-//ctorcont  := strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A"
 
-/*
-if ! alltrim(memvar->clevel) == "P"
-        ctorcont  := strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A"
-else
-        ctorcont  := "testingSN#"
-endif
-*/
 
 headeject()
 setprc(00,00)
 outexpr(prow()+03,02,"NAME              :")
 
-/*
-outexpr(prow()+00,22,alltrim(c999sm1p->sm1lstnam)+", "+alltrim(c999sm1p->sm1fstnam)+" "+   ;
-        if(!empty(c999sm1p->sm1midname),c999sm1p->sm1midname,                              ;
-           if(!empty(c999sm1p->sm1midnam),c999sm1p->sm1midnam+"."," ")))
-*/
+
 
 outexpr(prow()+00,22,alltrim(strtran(c999sm1p->sm1lstnam,"¥",chr(165)))+", "+alltrim(strtran(c999sm1p->sm1fstnam,"¥",chr(165)))+" "+   ;
         if(!empty(c999sm1p->sm1midname),strtran(c999sm1p->sm1midname,"¥",chr(165)),                              ;
@@ -3503,23 +3425,7 @@ outexpr(prow()+01,02,"REGARDED AS EQUIVALENT ALSO TO ONE UNIT OF CREDIT.")
 outexpr(prow()+02,02,"THE STUDENT IS IN GOOD MORAL STANDING UNLESS OTHERWISE INDICATED  IN  THE")
 outexpr(prow()+01,02,"TRANSCRIPT.")
 
-/*
-//outexpr(prow()+03,02,"REMARKS:                                             DATE ISSUED:")
-//outexpr(prow()+00,11,cpurpose);outexpr(prow()+00,68,displaydate(date()))
-//outexpr(prow()+03,02,"PREPARED BY:                                         NOTED BY:  ")
-//outexpr(prow()+03,02,cprepared)
-//outexpr(prow()+00,55,cchecked)
-//outexpr(prow()+00,02,replicate("_",22))
-//outexpr(prow()+00,55,replicate("_",22))
-//outexpr(prow()+04,27,"    FRANCISCO C. SALES    ")
-//outexpr(prow()+00,27,"__________________________")
-//outexpr(prow()+01,27,"   UNIVERSITY REGISTRAR   ")
-//outexpr(prow()+02,04,"NOT VALID WITHOUT SEAL")
-//outexpr(prow()+01,04,"    OR NO.________        ")
-//outexpr(prow()+00,04,"           "+corno)
-//outexpr(prow()+01,04,"        PAGE  1       ")
-//__eject()
-*/
+
 
 tefooter2(1,cpurpose,corno,ctorcont)
 return(nil)
@@ -8477,803 +8383,12 @@ enddo
 outexpr(prow()+00,00,chr(18))
 __eject()
 closewcheck(afile)
-return(nil)
-
-//FUNCTION TOR FOR UC MAIN NGA GE REKLAMO SA GOBYERNO
-function formainkaduhangtor()
-local getlist := {}, alastscr := savescr(01,00,24,79), nlastcursor := setcursor(),;
-      clastcolor := setcolor(memvar->colorarray[11]), lconfirm := set(_SET_CONFIRM),;
-      aprvsetup,aentryscr,bprint,cprocsts,cfile,ccdx,;
-      cidno,cnceeper,cyrtaken,cexamno,cpurpose,n99,cbarhead,corno,cdategrad,;
-      cdategrad1,cdateadmit,chonrec,sporderno,seriesno,sporder,ladder,ctorcont,;
-      ctordate,ctorserial
-private navfile:="reptor"+strzero(memvar->naccess,2),navtor,afile
-if(aprvsetup := openwcheck({{,,"c999torp",,_DBF_SHARED,,1},;
-                            {,,"term"    ,,_DBF_SHARED,,1},;
-                            {,,"c999crsp",,_DBF_SHARED,,1},;
-                            {,,"c999colp",,_DBF_SHARED,,1},;
-                            {,,"c999grad",,_DBF_SHARED,,1},;
-                            {,,"oldcuraj",,_DBF_SHARED,,1},;
-                            {,,"c999sm1p",,_DBF_SHARED,,1},;
-                            {,,"heads",,_DBF_SHARED,,4},;
-                            {,,"torcont",,_DBF_SHARED,,1},;
-                            {,,"PARA",,_DBF_SHARED,,},;
-                            {,,"c999sm2p",,_DBF_SHARED,,1}})) == nil
-        return(nil)
-endif
-boxshadow(01,00,24,79,"ÛßÛÛÛÜÛÛ ",memvar->colorarray[11],"  Transcript of Record Printing  ")
-commandline("³           F4 - View Student          ³              ESC - Previous           ³")
-aentryscr := savescr(01,00,24,79)
-
-//fask(10,"  User level ==> "+memvar->clevel+"  ",{" Ok "},memvar->colorarray[05],.t.,nil)
-
-if ! alltrim(memvar->clevel) == "P"
-        ctorcont  := if(!empty(ctorserial),ctorserial,strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A")
-//        fask(10,"  TOR Serial: "+LEFT(ctorcont,7)+" <----- ",{" Ok "},memvar->colorarray[05],.t.,nil)
-        para->(reclock())
-        para->torserial      := LEFT(ctorcont,7)
-        para->(dbcommit())
-        para->(dbunlock())
-else
-        ctorcont  := "SN#"
-endif
-
-cidno     := space(len(c999sm1p->sm1idno))
-cnceeper  := "N.A."
-cyrtaken  := "N.A."
-cexamno   := "N.A.      "
-cpurpose  := "FOR EVALUATION"+space(36)
-cprepared := memvar->cuserfname + space(30-len(memvar->cuserfname))
-
-cchecked  := space(30)
-//cchecked  := strtran(cchecked,"¥","Å")
-cchecked  := strtran(cchecked,"¥",chr(165))
-cflag     := " "
-sporderno := space(20)
-sporderdte:= ctod("  /  /  ")
-seriesno  := space(4)
-ladder    := space(1)
-nstpact   := "N"
-ctordate  := ctod("  /  /  ")
-ctorserial:= space(8)
-
-if heads->(dbseek("REGISTRAR"))
-    cregistrar:= alltrim(heads->fname)+" "+alltrim(heads->mname)+" "+alltrim(heads->lname)
-else
-   cregistrar:= space(20)
-endif
-
-//cregistrar:= "EDGAR J. ESGUERRA"+space(13)
-cposition := "REGISTRAR"+space(11)
-
-create_navfile()
-do while .t.
-        sporder := 0
-        navtor->(__dbzap());navtor->(dbreindex())
-        restscr(aentryscr)
-        setkey(K_F4,{||if(readvar()=="CIDNO",vstudent(space(len(c999sm1p->sm1idno)),cprocsts,memvar->colorarray[10]),)})
-        setcursor(1);set(_SET_CONFIRM,.t.)
-        @ 02,02 say "Student Number        :";
-                color memvar->colorarray[02];
-                get cidno       pict "@!";
-                valid ! empty(cidno)
-        read
-        if lastkey() == K_ESC
-                exit
-        endif
-        if !c999sm1p->(dbseek(cidno))
-                fask(10,"  Student Number : "+cidno+" not found  ",{" Ok "},memvar->colorarray[05],.t.,nil)
-                loop
-        endif
-        if c999sm2p->(dbseek(cidno))
-                corno      := c999sm2p->sm2paynum
-                cdategrad  := c999sm2p->sm2dgradas
-                cdategrad1 := c999sm2p->sm2dgradbs
-                cdateadmit := c999sm2p->sm2dadmit
-                chonrec    := c999sm2p->sm2honors
-                sporderno  := c999sm2p->sm2sono
-                sporderdte := c999sm2p->sm2sodate
-                seriesno   := c999sm2p->sm2series
-        else
-                c999sm2p->(dbappend())
-                c999sm2p->sm2idno := cidno
-                corno     := space(10)
-                cdategrad := ctod("  /  /  ")
-                cdategrad1:= ctod("  /  /  ")
-                cdateadmit:= ctod("  /  /  ")
-                chonrec   := space(20)
-                sporderno := space(20)
-                sporderdte:= ctod("  /  /  ")
-                seriesno  := space(4)
-        endif
-
-        @ 03,02 say "NCEE Percentile       :";
-                color memvar->colorarray[02];
-                get cnceeper    pict "@!"
-        @ 04,02 say "Year Taken            :";
-                color memvar->colorarray[02];
-                get cyrtaken    pict "@!"
-        @ 05,02 say "Examinee Number       :";
-                color memvar->colorarray[02];
-                get cexamno     pict "@!"
-        @ 06,02 say "Purpose               :";
-                color memvar->colorarray[02];
-                get cpurpose    pict "@!"
-        @ 07,02 say "Prepared by           :";
-                color memvar->colorarray[02];
-                get cprepared   pict "@!"
-        @ 08,02 say "Noted by              :";
-                color memvar->colorarray[02];
-                get cchecked    pict "@!"
-
-        @ 09,02 say "Registrar Head        :";
-                color memvar->colorarray[02];
-                get cregistrar    pict "@!"
-                //valid ! empty(cregistrar)
-
-        @ 10,02 say "Payment Number        :";
-                color memvar->colorarray[02];
-                get corno       pict "@!"
-        @ 11,02 say "Date Graduated (AS)   :";
-                color memvar->colorarray[02];
-                get cdategrad   //pict "@!"
-        @ 12,02 say "Date Graduated (BS)   :";
-                color memvar->colorarray[02];
-                get cdategrad1   //pict "@!"
-        @ 13,02 say "Date Admitted         :";
-                color memvar->colorarray[02];
-                get cdateadmit   //pict "@!"
-        @ 14,02 say "Honor Received        :";
-                color memvar->colorarray[02];
-                get chonrec   pict "@!"
-
-        @ 15,02 say "Special Order No.     :";
-                color memvar->colorarray[02];
-                get sporderno pict "@!"
-        @ 16,02 say "Dated                 :";
-                color memvar->colorarray[02];
-                get sporderdte //pict "@!"
-        @ 17,02 say "Series of             :";
-                color memvar->colorarray[02];
-                get seriesno pict "@!"
-        @ 18,02 say "NSTP act of 2001      :";
-                color memvar->colorarray[02];
-                get nstpact pict "Y";
-                valid !empty(nstpact)
-        @ 19,02 say "TOR Date              :";
-                color memvar->colorarray[02];
-                get ctordate
-        @ 20,02 say "TOR Serial Number     :";
-                color memvar->colorarray[02];
-                get ctorserial
-/*        @ 20,02 say "Name of Registrar     :";
-                color memvar->colorarray[02];
-                get cregistar   pict "@!"
-        @ 21,02 say "Position              :";
-                color memvar->colorarray[02];
-                get cposition   pict "@!"
-*/
-
-/*        @ 16,02 say "Ladderized Program?   :";
-                color memvar->colorarray[02];
-                get ladder pict "Y";
-                valid !empty(ladder)
-*/
-        read
-
-        if len(alltrim(sporderno))!=0 .and. len(alltrim(seriesno))!=0
-                sporder:=2
-        endif
-
-        ctorcont  := if(!empty(ctorserial),ctorserial,strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A")
-
-        setcursor(nlastcursor);set(_SET_CONFIRM,lconfirm)
-        setkey(K_F4,nil)
-        if lastkey() == K_ESC
-                exit
-        endif
-        nptor(cidno) //&& additional function for mellinium compliance
-
-        if c999sm2p->(dbseek(cidno))
-                c999sm2p->(reclock())
-                c999sm2p->sm2paynum := corno
-                c999sm2p->sm2dgradas := cdategrad
-                c999sm2p->sm2dgradbs := cdategrad1
-                c999sm2p->sm2dadmit  := cdateadmit
-                c999sm2p->sm2honors  := chonrec
-                c999sm2p->sm2sono    := sporderno
-                c999sm2p->sm2sodate  := sporderdte
-                c999sm2p->sm2series  := seriesno
-                c999sm2p->(dbcommit())
-                c999sm2p->(dbunlock())
-        endif
-        if ! alltrim(memvar->clevel) == "P"
-                torcont->(dbappend())
-                torcont->torserial   := ctorcont
-                torcont->toridno     := cidno
-                torcont->tordate     := date()
-                torcont->rectrail    := dtoc(date())+","+time()+","+memvar->cusername
-                torcont->(dbcommit())
-                torcont->(dbunlock())
-        endif
-
-        if empty(cdategrad1)
-            cdategrad1 := cdategrad
-        endif
-
-        if whereprint({||kaduhangptor(cidno,cnceeper,cyrtaken,cexamno,cpurpose,cprepared,cchecked,corno,cdategrad,cdategrad1,cdateadmit,chonrec,sporderno,seriesno,sporder,ctorcont,ctordate,ctorserial,cregistrar,cposition)}) == 1
-                __keyboard(alltrim(memvar->cspooltxt)+".PRN"+chr(K_ENTER))
-                 viewtextfile()
-        endif
-enddo
-restscr(alastscr)
-closewcheck(aprvsetup)
-navtor->(dbclosearea())
-memvar->navfile+=".*"
-ferase(memvar->navfile)
-return(nil)
-
-
-//TRANSCRIPT OF RECORD PRINTING UC-MAIN NGA GE REKLAMO SA GOBYERNO
-function kaduhangptor(cidno,cnceeper,cyrtaken,cexamno,cpurpose,cprepared,cchecked,corno,cdategrad,cdategrad1,cdateadmit,chonrec,sporderno,seriesno,sporder,ctorcont,ctordate,ctorserial,cregistrar,cposition)
-local afile,nline := 0, nctr := 0, nctrunt := 0, cnterm:=space(3), lterm:=space(3), ;
-      cintcod,cfingrd,ccomgrd,ctrmdesc,ncredit:=0,ccredit:=space(3),yrlevel:=" ",;
-      bgrad := 0, cint_cod, nunit := 0, addunit := 0, ccors, npage := 1, srchvess := 0, cyytappp, apterm
-
-//ctorcont  := strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A"
-/*
-//if ! alltrim(memvar->clevel) == "P"
-//        ctorcont  := strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A"
-//else
-//      ctorcont  := "testingSN#"
-//endif
-*/
-
-kaduhangtorfront1(cidno,cnceeper,cyrtaken,cexamno,cpurpose,cprepared,cchecked,corno,cdateadmit,chonrec,npage,ctorcont,ctordate,cregistrar,cposition)
-torheader()
-
-navtor->(sx_setscope(_TOP_SCOPE   ,cidno))
-navtor->(sx_setscope(_BOTTOM_SCOPE,cidno))
-
-navtor->(dbgotop())
-do while ! empty(navtor->torintcd01) .and. ! navtor->(eof())
-        lterm := right(navtor->torschtrm,3)
-        navtor->(dbskip())
-enddo
-//fask(10,"  Term: "+lterm+"  ",{" Ok "},memvar->colorarray[05],.t.,nil)
-
-//navtor->(sx_SetTagOrder(3))
-navtor->(dbgotop())
-do while ! navtor->(eof())
-        yrlevel := navtor->toryrlevl
-        fask(10,"  Processing school term "+navtor->torschtrm+"  ",{" Ok "},memvar->colorarray[06],.F.,nil)
-        c999colp->(dbseek(navtor->torcolcod))
-        cnterm:=substr(navtor->torschtrm,3,3)
-        term->(dbseek(cnterm))
-        ctrmdesc := alltrim(if(right(navtor->torschtrm,1) == "1","FIRST SEMESTER, "+substr(term->name,14),;
-                    if(right(navtor->torschtrm,1) == "2","SECOND SEMESTER, "+substr(term->name,14),;
-                    if(right(navtor->torschtrm,1) == "A","FIRST "+substr(term->name,4),;
-                    if(right(navtor->torschtrm,1) == "B","SECOND "+substr(term->name,4),;
-                    if(right(navtor->torschtrm,1) == "C","THIRD "+substr(term->name,4),;
-                    if(right(navtor->torschtrm,1) == "4","SUMMER, "+substr(term->name,8),space(1))))))))+;
-                    if(!empty(alltrim(navtor->torinst))," w/ PERMIT","")
-        if (prow() >= 39) .or. (empty(navtor->torintcd01) .and. (prow()+6)>39)
-                footline()
-                kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                torheader()
-        endif
-
-        if empty(navtor->torintcd01)
-           if bgrad == 0
-                if c999colp->colcod $ "MT,MV,ME,MI,MO,MS,PA,SN,YN,BN,NW,HN,NV"
-                   @ prow()+01,18 say "ONE YEAR APPRENTICESHIP/SHIPBOARD TRAINING   WITH LOG BOOK"
-                   @ prow()+00,18 say replicate("_",44)
-                elseif c999colp->colcod $ "MA,MM,MR,MB,MD,MP,EN,EL,SM,YM,BM,MW,HM,NM"
-                   @ prow()+01,18 say "ONE YEAR APPRENTICESHIP/SHIPBOARD TRAINING   WITH LOG BOOK"
-                   @ prow()+00,18 say replicate("_",44)
-                elseif c999colp->colcod == "CS"
-                   if yrlevel == "2"
-                   @ prow()+01,18 say "APPRENTICE ON BOARD"
-                   @ prow()+00,18 say replicate("_",19)
-                   end if
-                endif
-                bgrad := 1
-           endif
-
-//           fask(10,"  "+alltrim(str(c999sm1p->sm1schtrm))+"  ",{" Ok "},memvar->colorarray[05],.t.,nil)
-           if srchvess == 0
-           if alltrim(c999colp->coldesabr)=="CS"
-                   @ prow()+01,02 say "CS (PHASE "+if(navtor->toryrlevl=="1","I",if(navtor->toryrlevl=="2","II","III"))+")"+space(2)+ctrmdesc
-                   @ prow()+00,02 say replicate("_",13)+if(navtor->toryrlevl=="3","_","_ ")+space(2)+replicate("_",len(alltrim(ctrmdesc)))
-           elseif padl(alltrim(str(c999sm1p->sm1schtrm)),3,"0") >= "031" .and. ;
-                  padl(alltrim(str(c999sm1p->sm1schtrm)),3,"0") <= "221"
-//                   @ prow()+01,02 say c999colp->coldesabr+" "+navtor->toryrlevl//+space(8)+ctrmdesc
-                   @ prow()+00,02 say ;
-                        if(alltrim(c999colp->colcod)=="MA","BSMARE",;
-                        if(alltrim(c999colp->colcod)=="MT","BSMT",;
-                           c999colp->coldesabr))+" "+navtor->toryrlevl//+space(6)+ctrmdesc
-                   @ prow()+00,02 say replicate("_",10)//+space(6)+replicate("_",len(alltrim(ctrmdesc)))
-           else
-                   @ prow()+01,02 say c999colp->coldesabr+" "+navtor->toryrlevl//+space(6)+ctrmdesc
-                 //  @ prow()+00,02 say replicate("_",10)+space(6)+replicate("_",len(alltrim(ctrmdesc)))
-           endif
-
-           c999torp->(dbseek(cidno+cnterm))
-                if c999colp->colcod != "CS"
-//                if (left(cidno,2) >= "01") .and. (left(cidno,2) <= "10")
-                        @ prow()+01,57 say if(empty(c999torp->torapgrd),"---"+space(10)+"40",;
-                                           if(val(c999torp->torapgrd) > 0,;
-                                           left(c999torp->torapgrd,1)+"."+right(c999torp->torapgrd,1)+space(11)+"40",c999torp->torapgrd))
-          //edited by KENN JULY 5, 2012
-                elseif c999colp->colcod = "CS"
-                        @ prow()+01,57 say if(empty(c999torp->torapgrd),"---"+space(10)+"7",;
-                                           if(val(c999torp->torapgrd) > 0,;
-                                           left(c999torp->torapgrd,1)+"."+right(c999torp->torapgrd,1)+space(11)+"7",c999torp->torapgrd))
-                endif
-           @ prow()+01,02 say "VESSEL"+space(15)+"EMBARKATION"+space(08)+"DISEMBARKATION"+space(5)+"GROSS TONNAGE"
-           srchvess = 1
-           endif
-        cyytappp := alltrim("c"+cnterm+"appp")
-        if(aprvsetup := openwcheck({{,,"c999appp",,_DBF_SHARED,,1},;
-                         {,, cyytappp ,"cyytappp",_DBF_SHARED,,11}})) == nil
-                return(nil)
-        endif
-
-       //----------------REVISED BY MARINA 5/20/2015
-        cyytappp->(sx_settagorder(11))
-        cyytappp->(dbgotop())
-        do while ! cyytappp->(eof())
-
-           if cyytappp->appidno == cidno
-                @ prow()+01,02 say alltrim(cyytappp->appvesname)
-                @ prow()+00,23 say upper(cmonth(cyytappp->appembark))+str(day(cyytappp->appembark))+","+str(year(cyytappp->appembark))
-                @ prow()+00,42 say upper(cmonth(cyytappp->appdembark))+str(day(cyytappp->appdembark))+","+str(year(cyytappp->appdembark))
-                @ prow()+00,60 say transform(cyytappp->appgrston,"9,999,999.99")
-           endif
-           cyytappp->(dbskip())
-        enddo
-
-/*
-           @ prow()+01,02 say "NAME OF VESSEL     : "+c999torp->torvesname
-           @ prow()+01,02 say "PROPRIETOR         : "+c999torp->torvesown
-           @ prow()+01,02 say "GROSS TONS         : "+transform(c999torp->torgrston,"9,999,999.99")
-//           @ prow()+01,02 say "DATE OF EMBARKATION: "+upper(cmonth(c999torp->torembark))+str(day(c999torp->torembark))+","+str(year(c999torp->torembark))
-           @ prow()+01,02 say "DATE OF EMBARKATION: "+format_date(c999torp->torembark)
-*/
-        else
-           if !empty(navtor->torinst)
-                   @ prow()+01,18 say alltrim(navtor->torinst)
-                   @ prow()+00,18 say replicate("_",len(alltrim(navtor->torinst)))
-           endif
-
-           if alltrim(c999colp->coldesabr)=="CS"
-                   @ prow()+01,02 say "CS (PHASE "+if(navtor->toryrlevl=="1","I ","II")+")"+space(3)+ctrmdesc
-                   @ prow()+00,02 say replicate("_",13)+space(3)+replicate("_",len(alltrim(ctrmdesc)))
-           elseif lterm >= "031" .and. ;
-                  lterm <= "221"
-//                   @ prow()+01,02 say c999colp->coldesabr+" "+navtor->toryrlevl+space(8)+ctrmdesc
-                   @ prow()+01,02 say ;
-                        if(alltrim(c999colp->colcod)=="MA","BSMARE",;
-                        if(alltrim(c999colp->colcod)=="MT","BSMT  ",;
-                           c999colp->coldesabr))+" "+navtor->toryrlevl+space(6)+ctrmdesc
-                   @ prow()+00,02 say replicate("_",10)+space(6)+replicate("_",len(alltrim(ctrmdesc)))
-           else
-                   @ prow()+01,02 say c999colp->coldesabr+" "+navtor->toryrlevl+space(6)+ctrmdesc
-                   @ prow()+00,02 say replicate("_",10)+space(6)+replicate("_",len(alltrim(ctrmdesc)))
-           endif
-
-        endif
-        for nctr := 1 to 20 //melchor
-                nctrunt := 1
-                cintcod := "torintcd"+strzero(nctr,2)
-                cfingrd := "torfingd"+strzero(nctr,2)
-                ccomgrd := "torcomgd"+strzero(nctr,2)
-                addunit := 0
-                if oldcuraj->(dbseek(navtor->&cintcod))
-                        addunit := 1
-                        for nctrunt := 1 to 19 //melchor
-                            cint_cod := "torintcd"+strzero(nctrunt,2)
-                            if navtor->&cint_cod == oldcuraj->courslcod
-                                addunit := 0
-                                exit
-                            endif
-                        next
-                endif
-                if ! empty(navtor->&cintcod)
-                        fask(16,"  Printing subject "+navtor->&cintcod+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
-                        c999crsp->(dbseek(navtor->&cintcod))
-                        nunit := c999crsp->crscreunt
-                        if addunit == 1
-                           nunit += 1
-                        endif
-                      //  if prow() > 50
-                        if prow() >= 39
-                                footline()
-                                kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                                torheader()
-                                if alltrim(c999colp->coldesabr)=="CS"
-                                        @ prow()+01,02 say "CS (PHASE "+if(navtor->toryrlevl=="1","I","II")+")"+space(3)+ctrmdesc
-                                        @ prow()+00,02 say replicate("_",13)+space(3)+replicate("_",len(alltrim(ctrmdesc)))
-                                elseif lterm <= "221" .and. ;
-                                       lterm >= "031"
-                                        @ prow()+01,02 say ;
-                                             if(alltrim(c999colp->colcod)=="MA","BSMARE",;
-                                             if(alltrim(c999colp->colcod)=="MT","BSMT",;
-                                                c999colp->coldesabr))+" "+navtor->toryrlevl+space(6)+ctrmdesc
-                                        @ prow()+00,02 say replicate("_",10)+space(6)+replicate("_",len(alltrim(ctrmdesc)))
-                                else
-                                        @ prow()+01,02 say c999colp->coldesabr+" "+navtor->toryrlevl+space(6)+ctrmdesc
-                                        @ prow()+00,02 say replicate("_",10)+space(6)+replicate("_",len(alltrim(ctrmdesc)))
-                                endif
-                        endif
-                        
-                        @ prow()+01,02 say c999crsp->crssubcod+" "+;
-                                           if(c999crsp->crssubtyp == "R"," ","L")+"  "+;
-                                           c999crsp->crsdsc1
-                        if ! empty(c999crsp->crsdsc2)
-                                @ prow()+01,18 say c999crsp->crsdsc2+"   "+;
-                                                   if(empty(navtor->&cfingrd),"---",;
-                                                   if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
-                                                   if(empty(navtor->&ccomgrd),"   ",;
-                                                   if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2)+;
-                                                   if((val(navtor->&cfingrd) > 0 .and. navtor->&cfingrd < "31") .or. (val(navtor->&ccomgrd) > 0 .and. navtor->&ccomgrd< "31"),;
-                                                   if (str(c999crsp->crscreunt,3,1) == "1.5",transform(c999crsp->crscreunt,"@Z 999.9"),transform(nunit,"@Z 999")),transform(0,"999"))
-
-                        elseif empty(c999crsp->crsdsc2)
-                                @ prow()+00,57 say ;
-                                                   if(empty(navtor->&cfingrd),"---",;
-                                                   if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
-                                                   if(empty(navtor->&ccomgrd),"   ",;
-                                                   if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2)+;
-                                                   if((val(navtor->&cfingrd) > 0 .and. navtor->&cfingrd < "31") .or. (val(navtor->&ccomgrd) > 0 .and. navtor->&ccomgrd< "31"),;
-                                                   if (str(c999crsp->crscreunt,3,1) == "1.5",transform(c999crsp->crscreunt,"@Z 999.9"),transform(nunit,"@Z 999")),transform(0,"999"))
-
-                                                  // &&if(val(navtor->&cfingrd) > 0 .and. navtor->&cfingrd < "31",transform(c999crsp->crscreunt,"@Z"),transform(0,"99999"))
-                        endif
-                else
-                        exit
-                endif
-        next
-
-        if nextkey() == K_ESC
-                exit
-        endif
-//        lterm := navtor->torschtrm
-        ccors := c999colp->colcod
-        navtor->(dbskip())
-
-/* ----------------------------------------------------------------- */
-
-        if (navtor->toryrlevl == "4" .or. c999colp->colcod == "CS") .and. bgrad == 0 .and. empty(navtor->torintcd01)
-           if nstpact=="Y"
-                outexpr(prow()+01,02,"ROTC  AS  REQUISITE  FOR  GRADUATION  SET-ASIDE  PURSUANT  TO  SECTION 12.")
-                outexpr(prow()+01,02,"RULE VI OF THE IMPLEMENTING RULES AND REGULATIONS OF THE NSTP ACT OF 2001,")
-                outexpr(prow()+01,02,"WHICH TOOK EFFECT ON MARCH 23, 2002.")
-                if (prow() >= 39) .or. (empty(navtor->torintcd01) .and. (prow()+6)>39)
-                        footline()
-//                        tefooter1(++npage,cpurpose,corno)
-                        kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                torheader()
-                endif
-           endif
-
-           if ccors == "ET"
-                outexpr(prow()+01,02,"GRADUATED FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH THE DEGREE OF")
-                outexpr(prow()+01,02,+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS OF "+format_date(cdategrad))
-                outexpr(prow()+01,02,"PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER. UNDER THE")
-                outexpr(prow()+01,02,"EXPANDED TERTIARY EDUCATION EQUIVALENCY AND ACCREDITATION PROGRAM (ETEEAP)")
-                outexpr(prow()+01,02,"PER EXECUTIVE ORDER NO. 330 DATED MAY 10, 1996.")
-           elseif ccors == "ER"
-                outexpr(prow()+01,02,"GRADUATED FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH THE DEGREE")
-                outexpr(prow()+01,02,"THE TITLE OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS OF"+format_date(cdategrad))
-                outexpr(prow()+01,02,"PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER. UNDER THE")
-                outexpr(prow()+01,02,"EXPANDED TERTIARY EDUCATION EQUIVALENCY AND ACCREDITATION PROGRAM (ETEEAP)")
-                outexpr(prow()+01,02,"PER EXECUTIVE ORDER NO. 330 DATED MAY 10, 1996.")
-           elseif ccors == "MT"
-                outexpr(prow()+01,02,"GRADUATED FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH THE ")
-                outexpr(prow()+01,02,"THE TITLE OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS")
-                outexpr(prow()+01,02,"OF "+format_date(cdategrad)+". PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE ")
-                outexpr(prow()+01,02,"OF SPECIAL ORDER.")
-
-
-           elseif ccors == "EN"
-                outexpr(prow()+01,02,"COMPLETED THE REQUIRED SUBJECTS OF THE BRIDGING PROGRAM FROM BACHELOR")
-                outexpr(prow()+01,02,"OF SCIENCE IN MECHANICAL ENGINEERING TO BACHELOR OF SCIENCE IN MARINE")
-                outexpr(prow()+01,02,"ENGINEERING (BSMARE) AS REQUIRED BY THE COMMISSION ON HIGHER EDUCATION")
-                outexpr(prow()+01,02,"(CHED) AND UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+". PACUCOA")
-                outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-
-           elseif ccors == "EL"
-                outexpr(prow()+01,02,"COMPLETED THE REQUIRED SUBJECTS OF THE BRIDGING PROGRAM FROM BACHELOR")
-                outexpr(prow()+01,02,"OF SCIENCE IN ELECTRICAL ENGINEERING TO BACHELOR OF SCIENCE IN MARINE")
-                outexpr(prow()+01,02,"ENGINEERING (BSMARE) AS REQUIRED BY THE COMMISSION ON HIGHER EDUCATION")
-                outexpr(prow()+01,02,"(CHED) AND UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+". PACUCOA")
-                outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-
-           elseif ccors == "AM"
-                outexpr(prow()+01,02,"GRADUATED "+if(!empty(chonrec),alltrim(chonrec)+" ","")+"FROM THE "+yrlevel+"-YEAR ACADEMIC COURSE OF THE 4-YEAR LADDERIZED")
-                outexpr(prow()+01,02,"PROGRAM IN MARINE ENGINEERING WITH THE TITLE OF ASSOCIATE IN")
-                outexpr(prow()+01,02,"MARINE ENGINEERING (A.MAR.E.) AS OF "+format_date(cdategrad)+"."+" PACUCOA")
-                outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
- //SF ADDED APRIL 18, 2016
-           elseif ccors == "SF"
-                outexpr(prow()+01,02,"COMPLETED THE THEORETICAL REQUIREMENT LEADING TO THE COMPLETION OF THE")
-                outexpr(prow()+01,02,"STEEL FABRICATION TECHNOLOGY PROGRAM")
-                outexpr(prow()+01,02,"AS OF "+format_date(cdategrad)+".")
-
-           elseif sporder==2 .and. ! c999colp->colcod == "CS"
-                outexpr(prow()+01,02,"GRADUATED FROM THE "+yrlevel+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH")
-                outexpr(prow()+01,02,"THE "+if (left(c999colp->colnamabr2,3) == "B.S","DEGREE","TITLE")+" OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS OF")
-                outexpr(prow()+01,02,format_date(cdategrad)+". PER SPECIAL ORDER (B ) NO. "+alltrim(sporderno)+", S. "+alltrim(seriesno))
-                outexpr(prow()+01,02,"DATED "+format_date(sporderdte)+" ISSUED BY DECS, REGION VII, CEBU CITY.")
-                sporder  :=0
-                seriesno :=""
-         //---remove by jun for eteeap
-           elseif lterm >= "031" .and. ;
-                  lterm <= "221" .and. ;
-                ccors != "CS"
-                outexpr(prow()+01,02,"COMPLETED THE THREE-YEAR THEORETICAL REQUIREMENTS OF THE COURSE LEADING TO THE")
-                outexpr(prow()+01,02,"DEGREE  OF  BACHELOR  OF  SCIENCE  IN "+alltrim(c999colp->colnamcol)+" "+if(alltrim(c999colp->colcod)=="MT"," (B.S.M.T.)",if(alltrim(c999colp->colcod)=="MA"," (B.S.MAR.E)","("+alltrim(c999colp->colnamabr2)+")")))
-                outexpr(prow()+01,02,"AS   REQUIRED  BY  THE   COMMISSION  ON  HIGHER  EDUCATION  (CHED)  AND")
-                outexpr(prow()+01,02,"UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+". PACUCOA ACCREDITED EXEMPTED FROM THE")
-                outexpr(prow()+01,02,"ISSUANCE OF SPECIAL ORDER.")
-                
- //SF ADDED APRIL 18, 2016
-           elseif ccors == "SF"
-                outexpr(prow()+01,02,"COMPLETED THE THEORETICAL REQUIREMENT LEADING TO THE COMPLETION OF THE")
-                outexpr(prow()+01,02,"STEEL FABRICATION TECHNOLOGY PROGRAM")
-                outexpr(prow()+01,02,"AS OF "+format_date(cdategrad)+".")
-   //  elseif ccors != "CS"
-         //       outexpr(prow()+01,02,"GRADUATED "+if(!empty(chonrec),alltrim(chonrec)+" ","")+"FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol))
-         //       outexpr(prow()+01,02,"WITH THE "+if (left(c999colp->colnamabr2,3) == "B.S","DEGREE","TITLE")+" OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+")")
-         //       outexpr(prow()+01,02,"AS OF "+format_date(cdategrad)+". PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE")
-         //      outexpr(prow()+01,02,"OF SPECIAL ORDER.")
-         // lines below are added by Jun (ETEEAP)
-         // else
-         //       outexpr(prow()+01,02,"COMPLETED  THE  THEORETICAL  REQUIREMENTS  OF THE COURSE LEADING TO THE")
-         //       outexpr(prow()+01,02,"DEGREE  OF  BACHELOR  OF  SCIENCE  IN "+alltrim(c999colp->colnamcol)+" "+if(alltrim(c999colp->colcod)=="MT"," (B.S.M.T.)",if(alltrim(c999colp->colcod)=="MA"," (B.S.MAR.E)","("+alltrim(c999colp->colnamabr2)+")")))
-         //       outexpr(prow()+01,02,"AS   REQUIRED  BY  THE   COMMISSION  ON  HIGHER  EDUCATION  (CHED)  AND")
-         //       outexpr(prow()+01,02,"UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+".")
-           endif
-
-           if (prow() >= 39) .or. (empty(navtor->torintcd01) .and. (prow()+6)>39)
-                footline()
-//                tefooter1(++npage,cpurpose,corno)
-                kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                torheader()
-           endif
-           if c999colp->colcod $ "MT,MV,ME,MI,MO,MS,PA,SN,YN,BN,NW,NV,HN"
-                @ prow()+01,18 say "ONE YEAR APPRENTICESHIP/SHIPBOARD TRAINING   WITH LOG BOOK"
-                @ prow()+00,18 say replicate("_",44)
-           elseif c999colp->colcod $ "MA,MM,MR,MB,MD,MP,AM,EN,EL,SM,YM,BM,MW,NM,HM"
-                @ prow()+01,18 say "ONE YEAR APPRENTICESHIP/SHIPBOARD TRAINING   WITH LOG BOOK"
-                @ prow()+00,18 say replicate("_",44)
-           elseif c999colp->colcod == "CS" .and. yrlevel = "2"
-                @ prow()+01,18 say "APPRENTICE ON BOARD"
-                @ prow()+00,18 say replicate("_",19)
-
-           endif
-           bgrad := 1
-        endif
-/* ----------------------------------------------------------------- */
-
-        if navtor->toryrlevl == "2" .and. c999colp->colcod == "RO" ;
-                   .and. bgrad == 0 .and. (empty(navtor->torintcd01))
-           outexpr(prow()+01,02,"GRADUATED FROM THE SPECIAL ACADEMIC PROGRAM IN MARINE TRANSPORTATION")
-           outexpr(prow()+01,02,"COURSE FOR  MARINE RADIO OPERATORS  WITH THE TITLE OF  ASSOCIATE IN")
-           outexpr(prow()+01,02,"MARINE TRANSPORTATION (A.M.T.)  AS OF "+format_date(cdategrad)+". PACUCOA")
-           outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-           if (prow() > 39) .or. (empty(navtor->torintcd01) .and. (prow()+6)>39)
-                footline()
-//                tefooter1(++npage,cpurpose,corno,npage)
-                kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                torheader()
-           endif
-           bgrad := 1
-
-        endif
-/* ----------------------------------------------------------------- */
-// for bridging program
-        if navtor->toryrlevl == "4" .and. c999colp->colcod == "EN" ;
-                   .and. bgrad == 0 .and. (empty(navtor->torintcd01))
-           outexpr(prow()+01,02,"GRADUATED FROM MARINE ENGINEERING COURSE UNDER THE BRIDGING")
-           outexpr(prow()+01,02,"PROGRAM WITH DEGREE OF BACHELOR OF SCIENCE IN MARINE ENGINEERING")
-           outexpr(prow()+01,02,"(BSMARE) AS OF "+format_date(cdategrad1)+". PACUCOA ACCREDITED EXEMPTED FROM THE")
-           outexpr(prow()+01,02,"ISSUANCE OF SPECIAL ORDER.")
-           if (prow() > 39) .or. (empty(navtor->torintcd01) .and. (prow()+6)>39)
-                footline()
-                kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                torheader()
-           endif
-           bgrad := 1
-
-        endif
-        if navtor->toryrlevl == "3" .and. c999colp->colcod == "MT" ;
-                   .and. bgrad == 0 .and. (empty(navtor->torintcd01))
-           outexpr(prow()+01,02,"GRADUATED FROM 3-YEAR COURSE IN MARINE TRANSPORTATION WITH")
-           outexpr(prow()+01,02,"THE TITLE OF ASSOCIATE IN MARINE TRANSPORTATION (A.M.T.) AS")
-           outexpr(prow()+01,02,"AS OF "+format_date(cdategrad1)+". PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE")
-           outexpr(prow()+01,02,"OF SPECIAL ORDER.")
-           if (prow() > 39) .or. (empty(navtor->torintcd01) .and. (prow()+6)>39)
-                footline()
-                kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                torheader()
-           endif
-           bgrad := 1
-
-        endif
-
-        if navtor->toryrlevl == "4" .and. c999colp->colcod == "EL" ;
-                   .and. bgrad == 0 .and. (empty(navtor->torintcd01))
-           outexpr(prow()+01,02,"GRADUATED FROM MARINE ENGINEERING COURSE UNDER THE BRIDGING")
-           outexpr(prow()+01,02,"PROGRAM WITH DEGREE OF BACHELOR OF SCIENCE IN MARINE ENGINEERING")
-           outexpr(prow()+01,02,"(BSMARE) AS OF "+format_date(cdategrad1)+". PACUCOA ACCREDITED EXEMPTED FROM THE")
-           outexpr(prow()+01,02,"ISSUANCE OF SPECIAL ORDER.")
-           if (prow() > 39) .or. (empty(navtor->torintcd01) .and. (prow()+6)>39)
-                footline()
-                kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-                torheader()
-           endif
-           bgrad := 1
-
-        endif
-
-/* ----------------------------------------------------------------- */
-enddo
-navtor->(clearscope())
-
-//if(val(navtor->&cfingrd) > 0 .and. navtor->&cfingrd < "31",(if (c999crsp->crscreunt),transform(c999crsp->crscreunt,"999.9"),transform(c999crsp->crscreunt,"999")),transform(0,"99999")))
-//navtor->(sx_SetTagOrder(1))
-
-if nstpact=="Y" .and. bgrad==0
-        outexpr(prow()+01,02,"ROTC  AS  REQUISITE  FOR  GRADUATION  SET-ASIDE  PURSUANT  TO  SECTION 12.")
-        outexpr(prow()+01,02,"RULE VI OF THE IMPLEMENTING RULES AND REGULATIONS OF THE NSTP ACT OF 2001,")
-        outexpr(prow()+01,02,"WHICH TOOK EFFECT ON MARCH 23, 2002.")
-endif
-
-if c999colp->colcod == "MB"
-        outexpr(prow()+01,02,"COMPLETED FROM THE FIRST "+yrlevel+"-YEARS IN BSMARE COURSE LADDERIZED")
-        outexpr(prow()+01,02,"CURRICULUM WITH THE CERTIFICATE IN MARINE ENGINEERING (C.M.E.) AS OF")
-        outexpr(prow()+01,02,format_date(cdategrad)+".")
-
-/*        outexpr(prow()+01,02,"COMPLETED "+if(!empty(chonrec),alltrim(chonrec)+" ","")+"THE "+yrlevel+"-YEAR ACADEMIC COURSE OF THE 4-YEAR LADDERIZED")
-        outexpr(prow()+01,02,"PROGRAM IN MARINE ENGINEERING WITH THE TITLE OF CERTIFICATE")
-        outexpr(prow()+01,02,"IN MARINE ENGINEERING (C.M.E.) AS OF "+format_date(cdategrad)+"."+" PACUCOA")
-        outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-*/
-elseif sporder==2 .and. ! c999colp->colcod == "CS"
-        outexpr(prow()+01,02,"GRADUATED FROM THE "+yrlevel+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH")
-        outexpr(prow()+01,02,"THE "+if (left(c999colp->colnamabr2,3) == "B.S","DEGREE","TITLE")+" OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS OF")
-        outexpr(prow()+01,02,format_date(cdategrad)+". PER SPECIAL ORDER (B ) NO. "+alltrim(sporderno)+", S. "+alltrim(seriesno))
-        outexpr(prow()+01,02,"DATED "+format_date(sporderdte)+" ISSUED BY DECS, REGION VII, CEBU CITY.")
-        //outexpr(prow()+01,02,"DATED "+format_date(cdategrad1)+" ISSUED BY DECS, REGION VII, CEBU CITY.")
-//added for NIS & Alpha
-elseif  c999colp->colcod $ "MI,MR,PA,MP,MH"
-        outexpr(prow()+01,02,"GRADUATED "+if(!empty(chonrec),alltrim(chonrec)+" ","")+"FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol))
-        outexpr(prow()+01,02,"WITH THE "+if (left(c999colp->colnamabr2,3) == "B.S","DEGREE","TITLE")+" OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+")")
-        outexpr(prow()+01,02,"AS OF "+format_date(cdategrad1)+". PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE")
-        outexpr(prow()+01,02,"OF SPECIAL ORDER.")
-//added for NIS & Alpha
-elseif c999colp->colcod == "AM"
-        outexpr(prow()+01,02,"GRADUATED "+if(!empty(chonrec),alltrim(chonrec)+" ","")+"FROM THE "+yrlevel+"-YEAR ACADEMIC COURSE OF THE 4-YEAR LADDERIZED")
-        outexpr(prow()+01,02,"PROGRAM IN MARINE ENGINEERING WITH THE TITLE OF ASSOCIATE IN")
-        outexpr(prow()+01,02,"MARINE ENGINEERING (A.MAR.E.) AS OF "+format_date(cdategrad)+"."+" PACUCOA")
-        outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-elseif c999colp->colcod == "RO" .and. yrlevel == "1"
-        outexpr(prow()+01,02,"GRADUATED FROM THE SPECIAL ACADEMIC PROGRAM IN MARINE TRANSPORTATION")
-        outexpr(prow()+01,02,"COURSE FOR  MARINE RADIO OPERATORS  WITH THE TITLE OF  ASSOCIATE IN")
-        outexpr(prow()+01,02,"MARINE TRANSPORTATION - MRO (A.M.T. - MRO )  AS OF "+format_date(cdategrad)+".")
-        outexpr(prow()+01,02,"PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-elseif c999colp->colcod == "EN" .and. yrlevel == "3"
-        outexpr(prow()+01,02,"COMPLETED THE REQUIRED SUBJECTS OF THE BRIDGING PROGRAM FROM BACHELOR")
-        outexpr(prow()+01,02,"OF SCIENCE IN MECHANICAL ENGINEERING TO BACHELOR OF SCIENCE IN MARINE")
-        outexpr(prow()+01,02,"ENGINEERING (BSMARE) AS REQUIRED BY THE COMMISSION ON HIGHER EDUCATION")
-        outexpr(prow()+01,02,"(CHED) AND UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+". PACUCOA")
-        outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-elseif c999colp->colcod == "EL" .and. yrlevel == "3"
-        outexpr(prow()+01,02,"COMPLETED THE REQUIRED SUBJECTS OF THE BRIDGING PROGRAM FROM BACHELOR")
-        outexpr(prow()+01,02,"OF SCIENCE IN ELECTRICAL ENGINEERING TO BACHELOR OF SCIENCE IN MARINE")
-        outexpr(prow()+01,02,"ENGINEERING (BSMARE) AS REQUIRED BY THE COMMISSION ON HIGHER EDUCATION")
-        outexpr(prow()+01,02,"(CHED) AND UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+". PACUCOA")
-        outexpr(prow()+01,02,"ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-elseif c999colp->colcod == "MT" .and. yrlevel == "3"
-        outexpr(prow()+01,02,"GRADUATED FROM THE 3-YEAR COURSE IN MARINE TRANSPORTATION WITH")
-        outexpr(prow()+01,02,"THE TITLE OF ASSOCIATE IN MARINE TRANSPORTATION (A.M.T.) AS ")
-        outexpr(prow()+01,02,"ENGINEERING (BSMARE) AS REQUIRED BY THE COMMISSION ON HIGHER EDUCATION")
-        outexpr(prow()+01,02,"OF "+format_date(cdategrad)+". PACUCOA ACCREDITED EXEMPTED FROMT THE ISSUANCE")
-        outexpr(prow()+01,02,"OF SPECIAL ORDER.")
-elseif c999colp->colcod == "ET"
-        outexpr(prow()+01,02,"GRADUATED FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH THE DEGREE OF")
-        outexpr(prow()+01,02,+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS OF "+format_date(cdategrad))
-        outexpr(prow()+01,02,"PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER. UNDER THE")
-        outexpr(prow()+01,02,"EXPANDED TERTIARY EDUCATION EQUIVALENCY AND ACCREDITATION PROGRAM (ETEEAP)")
-        outexpr(prow()+01,02,"PER EXECUTIVE ORDER NO. 330 DATED MAY 10, 1996.")
-elseif c999colp->colcod == "ER"
-        outexpr(prow()+01,02,"GRADUATED FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH THE DEGREE OF")
-        outexpr(prow()+01,02,+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS OF "+format_date(cdategrad))
-        outexpr(prow()+01,02,"PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER. UNDER THE")
-        outexpr(prow()+01,02,"EXPANDED TERTIARY EDUCATION EQUIVALENCY AND ACCREDITATION PROGRAM (ETEEAP)")
-        outexpr(prow()+01,02,"PER EXECUTIVE ORDER NO. 330 DATED MAY 10, 1996.")
-elseif c999colp->colcod == "EN" .and. yrlevel == "4"
-        outexpr(prow()+01,02,"GRADUATED FROM MARINE ENGINEERING COURSE UNDER THE BRIDGING")
-        outexpr(prow()+01,02,"PROGRAM WITH DEGREE OF BACHELOR OF SCIENCE IN MARINE ENGINEERING")
-        outexpr(prow()+01,02,"(BSMARE) AS OF "+format_date(cdategrad1)+". PACUCOA ACCREDITED EXEMPTED FROM THE")
-        outexpr(prow()+01,02,"ISSUANCE OF SPECIAL ORDER.")
-elseif c999colp->colcod == "EL" .and. yrlevel == "4"
-        outexpr(prow()+01,02,"GRADUATED FROM MARINE ENGINEERING COURSE UNDER THE BRIDGING")
-        outexpr(prow()+01,02,"PROGRAM WITH DEGREE OF BACHELOR OF SCIENCE IN MARINE ENGINEERING")
-        outexpr(prow()+01,02,"(BSMARE) AS OF "+format_date(cdategrad1)+". PACUCOA ACCREDITED EXEMPTED FROM THE")
-        outexpr(prow()+01,02,"ISSUANCE OF SPECIAL ORDER.")
-elseif c999colp->colcod == "RO" .and. !(yrlevel == "1")
-        outexpr(prow()+01,02,"GRADUATED FROM THE SPECIAL ACADEMIC PROGRAM IN MARINE TRANSPORTATION")
-        outexpr(prow()+01,02,"COURSE FOR  MARINE RADIO OPERATORS  WITH THE DEGREE OF BACHELOR OF")
-        outexpr(prow()+01,02,"SCIENCE IN MARINE TRANSPORTATION (B.S.M.T.)  AS OF "+format_date(cdategrad1)+".")
-        outexpr(prow()+01,02,"PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE OF SPECIAL ORDER.")
-elseif c999colp->colcod == "CS" .and. yrlevel == "1"
-                outexpr(prow()+01,02,"COMPLETED THE THEORETICAL REQUIREMENTS OF THE ONE-YEAR ")
-                outexpr(prow()+01,02,"SEAFARER'S CATERING/STEWARDING COURSE (SCS) AS OF "+format_date(cdategrad1)+".")
-elseif c999colp->colcod == "SF"
-                outexpr(prow()+01,02,"COMPLETED THE THEORETICAL REQUIREMENT LEADING TO THE COMPLETION ")
-                outexpr(prow()+01,02,"OF THE STEEL FABRICATION TECHNOLOGY PROGRAM AS OF "+format_date(cdategrad)+".")
-
-elseif c999colp->colcod == "CS" .and. yrlevel == "2"
-       if alltrim(sporderno) == ""
-/*
-                outexpr(prow()+01,02,"GRADUATED FROM THE ONE YEAR COURSE IN SEAFARER'S CATERING/STEWARDING ")
-                outexpr(prow()+01,02,"AS OF "+format_date(cdategrad1)+".  SPECIAL ORDER APPLIED FOR.")
-*/
-
-                outexpr(prow()+01,02,"RECOMMENDED FOR GRADUATION TOWARDS THE ONE YEAR COURSE IN SEAFARER'S ")
-                outexpr(prow()+01,02,"CATERING STEWARDING COURSE (CSC) AS OF "+format_date(cdategrad1)+".")
-        else
-                outexpr(prow()+01,02,"GRADUATED FROM THE ONE YEAR COURSE IN SEAFARER'S CATERING/STEWARDING ")
-                outexpr(prow()+01,02,"AS OF "+format_date(cdategrad1)+".  PER SPECIAL ORDER (D ) NO. "+alltrim(sporderno)+", S. "+alltrim(seriesno))
-                outexpr(prow()+01,02,"DATED "+format_date(sporderdte)+" ISSUED BY TESDA, REGION VII, CENTRAL VISAYAS.")
-        endif
-//---remove by jun for eteeap
-
-elseif padl(alltrim(str(c999sm1p->sm1schtrm)),3,"0") >= "031" .and. ;
-       padl(alltrim(str(c999sm1p->sm1schtrm)),3,"0") <= "221" .and. ;
-       bgrad == 0
-       
-        outexpr(prow()+01,02,"COMPLETED  THE THREE-YEAR THEORETICAL REQUIREMENTS OF THE COURSE LEADING TO THE")
-        outexpr(prow()+01,02,"DEGREE  OF  BACHELOR  OF  SCIENCE  IN "+alltrim(c999colp->colnamcol)+" "+if(alltrim(c999colp->colcod)=="MT"," (B.S.M.T.)",if(alltrim(c999colp->colcod)=="MA"," (B.S.MAR.E)","("+alltrim(c999colp->colnamabr2)+")")))
-        outexpr(prow()+01,02,"AS   REQUIRED  BY  THE   COMMISSION  ON  HIGHER  EDUCATION  (CHED)  AND")
-        outexpr(prow()+01,02,"UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+". PACUCOA ACCREDITED EXEMPTED FROM THE")
-        outexpr(prow()+01,02,"ISSUANCE OF SPECIAL ORDER.")
-else
-//original        outexpr(prow()+01,02,"GRADUATED "+if(!empty(chonrec) .and. !empty(navtor->torintcd01) ,alltrim(chonrec)+" ","")+"FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol) + " WITH THE")
-        outexpr(prow()+01,02,"GRADUATED "+if(!empty(chonrec),alltrim(chonrec)+" ","")+"FROM THE "+transform(c999colp->colyrlevl,"9")+"-YEAR COURSE IN "+alltrim(c999colp->colnamcol)+" WITH THE")
-        outexpr(prow()+01,02,if (left(c999colp->colnamabr2,3) == "B.S","DEGREE","TITLE")+" OF "+alltrim(c999colp->colnamdeg)+" ("+alltrim(c999colp->colnamabr2)+") AS")
-        outexpr(prow()+01,02,"OF "+format_date(cdategrad1)+". PACUCOA ACCREDITED EXEMPTED FROM THE ISSUANCE OF ")
-        outexpr(prow()+01,02,"SPECIAL ORDER.")
-
-/*
-else
-        outexpr(prow()+01,02,"COMPLETED  THE  THEORETICAL  REQUIREMENTS  OF THE COURSE LEADING TO THE")
-        outexpr(prow()+01,02,"DEGREE  OF  BACHELOR  OF  SCIENCE  IN "+alltrim(c999colp->colnamcol)+" "+if(alltrim(c999colp->colcod)=="MT"," (B.S.M.T.)",if(alltrim(c999colp->colcod)=="MA"," (B.S.MAR.E)","("+alltrim(c999colp->colnamabr2)+")")))
-        outexpr(prow()+01,02,"AS   REQUIRED  BY  THE   COMMISSION  ON  HIGHER  EDUCATION  (CHED)  AND")
-        outexpr(prow()+01,02,"UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+".")
-*/
-
-endif
-        outexpr(prow()+01,02,replicate("-",74))
-        outexpr(prow()+01,07,"(TRANSCRIPT CLOSED. ANY ENTRY BELOW THIS LINE IS NULL AND VOID.)")
-//        tefooter2(++npage,cpurpose,corno,npage,ctorcont)
-        kaduhatefooter2(++npage,cpurpose,corno,ctorcont,ctordate)
-return(nil)
 
 static function kaduhatorfrontpage(cidno,cnceeper,cyrtaken,cexamno,cpurpose,cprepared,cchecked,corno,cdateadmit,ctorcont,cregistrar,cposition)
 ccolcod := space(2)
 //ctorcont  := strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A"
 
-/*
-if ! alltrim(memvar->clevel) == "P"
-        ctorcont  := strtran(transform(val(left(para->torserial,7))+1,"#######")," ","0")+"A"
-else
-        ctorcont  := "testingSN#"
-endif
-*/
+
 
 headeject()
 setprc(00,00)
@@ -9357,23 +8472,7 @@ outexpr(prow()+01,02,"REGARDED AS EQUIVALENT ALSO TO ONE UNIT OF CREDIT.")
 outexpr(prow()+02,02,"THE STUDENT IS IN GOOD MORAL STANDING UNLESS OTHERWISE INDICATED  IN  THE")
 outexpr(prow()+01,02,"TRANSCRIPT.")
 
-/*
-//outexpr(prow()+03,02,"REMARKS:                                             DATE ISSUED:")
-//outexpr(prow()+00,11,cpurpose);outexpr(prow()+00,68,displaydate(date()))
-//outexpr(prow()+03,02,"PREPARED BY:                                         NOTED BY:  ")
-//outexpr(prow()+03,02,cprepared)
-//outexpr(prow()+00,55,cchecked)
-//outexpr(prow()+00,02,replicate("_",22))
-//outexpr(prow()+00,55,replicate("_",22))
-//outexpr(prow()+04,27,"    FRANCISCO C. SALES    ")
-//outexpr(prow()+00,27,"__________________________")
-//outexpr(prow()+01,27,"   UNIVERSITY REGISTRAR   ")
-//outexpr(prow()+02,04,"NOT VALID WITHOUT SEAL")
-//outexpr(prow()+01,04,"    OR NO.________        ")
-//outexpr(prow()+00,04,"           "+corno)
-//outexpr(prow()+01,04,"        PAGE  1       ")
-//__eject()
-*/
+
 
 kaduhatefooter2(1,cpurpose,corno,ctorcont)
 return(nil)

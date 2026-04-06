@@ -82,25 +82,28 @@ cwaitscr     := savescr(00,00,24,79)
 nlastcursor  := setcursor(0)
 set key K_F2 to popdate
 
-*dispbox(00,00,24,79, if(memvar->lcolor, "²²²²²²²²²", "°°°°°°°°°"), memvar->colorarray[15])
-*dispbox(00,00,24,79, space(09), memvar->colorarray[01])        // plain
+
 dispbox(00,00,24,79, REPLICATE(CHR(206),9), memvar->colorarray[50])
 
 *back_paper()
 draw_box2(03,11,22,68,memvar->colorarray[28],memvar->colorarray[29],,.F.)
-@ 04,46 say "ÜßßÜ ÜßßÜ ÜßßÜ ÜßßÜ" color memvar->colorarray[28]
-@ 05,46 say " Üß  Û  Û Û  Û Û  Û" color memvar->colorarray[28]
-@ 06,46 say "ÛÜÜÜ ßÜÜß ßÜÜß ßÜÜß" color memvar->colorarray[28]
-
+/*
+@ 04,46 say "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[28]
+@ 05,46 say " ï¿½ï¿½  ï¿½  ï¿½ ï¿½  ï¿½ ï¿½  ï¿½" color memvar->colorarray[28]
+@ 06,46 say "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[28]
+*/
+/*
 @ 07,16 say "U C - M E T C" color memvar->colorarray[51]
-
-@ 08,18 say "   ÜÜÜ ÜÜÜ       ÜÜÜÜ ÜÜÜÜ         ÜÜÜ ÜÜÜ  " color memvar->colorarray[37]
-@ 09,18 say " ÜÜÜ     ÜÜÜ      ÜÜÜ    ÜÜÜ     ÜÜÜ     ÜÜÜ" color memvar->colorarray[37]
-@ 10,18 say "ÜÜÜ               ÜÜÜ    ÜÜÜ     ÜÜÜ        " color memvar->colorarray[37]
-@ 11,18 say "ÜÜÜ               ÜÜÜ ÜÜÜÜ         ÜÜÜ ÜÜÜ  " color memvar->colorarray[37]
-@ 12,18 say "ÜÜÜ               ÜÜÜ  ÜÜ                ÜÜÜ" color memvar->colorarray[37]
-@ 13,18 say " ÜÜÜ     ÜÜÜ      ÜÜÜ   ÜÜÜ      ÜÜÜ     ÜÜÜ" color memvar->colorarray[37]
-@ 14,18 say "   ÜÜÜ ÜÜÜ       ÜÜÜÜÜ   ÜÜÜÜ      ÜÜÜ ÜÜÜ  " color memvar->colorarray[37]
+*/
+/*
+@ 08,18 say "   ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½         ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½  " color memvar->colorarray[37]
+@ 09,18 say " ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½    ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½" color memvar->colorarray[37]
+@ 10,18 say "ï¿½ï¿½ï¿½               ï¿½ï¿½ï¿½    ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½        " color memvar->colorarray[37]
+@ 11,18 say "ï¿½ï¿½ï¿½               ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½         ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½  " color memvar->colorarray[37]
+@ 12,18 say "ï¿½ï¿½ï¿½               ï¿½ï¿½ï¿½  ï¿½ï¿½                ï¿½ï¿½ï¿½" color memvar->colorarray[37]
+@ 13,18 say " ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½" color memvar->colorarray[37]
+@ 14,18 say "   ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½  " color memvar->colorarray[37]
+*/
 
 draw_box1(16,18,21,61,memvar->colorarray[28],memvar->colorarray[29],,.f.)
 @ 17,21 say "          University of Cebu          " color memvar->colorarray[36]
@@ -115,9 +118,11 @@ outexpr(00, 06, memvar->cusername, memvar->colorarray[01])
 outexpr(00, 24, "Current Date:", memvar->colorarray[01])
 outexpr(00, 64, "Time:", memvar->colorarray[01])
 outexpr(00, 70, clock("on", "12 hour", "seconds"), memvar->colorarray[01])
-&&CommandLine( "³  Use " + Chr(27) + Chr(24) + Chr(25) + Chr(26) + " to navigate   " + "³      Ù - to select      ³     ESC - Previous      ³" )
-&&commandline("³  Alt+C - Calculator ³  " + chr(27) + chr(24) + chr(25) + chr(26) + " to Navigate  ³" + "  Ù - to Select  ³ ESC - Previous ³")
-commandline("³ F2-Calendar ³ Alt+C-Calculator ³ "+chr(27)+chr(24)+chr(25)+chr(26)+" to Navigate ³ "+"Ù-Select ³ ESC-Previous ³")
+
+&&CommandLine( "ï¿½  Use " + Chr(27) + Chr(24) + Chr(25) + Chr(26) + " to navigate   " + "ï¿½      ï¿½ - to select      ï¿½     ESC - Previous      ï¿½" )
+&&commandline("ï¿½  Alt+C - Calculator ï¿½  " + chr(27) + chr(24) + chr(25) + chr(26) + " to Navigate  ï¿½" + "  ï¿½ - to Select  ï¿½ ESC - Previous ï¿½")
+
+commandline(" F2-Calendar  Alt+C-Calculator  "+chr(27)+chr(24)+chr(25)+chr(26)+" to Navigate  "+" -Select  ESC-Previous ")
 dispbox(01,00,01,79, space(9), memvar->colorarray[06])
 
 __keyboard(chr(K_ENTER))
@@ -246,16 +251,15 @@ aadd( aelements, { ncurrline++, 11, "  ~Grade Information           ",,, { || r
                            { 12, 29, "  ~T.O.R. Printing (Graduated Already)  ",,, { || rights( "[2,3,8]" ) }, {|| tor()},,},;
                            { 13, 29, "  T.O.R. Printing (Not ~Yet Graduated)  ",,, { || rights( "[2,3,9]" ) }, {|| foreval()},,},;
                            { 14, 29, "  T.O.R. Printing (~Main)               ",,, { || rights( "[2,3,A]" ) }, {|| tormain()},,},;
-						               { 15, 29, "  T.O.R. Printing (~For NAME)           ",,, { || rights( "[2,3,A]" ) }, {|| torname()},,},; 
-                           { 16, 29, "  T.O.R. Printing (UCMAI~N)           ",,, { || rights( "[2,3,A]" ) }, {|| formainkaduhangtor()},,},;
-                           { 17, 29, "  Grade ~Evaluation Printing            ",,, { || rights( "[2,3,B]" ) }, {|| foreval()},,},;
-                           { 18, 29, "  Grade Printing (S~ubject)             ",,, { || rights( "[2,3,C]" ) }, {|| grdsubj()},,},;
-                           { 19, 29, "  Grade Ranking (S~pecial)              ",,, { || rights( "[2,3,D]" ) }, {|| grdspecial()},,},;
-                           { 20, 29, "  Grade Printing (R~OTC Individual)     ",,, { || rights( "[2,3,E]" ) }, {|| grdrotc()},,},;
-                           { 21, 29, "  Grade Pri~nting (ROTC by Course)      ",,, { || rights( "[2,3,F]" ) }, {|| rotccourse()},,},;
-                           { 22, 29, "  Students with ~Failing Grade          ",,, { || rights( "[2,3,G]" ) }, {|| failgrade()},,},;
-                           { 23, 29, "  Grade Printing (Ranking ~w/o scholars)",,, { || rights( "[2,3,H]" ) }, {|| compgrdav() },,},;
-                           { 24, 29, "  Grade Printing for ~Checking          ",,, { || rights( "[2,3,I]" ) }, {|| grdlistbysubj()},,}},;
+		                       { 15, 29, "  T.O.R. Printing (~For NAME)           ",,, { || rights( "[2,3,A]" ) }, {|| torname()},,},; 
+                           { 16, 29, "  Grade ~Evaluation Printing            ",,, { || rights( "[2,3,B]" ) }, {|| foreval()},,},;
+                           { 17, 29, "  Grade Printing (S~ubject)             ",,, { || rights( "[2,3,C]" ) }, {|| grdsubj()},,},;
+                           { 18, 29, "  Grade Ranking (S~pecial)              ",,, { || rights( "[2,3,D]" ) }, {|| grdspecial()},,},;
+                           { 19, 29, "  Grade Printing (R~OTC Individual)     ",,, { || rights( "[2,3,E]" ) }, {|| grdrotc()},,},;
+                           { 20, 29, "  Grade Pri~nting (ROTC by Course)      ",,, { || rights( "[2,3,F]" ) }, {|| rotccourse()},,},;
+                           { 21, 29, "  Students with ~Failing Grade          ",,, { || rights( "[2,3,G]" ) }, {|| failgrade()},,},;
+                           { 22, 29, "  Grade Printing (Ranking ~w/o scholars)",,, { || rights( "[2,3,H]" ) }, {|| compgrdav() },,},;
+                           { 23, 29, "  Grade Printing for ~Checking          ",,, { || rights( "[2,3,I]" ) }, {|| grdlistbysubj()},,}},;
         { || draw_box2(04,28,23,69,memvar->colorarray[30],memvar->colorarray[31])},,, memvar->colorarray[32] , , , , , ;
         gettrigger( memvar->colorarray[32] ) ) },, } )
 aadd( aelements, { ncurrline++, 11, "  ~Instructor(s) Information   ",,, { || rights( "[2,4]" ) }, ;
@@ -348,52 +352,53 @@ static function validuser()
 local getlist := {}, ascrpassword, nctr := 0, lconfirm, lintensity, nlastcursor
 scroll()
 
-boxshadow(00,00,24,79,"ÛßÛÛÛÜÛÛ ",memvar->colorarray[25])
+boxshadow(00,00,24,79,"******** ",memvar->colorarray[25])
 
 draw_box2(01,04,08,75,memvar->colorarray[25],memvar->colorarray[26],,.f.)
 draw_box3(08,13,13,65,memvar->colorarray[25],memvar->colorarray[26],,.f.)
 @ 08,14 say replicate(" ",51) color memvar->colorarray[25]
 
+/*
 draw_box2(02,07,07,16,memvar->colorarray[25],memvar->colorarray[26],,.f.)
-@ 03,09 say "ÛÛ  ÛÛ" color memvar->colorarray[41]
-@ 04,09 say "ÛÛ  ÛÛ" color memvar->colorarray[41]
-@ 05,09 say "ÛÛ  ÛÛ" color memvar->colorarray[41]
-@ 06,09 say "ßÛÜÜÛß" color memvar->colorarray[41]
+@ 03,09 say "***    ***" color memvar->colorarray[41]
+@ 04,09 say "***    ***" color memvar->colorarray[41]
+@ 05,09 say "***    ***" color memvar->colorarray[41]
+@ 06,09 say "**********" color memvar->colorarray[41]
 
 draw_box2(02,17,07,26,memvar->colorarray[25],memvar->colorarray[26],,.f.)
-@ 03,19 say "ÜÛßßßÛ" color memvar->colorarray[41]
-@ 04,19 say "ÛÛ   " color memvar->colorarray[41]
-@ 05,19 say "ÛÛ   " color memvar->colorarray[41]
-@ 06,19 say "ßÛÜÜÜÛ" color memvar->colorarray[41]
+@ 03,19 say "*********" color memvar->colorarray[41]
+@ 04,19 say "***   " color memvar->colorarray[41]
+@ 05,19 say "***   " color memvar->colorarray[41]
+@ 06,19 say "*********" color memvar->colorarray[41]
 
 draw_box1(03,28,06,32,memvar->colorarray[25],memvar->colorarray[26],,.f.)
-@ 04,29 say "ÜßÜ" color memvar->colorarray[43]
-@ 05,29 say "ßÜß" color memvar->colorarray[43]
+@ 04,29 say "ï¿½ï¿½ï¿½" color memvar->colorarray[43]
+@ 05,29 say "ï¿½ï¿½ï¿½" color memvar->colorarray[43]
 
 draw_box2(02,34,07,44,memvar->colorarray[25],memvar->colorarray[26],,.f.)
-@ 03,36 say "ÛÛÜ ÜÛÛ" color memvar->colorarray[42]
-@ 04,36 say "ÛÛÞÛÝÛÛ" color memvar->colorarray[42]
-@ 05,36 say "ÛÛ Û ÛÛ" color memvar->colorarray[42]
-@ 06,36 say "ÛÛ   ÛÛ" color memvar->colorarray[42]
+@ 03,36 say "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½" color memvar->colorarray[42]
+@ 04,36 say "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[42]
+@ 05,36 say "ï¿½ï¿½ ï¿½ ï¿½ï¿½" color memvar->colorarray[42]
+@ 06,36 say "ï¿½ï¿½   ï¿½ï¿½" color memvar->colorarray[42]
 
 draw_box2(02,45,07,53,memvar->colorarray[25],memvar->colorarray[26],,.f.)
-@ 03,47 say "ÛÛßßÛ" color memvar->colorarray[42]
-@ 04,47 say "ÛÛÜÜ " color memvar->colorarray[42]
-@ 05,47 say "ÛÛ   " color memvar->colorarray[42]
-@ 06,47 say "ÛÛÜÜÛ" color memvar->colorarray[42]
+@ 03,47 say "ï¿½ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[42]
+@ 04,47 say "ï¿½ï¿½ï¿½ï¿½ " color memvar->colorarray[42]
+@ 05,47 say "ï¿½ï¿½   " color memvar->colorarray[42]
+@ 06,47 say "ï¿½ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[42]
 
 draw_box2(02,54,07,63,memvar->colorarray[25],memvar->colorarray[26],,.f.)
-@ 03,56 say "ÛßÛÛßÛ" color memvar->colorarray[42]
-@ 04,56 say "  ÛÛ  " color memvar->colorarray[42]
-@ 05,56 say "  ÛÛ  " color memvar->colorarray[42]
-@ 06,56 say "  ÛÛ  " color memvar->colorarray[42]
+@ 03,56 say "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[42]
+@ 04,56 say "  ï¿½ï¿½  " color memvar->colorarray[42]
+@ 05,56 say "  ï¿½ï¿½  " color memvar->colorarray[42]
+@ 06,56 say "  ï¿½ï¿½  " color memvar->colorarray[42]
 
 draw_box2(02,64,07,72,memvar->colorarray[25],memvar->colorarray[26],,.f.)
-@ 03,66 say "ÜÛßßÛ" color memvar->colorarray[42]
-@ 04,66 say "ÛÛ   " color memvar->colorarray[42]
-@ 05,66 say "ÛÛ   " color memvar->colorarray[42]
-@ 06,66 say "ßÛÜÜÛ" color memvar->colorarray[42]
-
+@ 03,66 say "ï¿½ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[42]
+@ 04,66 say "ï¿½ï¿½   " color memvar->colorarray[42]
+@ 05,66 say "ï¿½ï¿½   " color memvar->colorarray[42]
+@ 06,66 say "ï¿½ï¿½ï¿½ï¿½ï¿½" color memvar->colorarray[42]
+*/
 draw_box1(08,17,12,61,memvar->colorarray[25],memvar->colorarray[26],,.f.)
 @ 09,20 say "College Registration System Version 2.1" color memvar->colorarray[43]
 @ 10,20 say "        Copyright (c) 1998-1999        " color memvar->colorarray[43]
@@ -547,8 +552,8 @@ endif
 
 do while .t.
         memvar->cterm := space(len(term->code))
-        boxshadow(05,15,22,75,"ÛßÛÛÛÜÛÛ ",memvar->colorarray[11],"  Medical Status Entry (For CLINIC Department)  ")
-        commandline("³        F4 - View Term File           ³            ESC - Previous             ³")
+        boxshadow(05,15,22,75,"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ",memvar->colorarray[11],"  Medical Status Entry (For CLINIC Department)  ")
+        commandline("ï¿½        F4 - View Term File           ï¿½            ESC - Previous             ï¿½")
         setkey(K_F4,{||viewterm({||__keyboard(chr(K_CTRL_LEFT)+term->code+chr(K_ENTER))},cprocsts,memvar->colorarray[10])})
         setcursor(1);set(_SET_CONFIRM,.t.)
 
@@ -587,7 +592,7 @@ do while .t.
         endif
 
         cidno := space(len(cyytmdst->medidno))
-        commandline("³         F4 - View Student         ³           ESC - Previous              ³")
+        commandline("ï¿½         F4 - View Student         ï¿½           ESC - Previous              ï¿½")
         aentryscr := savescr(01,00,24,79)
         do while .t.
         restscr(aentryscr)
@@ -630,7 +635,7 @@ do while .t.
         endif
 
 
-        commandline("³          ESC - Previous           |             ENTER - Proceed             ³")
+        commandline("ï¿½          ESC - Previous           |             ENTER - Proceed             ï¿½")
         setcursor(1);set(_SET_CONFIRM,.t.)
         @ 11,17 say "Last Name      :";
                 color memvar->colorarray[02];
@@ -728,8 +733,8 @@ endif
 
 do while .t.
         memvar->cterm := space(len(term->code))
-        boxshadow(05,15,15,65,"ÛßÛÛÛÜÛÛ ",memvar->colorarray[11],"  Medical Control Number  ")
-        commandline("³        F4 - View Term File           ³            ESC - Previous             ³")
+        boxshadow(05,15,15,65,"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ",memvar->colorarray[11],"  Medical Control Number  ")
+        commandline("ï¿½        F4 - View Term File           ï¿½            ESC - Previous             ï¿½")
         setkey(K_F4,{||viewterm({||__keyboard(chr(K_CTRL_LEFT)+term->code+chr(K_ENTER))},cprocsts,memvar->colorarray[10])})
         setcursor(1);set(_SET_CONFIRM,.t.)
 
@@ -761,7 +766,7 @@ do while .t.
         endif
 
         cidno := space(len(cyytmdst->medidno))
-        commandline("³         F4 - View Student         ³           ESC - Previous              ³")
+        commandline("ï¿½         F4 - View Student         ï¿½           ESC - Previous              ï¿½")
         aentryscr := savescr(01,00,24,79)
         do while .t.
         restscr(aentryscr)
@@ -796,7 +801,7 @@ do while .t.
         endif
 
 
-        commandline("³          ESC - Previous           |             ENTER - Proceed             ³")
+        commandline("ï¿½          ESC - Previous           |             ENTER - Proceed             ï¿½")
         setcursor(1);set(_SET_CONFIRM,.t.)
        read
         setcursor(nlastcursor);set(_SET_CONFIRM,lconfirm)
