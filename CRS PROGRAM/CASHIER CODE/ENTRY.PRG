@@ -1231,7 +1231,7 @@ function payentry()
 local getlist:={},alastscr:=savescr(01,00,24,79),lconfirm:=set(_SET_CONFIRM),;
       nlastcursor:=setcursor(),clastcolor:=setcolor(memvar->colorarray[11]),;
       aprvsetup,cprocsts,lexist:=.f.,aentryscr,ddate,ayytpayp,;
-      cterm,cpayno,dpay,cacctno,npayamt,ctype,paycode,colcod,checknum
+      cterm,cpayno,dpay,cacctno,npayamt,ctype,paycode,colcod,checknum,entusr
 
 if(aprv1setup:=openwcheck({{,,"term",,_DBF_SHARED,,1,"/crunlib"}}))==nil
         return(nil)
@@ -1286,6 +1286,7 @@ do while .t.
                 npayamt := 0
                 ctype   := space(01)
                 checknum := space(len(ayytpayp->paychcknum))
+                entusr  := space(len(ayytpayp->payentusr))
                 paycode  := space(04)
                 setcursor(1);set(_SET_CONFIRM,.t.)
                 @ 07,19 say "Payment Number :";
@@ -1307,6 +1308,7 @@ do while .t.
                         npayamt := ayytpayp->payamt
                         //ctype   := ayytpayp->paytyp
                         checknum := ayytpayp->paychcknum
+                        entusr   := ayytpayp->payentusr
                         viewacct2(cacctno,cprocsts)
 
 
@@ -1337,14 +1339,17 @@ do while .t.
                         valid ! empty(colcod)
                 */
 
-                @ 17,19 say "Amount Paid    :";
+                @ 15,19 say "Amount Paid    :";
                         color memvar->colorarray[02];
                         get npayamt pict "999,999.99";
                         valid ! npayamt = 0
 
-                @ 19,19 say "Check Number   :";
+                @ 16,19 say "Check Number   :";
                         color memvar->colorarray[02];
-                        get checknum pict "@!"         
+                        get checknum pict "@!"    
+                @ 17,19 say "Cashier Name   :";
+                        color memvar->colorarray[02];
+                        get entusr pict "@!"       
 
                read
                 setcursor(nlastcursor);set(_SET_CONFIRM,lconfirm)
@@ -1398,11 +1403,11 @@ do while .t.
                 if ! lexist
                         ayytpayp->payentdte     := date()
                         ayytpayp->payenttme     := substr(time(),1,2)+substr(time(),4,2)+substr(time(),7,2)
-                        ayytpayp->payentusr     := substr(memvar->cusername,1,8)
+                        ayytpayp->payentusr     := entusr
                        
                 else
                         ayytpayp->payupddte     := date()
-                        ayytpayp->payupdusr     := substr(memvar->cusername,1,8)
+                        ayytpayp->payupdusr     := entusr
                        
                 endif
                 ayytpayp->(dbcommit())
