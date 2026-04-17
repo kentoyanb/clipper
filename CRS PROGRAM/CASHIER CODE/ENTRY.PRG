@@ -37,7 +37,7 @@ function payent(cunit)
 local getlist:={},alastscr:=savescr(01,00,24,79),lconfirm:=set(_SET_CONFIRM),;
       nlastcursor:=setcursor(),clastcolor:=setcolor(memvar->colorarray[11]),;
       aprvsetup,cprocsts,lexist,aentryscr,opay,bindex,bitems,aetryscr,;
-      ayytpayp,zyytpayp,byytpayp,aprv1setup,ascr3,ccashno,prevterm
+      ayytpayp,zyytpayp,byytpayp,myytpayp,aprv1setup,ascr3,ccashno,prevterm
 private aitems := {},nindex := 1, ntotamt := 0, lpassedit,;
         cstudnam,ccourse,cyear,cterm := space(03), cacctno := space(08),;
         corno:=space(7),ndollrate:=0,nrendered:=0,nchange:=0,lconf := .f.,;
@@ -76,12 +76,8 @@ do while .t.
         ascr := savescr(01,00,24,79)
         draw_box2(10,21,14,58,memvar->colorarray[28],memvar->colorarray[29],,.f.)
         draw_box1(11,45,13,54,memvar->colorarray[28],memvar->colorarray[29],,.f.)
-        /*@ 12,25 say "Enter School Term :";
-                color memvar->colorarray[02]
-        @ 12,48 get memvar->cterm pict "@!";
-                color memvar->colorarray[02];
-                valid ! empty(memvar->cterm)
-        */
+
+      
 
         @ 12,25 say "Enter School Term  :";
                 color memvar->colorarray[02];
@@ -117,19 +113,13 @@ do while .t.
                 loop
         endif
 
-//memvar->orseqno := strtran(transform(val(left(para->c1orseqno,6))+1,"######")," ","0")+"C"
-/*
-        if ! file("cs0"+right(cunit,1)+".dbf")
-                fask(10,"  CS0"+right(cunit,1)+".DBF not yet created...   ",{" Ok "},memvar->colorarray[05],.t.,nil)
-                loop
-        endif
-*/
+
         
-        //aentryscr    := savescr(01,00,24,79)
         ayytpayp     := alltrim("a"+memvar->cterm+"payp")
         byytpayp     := alltrim("b"+memvar->cterm+"payp")
         zyytpayp     := alltrim("a"+alltrim(substr(memvar->cterm,1,2))+"1"+"payp")
-//        ccashno      := alltrim("cs0"+right(cunit,1))
+        myytpayp     := alltrim("b"+memvar->cterm+"payp")
+
 
         if(aprvsetup:=openwcheck({{,,"a999accp",,_DBF_SHARED,,1,"/arunlib"},;
                                   {,,"a999ctrl",,_DBF_SHARED,,1,"/arunlib"},;
@@ -137,6 +127,7 @@ do while .t.
                                   {,,"b999chrt",,_DBF_SHARED,,1},;
                                   {,,"blocklst",,_DBF_SHARED,,1,"/crunlib"},;
                                   {,,"para"    ,,_DBF_SHARED,,1},;
+                                  {,, myytpayp ,"myytpayp",_DBF_SHARED,,1},;
                                   {,, ayytpayp ,"ayytpayp",_DBF_SHARED,,7,"/arunlib"},;
                                   {,, zyytpayp ,"zyytpayp",_DBF_SHARED,,7,"/arunlib"},;
                                   {,, byytpayp ,"byytpayp",_DBF_SHARED,,5}}))==nil
@@ -375,6 +366,7 @@ nctr2 := 1
                         para->c3orseqno := left(memvar->orseqno,7)
                 case cunit == "C4"
                         para->c4orseqno := left(memvar->orseqno,7)
+
                 /*case cunit == "TEST"
                         para->testorseqno := left(memvar->orseqno,7)*/        
         endcase
@@ -385,108 +377,130 @@ nctr2 := 1
 while !Isprinter()
         fask(17," ERROR Printer not ready....",{" Ok "},memvar->colorarray[05],.t.,nil)
 enddo
-printOR(cunit)
 
-do while nctr <= nmax .and. ! len(memvar->aitems) == nctr
-        fask(13,"   Saving code "+alltrim(memvar->aitems[nctr,_DESCRIPTION])+"   ",{" Ok "},memvar->colorarray[06],.f.,nil)
-        
-        byytpayp->(dbappend())
+//TODO
 
-        /*if empty(alltrim(memvar->cacctno))
-                byytpayp->payidno    := "TESDA"
-        endif*/
+if ! myytpayp->(dbseek(memvar->orseqno))
 
-                byytpayp->payidno    := memvar->cacctno
-                byytpayp->paydte     := date()
-                byytpayp->paycode    := memvar->aitems[nctr,_CODE]
-                byytpayp->payorno    := memvar->orseqno+if(bdollar,"$","")
-                byytpayp->payname    := memvar->name
-                byytpayp->paychcknum := memvar->checknum
-                byytpayp->payinvoice := memvar->invoice
-                if b999chrt->(dbseek(byytpayp->paycode))
-                        byytpayp->paycolcod  := b999chrt->(acccode)
-                endif
-                byytpayp->payyrlevl  := memvar->cyear //a999accp->(accyrlevl)
-                byytpayp->paysyt     := memvar->cterm
-        if !bdollar
-                byytpayp->paypesoamt := memvar->aitems[nctr,_AMOUNT]
-        else
-                byytpayp->paypesoamt := memvar->aitems[nctr,_AMOUNT]*para->dollrate
-                byytpayp->paydollamt := memvar->aitems[nctr,_AMOUNT]
-        endif
-        para->(dbgotop())
-        byytpayp->payentdte  := date()
-        byytpayp->payenttme  := substr(time(),1,2)+substr(time(),4,2)+substr(time(),7,2)
-        byytpayp->payentusr  := substr(memvar->cusername,1,8)
-        byytpayp->payclass   := left(memvar->aitems[nctr,_CODE],1)
-        byytpayp->payseqno   := para->seqno+1
-        byytpayp->paytag     := "P"
-        byytpayp->(dbcommit())
-        byytpayp->(dbunlock())
-        para->(reclock())
-        ++para->seqno
-        para->(dbcommit())
-        para->(dbunlock())
+    printOR(cunit)
 
-        if  byytpayp->payclass != "M" //sud sa accounting payp if ang bayad tuition
-
-            //check if ang ni bayad ky elem og jh
-            if a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA" .and. alltrim(substr(memvar->cterm,3,1)) != "1"
-                    //sud sa 1st sem ang payment sa elem og jh
-                    zyytpayp->(recycle())
-                    zyytpayp->payidno   := byytpayp->payidno
-                    zyytpayp->payrefno  := byytpayp->payorno
-                    zyytpayp->paydte    := byytpayp->paydte
-                    zyytpayp->paycolcod := byytpayp->paycolcod
-                    zyytpayp->payyrlevl := byytpayp->payyrlevl
-                    zyytpayp->paysyt    := byytpayp->paysyt
-                    zyytpayp->payamt    := if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
-                    zyytpayp->payname   := memvar->name
-                    zyytpayp->paychcknum := memvar->checknum
-                    
-                    zyytpayp->payentdte := byytpayp->paydte
-                    zyytpayp->payenttme := byytpayp->payenttme
-                    zyytpayp->payentusr := byytpayp->payentusr
-                    zyytpayp->paytag    := _POSTED
-
-                    zyytpayp->(dbcommit())
-                    zyytpayp->(dbunlock())                        
-            else
-
-                    //sud sa current term if ang bayad dili elem og jh
-                    ayytpayp->(recycle())
-                    ayytpayp->payidno   := byytpayp->payidno
-                    ayytpayp->payrefno  := byytpayp->payorno
-                    ayytpayp->paydte    := byytpayp->paydte
-                    ayytpayp->paycolcod := byytpayp->paycolcod
-                    ayytpayp->payyrlevl := byytpayp->payyrlevl
-                    ayytpayp->paysyt    := byytpayp->paysyt
-                    ayytpayp->payamt    := if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
-                    ayytpayp->payname   := memvar->name
-                    ayytpayp->paychcknum := memvar->checknum
-                    
-                    ayytpayp->payentdte := byytpayp->paydte
-                    ayytpayp->payenttme := byytpayp->payenttme
-                    ayytpayp->payentusr := byytpayp->payentusr
-                    ayytpayp->paytag    := _POSTED
-
-                    ayytpayp->(dbcommit())
-                    ayytpayp->(dbunlock())
-            endif
+    do while nctr <= nmax .and. ! len(memvar->aitems) == nctr
+                fask(13,"   Saving code "+alltrim(memvar->aitems[nctr,_DESCRIPTION])+"   ",{" Ok "},memvar->colorarray[06],.f.,nil)
                 
-                //updates accp masterfile
-                if a999accp->(dbseek(ayytpayp->payidno))
-                        a999accp->(reclock())
-                        a999accp->accamtpd  += if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
-                        a999accp->accbaltot -= if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
-                        a999accp->(dbcommit())
-                        a999accp->(dbunlock())
+                byytpayp->(dbappend())
+
+                /*if empty(alltrim(memvar->cacctno))
+                        byytpayp->payidno    := "TESDA"
+                endif*/
+
+                        byytpayp->payidno    := memvar->cacctno
+                        byytpayp->paydte     := date()
+                        byytpayp->paycode    := memvar->aitems[nctr,_CODE]
+                        byytpayp->payorno    := memvar->orseqno+if(bdollar,"$","")
+                        byytpayp->payname    := memvar->name
+                        byytpayp->paychcknum := memvar->checknum
+                        byytpayp->payinvoice := memvar->invoice
+                        if b999chrt->(dbseek(byytpayp->paycode))
+                                byytpayp->paycolcod  := b999chrt->(acccode)
+                        endif
+                        byytpayp->payyrlevl  := memvar->cyear //a999accp->(accyrlevl)
+                        byytpayp->paysyt     := memvar->cterm
+                if !bdollar
+                        byytpayp->paypesoamt := memvar->aitems[nctr,_AMOUNT]
+                else
+                        byytpayp->paypesoamt := memvar->aitems[nctr,_AMOUNT]*para->dollrate
+                        byytpayp->paydollamt := memvar->aitems[nctr,_AMOUNT]
                 endif
+                para->(dbgotop())
+                byytpayp->payentdte  := date()
+                byytpayp->payenttme  := substr(time(),1,2)+substr(time(),4,2)+substr(time(),7,2)
+                byytpayp->payentusr  := substr(memvar->cusername,1,8)
+                byytpayp->payclass   := left(memvar->aitems[nctr,_CODE],1)
+                byytpayp->payseqno   := para->seqno+1
+                byytpayp->paytag     := "P"
+                byytpayp->(dbcommit())
+                byytpayp->(dbunlock())
+                para->(reclock())
+                ++para->seqno
+                para->(dbcommit())
+                para->(dbunlock())
 
-        endif //end of trapping if ang bayad ky dili miscellanous
-     ++nctr //importante kay ni sya ang iterator ni kung pila kbouk ge entry nga payment
-enddo
+                if  byytpayp->payclass != "M" //sud sa accounting payp if ang bayad tuition
 
+                    //check if ang ni bayad ky elem og jh
+                    if a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA" .and. alltrim(substr(memvar->cterm,3,1)) != "1"
+                            //sud sa 1st sem ang payment sa elem og jh
+                            zyytpayp->(recycle())
+                            zyytpayp->payidno   := byytpayp->payidno
+                            zyytpayp->payrefno  := byytpayp->payorno
+                            zyytpayp->paydte    := byytpayp->paydte
+                            zyytpayp->paycolcod := byytpayp->paycolcod
+                            zyytpayp->payyrlevl := byytpayp->payyrlevl
+                            zyytpayp->paysyt    := byytpayp->paysyt
+                            zyytpayp->payamt    := if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
+                            zyytpayp->payname   := memvar->name
+                            zyytpayp->paychcknum := memvar->checknum
+                            
+                            zyytpayp->payentdte := byytpayp->paydte
+                            zyytpayp->payenttme := byytpayp->payenttme
+                            zyytpayp->payentusr := byytpayp->payentusr
+                            zyytpayp->paytag    := _POSTED
+
+                            zyytpayp->(dbcommit())
+                            zyytpayp->(dbunlock())                        
+                    else
+
+                            //sud sa current term if ang bayad dili elem og jh
+                            ayytpayp->(recycle())
+                            ayytpayp->payidno   := byytpayp->payidno
+                            ayytpayp->payrefno  := byytpayp->payorno
+                            ayytpayp->paydte    := byytpayp->paydte
+                            ayytpayp->paycolcod := byytpayp->paycolcod
+                            ayytpayp->payyrlevl := byytpayp->payyrlevl
+                            ayytpayp->paysyt    := byytpayp->paysyt
+                            ayytpayp->payamt    := if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
+                            ayytpayp->payname   := memvar->name
+                            ayytpayp->paychcknum := memvar->checknum
+                            
+                            ayytpayp->payentdte := byytpayp->paydte
+                            ayytpayp->payenttme := byytpayp->payenttme
+                            ayytpayp->payentusr := byytpayp->payentusr
+                            ayytpayp->paytag    := _POSTED
+
+                            ayytpayp->(dbcommit())
+                            ayytpayp->(dbunlock())
+                    endif
+                        
+                        //updates accp masterfile
+                        if a999accp->(dbseek(ayytpayp->payidno))
+                                a999accp->(reclock())
+                                a999accp->accamtpd  += if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
+                                a999accp->accbaltot -= if(right(byytpayp->payorno,1)=="$",byytpayp->paydollamt,byytpayp->paypesoamt)
+                                a999accp->(dbcommit())
+                                a999accp->(dbunlock())
+                        endif
+
+                endif //end of trapping if ang bayad ky dili miscellanous
+             ++nctr //importante kay ni sya ang iterator ni kung pila kbouk ge entry nga payment
+    enddo
+
+else
+    fask(17," Error: O.R number already existed.... Generating New OR... ",{" Ok "},memvar->colorarray[05],.t.,nil)
+    do case
+        case cunit == "C1"
+            memvar->orseqno := strtran(transform(val(left(para->c1orseqno,6))+1,"######")," ","0")+"C"
+        case cunit == "C2"
+            memvar->orseqno := strtran(transform(val(left(para->c2orseqno,6))+1,"######")," ","0")+"B"
+        case cunit == "C3"
+            memvar->orseqno := strtran(transform(val(left(para->c3orseqno,6))+1,"######")," ","0")+"A"
+        case cunit == "C4"
+            memvar->orseqno := strtran(transform(val(left(para->c4orseqno,6))+1,"######")," ","0")+"D"
+        case cunit == "E1"
+            memvar->orseqno := "123456A"                      
+    endcase
+
+    
+endif
 
 
 return(0)
@@ -993,7 +1007,7 @@ function payupdate()
 local getlist:={},alastscr:=savescr(01,00,24,79),lconfirm:=set(_SET_CONFIRM),;
       nlastcursor:=setcursor(),clastcolor:=setcolor(memvar->colorarray[11]),;
       aprvsetup,cprocsts,lexist:=.f.,aentryscr,ddate,ayytpayp,byytpayp,;
-      cterm,cpayno,dpay,cacctno,xacctno,npayamt,xpayamt,ctype,paycode,seqno,colcod,paycls,seqcode,chcknum,invoice,fullname
+      cterm,cpayno,dpay,cacctno,xacctno,npayamt,xpayamt,ctype,paycode,seqno,colcod,paycls,seqcode,chcknum,invoice,fullname,usrname
 
 if(aprv1setup:=openwcheck({{,,"term",,_DBF_SHARED,,1,"/crunlib"}}))==nil
         return(nil)
@@ -1054,6 +1068,8 @@ do while .t.
                 chcknum := space(10)
                 invoice := space(10)
                 fullname := space(23)
+                usrname := space(len(byytpayp->payentusr))
+
                 setcursor(1);set(_SET_CONFIRM,.t.)
                 @ 07,19 say "Payment Number :";
                         color memvar->colorarray[02];
@@ -1081,6 +1097,7 @@ do while .t.
                         chcknum  := space(10)
                         invoice  := space(10)
                         fullname := space(23)
+                        usrname  := space(len(byytpayp->payentusr))
 
                         /*if b999chrt->(dbseek(paycode))
                             byytpayp->paycolcod  := b999chrt->acccode
@@ -1101,6 +1118,7 @@ do while .t.
                         chcknum            := byytpayp->paychcknum
                         invoice            := byytpayp->payinvoice
                         fullname           := byytpayp->payname
+                        usrname            := byytpayp->payentusr
 
 
 
@@ -1140,6 +1158,9 @@ do while .t.
                 @ 16,19 say "Invoice Number   :";
                         color memvar->colorarray[02];
                         get invoice pict "@!"
+                @ 17,19 say "Cashier Name    :";
+                        color memvar->colorarray[02];
+                        get usrname pict "@!"
                read
                 setcursor(nlastcursor);set(_SET_CONFIRM,lconfirm)
                 setkey(K_F4,nil);setkey(K_F12,nil)
@@ -1185,6 +1206,7 @@ do while .t.
                 byytpayp->paychcknum := chcknum
                 byytpayp->payinvoice := invoice
                 byytpayp->payname    := fullname
+                byytpayp->payentusr  := usrname
                 byytpayp->payentdte  := date()
                 
                 byytpayp->(dbcommit())
