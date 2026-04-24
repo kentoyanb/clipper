@@ -2848,9 +2848,12 @@ do while ! navtor->(eof())
                         if ! empty(c999crsp->crsdsc4)
                            @ prow()+01,18 say c999crsp->crsdsc4
                         endif
+                        //if(empty(navtor->&cfingrd),space(1), space(2))+;
+                        //if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2)+;
+                        //if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
                         @ prow()+00,57 say ;
-                        if(empty(navtor->&cfingrd),"---",;
-                        if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
+                        if(empty(navtor->&cfingrd),"ENROLLED",; 
+                        if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+if(empty(navtor->&cfingrd),space(2), space(4))+;
                         if(empty(navtor->&ccomgrd),"   ",;
                         if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2)+;
                         if((val(navtor->&cfingrd) > 0 .and. navtor->&cfingrd < "31") .or. (val(navtor->&ccomgrd) > 0 .and. navtor->&ccomgrd< "31"),;
@@ -2971,9 +2974,15 @@ outexpr(prow()+00,22,alltrim(c999sm2p->sm2gdn))
 outexpr(prow()+01,02,"PERMANENT ADDRESS :")         
 outexpr(prow()+00,22,if(!empty(c999sm1p->sm1homadr),strtran(c999sm1p->sm1homadr,"¥",chr(165)),"C/O REGISTRAR, UC-PT"))
 if(!empty(c999sm1p->sm1homadr2))
-        outexpr(prow()+01,02,"                  :")
+        outexpr(prow()+01,02,"CONTACT NUMBER    :")
         outexpr(prow()+00,22,strtran(c999sm1p->sm1homadr2,"¥",chr(165)))
 endif
+/*
+if(!empty(c999sm2p->sm2telno))
+    outexpr(prow()+01,02,"CONTACT NUMBER    :")
+    outexpr(prow()+00,22,strtran(c999sm2p->sm2telno,"¥",chr(165)))
+endif
+*/
 outexpr(prow()+01,02,"DATE ADMITTED     :")
 c999torp->(dbseek(cidno))
 outexpr(prow()+00,22,format_date(cdateadmit))
@@ -3055,9 +3064,16 @@ outexpr(prow()+00,22,alltrim(c999sm2p->sm2gdn))
 outexpr(prow()+01,02,"PERMANENT ADDRESS :")         
 outexpr(prow()+00,22,if(!empty(c999sm1p->sm1homadr),strtran(c999sm1p->sm1homadr,"¥",chr(165)),"C/O REGISTRAR, UC-PT"))
 if(!empty(c999sm1p->sm1homadr2))
-        outexpr(prow()+01,02,"                  :")
+        outexpr(prow()+01,02,"CONTACT NUMBER    :")
         outexpr(prow()+00,22,strtran(c999sm1p->sm1homadr2,"¥",chr(165)))
 endif
+/*
+if(!empty(c999sm2p->sm2telno))
+    outexpr(prow()+01,02,"CONTACT NUMBER    :")
+    outexpr(prow()+00,22,strtran(c999sm2p->sm2telno,"¥",chr(165)))
+endif
+*/
+outexpr(prow()+00,22,strtran(c999sm2p->sm2telno,"¥",chr(165)))
 outexpr(prow()+01,02,"DATE ADMITTED     :")
 c999torp->(dbseek(cidno))
 outexpr(prow()+00,22,format_date(cdateadmit))
@@ -3131,10 +3147,17 @@ outexpr(prow()+01,02,"PARENT/GUARDIAN   :")
 outexpr(prow()+00,22,alltrim(c999sm2p->sm2gdn))
 outexpr(prow()+01,02,"PERMANENT ADDRESS :")         
 outexpr(prow()+00,22,if(!empty(c999sm1p->sm1homadr),strtran(c999sm1p->sm1homadr,"¥",chr(165)),"C/O REGISTRAR, UC-PT"))
+
 if(!empty(c999sm1p->sm1homadr2))
-        outexpr(prow()+01,02,"                  :")
+        outexpr(prow()+01,02,"CONTACT NUMBER    :")
         outexpr(prow()+00,22,strtran(c999sm1p->sm1homadr2,"¥",chr(165)))
 endif
+/*
+if(!empty(c999sm2p->sm2telno))
+    outexpr(prow()+01,02,"CONTACT NUMBER    :")
+    outexpr(prow()+00,22,strtran(c999sm2p->sm2telno,"¥",chr(165)))
+endif
+*/
 outexpr(prow()+01,02,"DATE ADMITTED     :")
 c999torp->(dbseek(cidno))
 outexpr(prow()+00,22,format_date(cdateadmit))
@@ -3749,13 +3772,17 @@ do while ! navtor->(eof())
                         if ! empty(c999crsp->crsdsc4)
                              @ prow()+01,18 say c999crsp->crsdsc4
                         endif
-                        
+                       
+                       // if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+if(empty(navtor->&cfingrd),space(1), space(2))+;
 
-                        @ prow()+00,57 say if(empty(navtor->&cfingrd),"---",;
-                                                   if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
+                       //if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2),"")+; 
+                       //if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
+
+                        @ prow()+00,57 say if(empty(navtor->&cfingrd),"ENROLLED",;
+                                                   if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+if(empty(navtor->&cfingrd),space(2), space(4))+;
                                                    if(cGWA=="N",;
                                                         if(empty(navtor->&ccomgrd),"   ",;
-                                                        if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2),"")+;
+                                                        if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+if(empty(navtor->&cfingrd),space(1), space(2)),"")+;
                                                    if((val(navtor->&cfingrd) > 0 .and. navtor->&cfingrd < "31") .or. (val(navtor->&ccomgrd) > 0 .and. navtor->&ccomgrd< "31") ,;
                                                    if (str(c999crsp->crscreunt,3,1) == "1.5",transform(c999crsp->crscreunt,"@Z 999.9"),transform(nunit,"@Z 999")),transform(0,"999"))+;
                                                    if(cGWA=="Y",space(5)+transform((val(left(navtor->&cfingrd,1))+val(right(navtor->&cfingrd,1))/10)*c999crsp->crscreunt,"99.9"),"")        
@@ -5073,6 +5100,8 @@ outexpr(prow()+01,07,"(TRANSCRIPT CLOSED. ANY ENTRY BELOW THIS LINE IS NULL AND 
 mtefooter2(++npage,cpurpose,corno)
 return(nil)
 
+
+
 static function mtorfrontpage(cidno,cnceeper,cyrtaken,cexamno,cpurpose,cprepared,cchecked,corno,cdateadmit)
 mheadeject()
 setprc(00,00)
@@ -5298,7 +5327,7 @@ do while .t.
                 restscr(aentryscr)
                 commandline("³          F4 - View College File      ³          ESC - Previous               ³")
                 setkey(K_F4,{||if(readvar()=="CCOLCODE",vcolcode(space(len(c999colp->colcod)),cprocsts,memvar->colorarray[10]),)})
-                setcursor(1);set(_SET_CONFIRM,.t.) //TODO
+                setcursor(1);set(_SET_CONFIRM,.t.) 
                 @ 03,23 say "[UC - All Course]" color memvar->colorarray[02]
                   @ 03,02 say "College Code   :";
                         color memvar->colorarray[02];
@@ -7777,9 +7806,15 @@ outexpr(prow()+00,22,alltrim(c999sm2p->sm2gdn))
 outexpr(prow()+01,02,"PERMANENT ADDRESS :")         
 outexpr(prow()+00,22,if(!empty(c999sm1p->sm1homadr),strtran(c999sm1p->sm1homadr,"¥",chr(165)),"C/O REGISTRAR, UC-PT"))
 if(!empty(c999sm1p->sm1homadr2))
-        outexpr(prow()+01,02,"                  :")
+        outexpr(prow()+01,02,"CONTACT NUMBER    :")
         outexpr(prow()+00,22,strtran(c999sm1p->sm1homadr2,"¥",chr(165)))
 endif
+/*
+if(!empty(c999sm2p->sm2telno))
+    outexpr(prow()+01,02,"CONTACT NUMBER    :")
+    outexpr(prow()+00,22,strtran(c999sm2p->sm2telno,"¥",chr(165)))
+endif
+*/
 outexpr(prow()+01,02,"DATE ADMITTED     :")
 c999torp->(dbseek(cidno))
 outexpr(prow()+00,22,format_date(cdateadmit))
@@ -8185,11 +8220,15 @@ do while ! navtor->(eof())
                            @ prow()+01,18 say c999crsp->crsdsc4
                         endif
 
+
+                          // if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2)+;
+                          //if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
+
                         @ prow()+00,57 say ;
-                        if(empty(navtor->&cfingrd),"---",;
-                        if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+space(4)+;
+                        if(empty(navtor->&cfingrd),"ENROLLED",;
+                        if(val(navtor->&cfingrd) > 0,left(navtor->&cfingrd,1)+"."+right(navtor->&cfingrd,1),navtor->&cfingrd+" "))+if(empty(navtor->&cfingrd),space(2), space(4))+;
                         if(empty(navtor->&ccomgrd),"   ",;
-                        if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+space(2)+;
+                        if(val(navtor->&ccomgrd) > 0,left(navtor->&ccomgrd,1)+"."+right(navtor->&ccomgrd,1),navtor->&ccomgrd+" "))+if(empty(navtor->&cfingrd),space(1), space(2))+;
                         if(c999crsp->crslechrs > 0.0 ,transform(c999crsp->crslechrs,"@Z 999"),transform(0,"999"))
 
                         hrs += c999crsp->crslechrs
@@ -8260,9 +8299,15 @@ outexpr(prow()+00,22,alltrim(c999sm2p->sm2gdn))
 outexpr(prow()+01,02,"PERMANENT ADDRESS :")         
 outexpr(prow()+00,22,if(!empty(c999sm1p->sm1homadr),strtran(c999sm1p->sm1homadr,"¥",chr(165)),"C/O REGISTRAR, UC-PT"))
 if(!empty(c999sm1p->sm1homadr2))
-        outexpr(prow()+01,02,"                  :")
+        outexpr(prow()+01,02,"CONTACT NUMBER    :")
         outexpr(prow()+00,22,strtran(c999sm1p->sm1homadr2,"¥",chr(165)))
 endif
+/*
+if(!empty(c999sm2p->sm2telno))
+    outexpr(prow()+01,02,"CONTACT NUMBER    :")
+    outexpr(prow()+00,22,strtran(c999sm2p->sm2telno,"¥",chr(165)))
+endif
+*/
 outexpr(prow()+01,02,"DATE ADMITTED     :")
 c999torp->(dbseek(cidno))
 outexpr(prow()+00,22,format_date(cdateadmit))
