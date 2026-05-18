@@ -99,7 +99,7 @@ do while .t.
                         endif
 
                         a999accp->(dbseek(memvar->cacctno))
-                        if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+                        if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
                                 fask(10,"Special Course Entry of College ("+a999accp->acccolcod+") is NOT ALLOWED ;"+;
                                 "in Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                                 loop

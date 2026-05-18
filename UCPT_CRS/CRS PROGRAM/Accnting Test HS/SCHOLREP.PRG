@@ -180,10 +180,10 @@ ayytprsp->(dbgotop())
 do while ! ayytprsp->(eof())
         a999accp->(dbseek(ayytprsp->prsidno))
     //TRAP PARA MO DISPLAY KY MGA BASIC ED codes  RA
-    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM" .or. ;
+    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,HE,AB,AH,ET,PS,HT,TT" .or. ;
       memvar->cstud == "J" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "G7,G8,G9,GA" .or. ;
       memvar->cstud == "E" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6" .or. ;
-      memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA" 
+      memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AB,AH,ET,PS,HT,TT" 
 
    
         fask(10,"  Processing student no. "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
@@ -710,10 +710,10 @@ do while ! ayytprsp->(eof())
       memvar->cstud == "B"
     */
 
-    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM" .or. ;
+    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,AB,AH,ET,PS,HT,TT" .or. ;
       memvar->cstud == "J" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "G7,G8,G9,GA" .or. ;
       memvar->cstud == "E" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6" .or. ;
-      memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA" 
+      memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AB,AH,ET,PS,HT,TT" 
 
         ++memvar->nnumber
         ++memvar->npageno
@@ -940,7 +940,7 @@ do while ! ayytprsp->(eof())
       memvar->cstud == "B"
    */
 
-    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM" 
+    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,AB,AH,ET,PS,HT,TT" 
 
         if ayytprsp->prstuipdsc == 0
                 cpercent := "FF "
@@ -1003,7 +1003,7 @@ do while ! ayytprsp->(eof())
                     privsumm->(dbunlock())
             endif
     
-    elseif  memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA"
+    elseif  memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AB,AH,ET,PS,HT,TT"
 
             if ayytprsp->prstuipdsc == 0
                     cpercent := "FF "
@@ -1155,10 +1155,10 @@ ayytprsp->(sx_setscope(_BOTTOM_SCOPE,memvar->cprivcode))
 ayytprsp->(dbgotop())
 do while ! ayytprsp->(eof())
 
-        if memvar->cstud == "S" .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM" .or. ;
+        if memvar->cstud == "S" .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,AB,AH,ET,PS,HT,TT" .or. ;
         memvar->cstud == "J"  .and. ayytprsp->prscolcod $ "G7,G8,G9,GA" .or. ;
         memvar->cstud == "E"  .and. ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6" .or. ;
-        memvar->cstud == "A"  .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA" 
+        memvar->cstud == "A"  .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AB,AH,ET,PS,HT,TT" 
 
             fask(10,"  Processing student number "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
             a999accp->(dbseek(ayytprsp->prsidno))
@@ -1425,10 +1425,10 @@ do while ! ayytprsp->(eof())
       memvar->cstud == "B"
     */
 
-    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM" .or. ;
+    if memvar->cstud == "S" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,AB,AH,ET,PS,HT,TT" .or. ;
       memvar->cstud == "J" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "G7,G8,G9,GA" .or. ;
       memvar->cstud == "E" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6" .or. ;
-      memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA"
+      memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "AG,OO,GS,ST,HU,IC,AM,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AB,AH,ET,PS,HT,TT"
 
         fask(10,"  Processing student no. "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
         if ! left(ayytprsp->prscode,1) == "X"

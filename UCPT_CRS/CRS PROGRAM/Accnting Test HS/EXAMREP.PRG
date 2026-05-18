@@ -678,7 +678,7 @@ do while .t.
                 sectcod = ""
 
                
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,ST,HU,PB,AG,OO,IC,GS,AM"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,ST,HU,PB,AG,OO,IC,GS,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Viewing of College ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "BasicEd Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -767,7 +767,7 @@ do while ! cyytenrp->(eof())
                       student->course  := c999colp->coldesabr //+" "+cyytenrp->enryrlevl
             endif
         elseif ccolcode == "UC"
-              if cyytenrp->enrcolcod $ "ST,HU,PB,AG,OO,IC,GS,AM"
+              if cyytenrp->enrcolcod $ "ST,HU,PB,AG,OO,IC,GS,AM,HE,AB,AH,ET,PS,HT,TT"
                 if alltrim(cyytenrp->enrsection) == alltrim(sectcod) .and. alltrim(cyytenrp->enrcolcod2) == alltrim(cyrlevel)
                   fask(10,"  Processing student no. "+accntnum+"  "+cyytenrp->enrcolcod,{" Ok "},memvar->colorarray[06],.f.,nil)
                           student->(dbappend())
@@ -956,7 +956,7 @@ do while .t.
                         loop
                 endif
 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,ST,HU,PB,AG,OO,IC,GS,AM"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,ST,HU,PB,AG,OO,IC,GS,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Viewing of College ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "BasicEd Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop

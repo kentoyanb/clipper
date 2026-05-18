@@ -117,7 +117,7 @@ do while .t.
         endif
         
         
-        if ! ccourse $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" 
+        if ! ccourse $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Creating of College Student New ID Number  ("+ccourse+") ;"+;
                         "is not ALLOWED in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -321,7 +321,7 @@ do while .t.
         endif
 */
         a999accp->(dbseek(cidno))
-        if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" 
+        if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Changing of College Student Name("+a999accp->acccolcod+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -468,7 +468,7 @@ do while .t.
         endif
         
         c999sm1p->(dbseek(right(cacctno,8)))
-        if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" 
+        if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Viewing of College Account Master File  ("+a999accp->acccolcod+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop

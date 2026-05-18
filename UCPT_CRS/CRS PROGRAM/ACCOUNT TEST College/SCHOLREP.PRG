@@ -894,7 +894,7 @@ do while ! ayytprsp->(eof())
                 summary->percent        := cpercent
         endif
 
-    elseif memvar->cstud == "U" .and. !ayytprsp->prscolcod $ "MA,MM,MT,MV,MI,MR,PA,MP,CS,MN,NS,HN,HM,NN,ML,TL,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+    elseif memvar->cstud == "U" .and. !ayytprsp->prscolcod $ "MA,MM,MT,MV,MI,MR,PA,MP,CS,MN,NS,HN,HM,NN,ML,TL,K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
         a999accp->(dbseek(ayytprsp->prsidno))
         fask(10,"  Processing Training student no. "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
         aadd(memvar->aitems,_P_EMPTY)
@@ -950,7 +950,7 @@ do while ! ayytprsp->(eof())
                 summary->percent        := cpercent
         endif
 
-    elseif memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+    elseif memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
         a999accp->(dbseek(ayytprsp->prsidno))
         fask(10,"  Processing student no. "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
         aadd(memvar->aitems,_P_EMPTY)
@@ -1662,7 +1662,7 @@ do while ! ayytprsp->(eof())
         memvar->npageamt  += ayytprsp->prstuiadsc
         memvar->ngrandamt += ayytprsp->prstuiadsc
 
-   elseif memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+   elseif memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
 
         ++memvar->nnumber
         ++memvar->npageno
@@ -1909,7 +1909,7 @@ do while ! ayytprsp->(eof())
             //privsumm->(dbunlock())
 
    elseif memvar->cstud == "U" .and. !ayytprsp->prscolcod $ "MT,MV,MA,MM,MI,MR,PA,MP,CS,MN,HM,HN,NS" .and. ;
-         !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+         !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
 
         fask(16,"  Processing Upgrading Student no. "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
 
@@ -1937,7 +1937,7 @@ do while ! ayytprsp->(eof())
             privsumm->(dbcommit())
             privsumm->(dbunlock())
 
-   elseif memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+   elseif memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
 
         fask(16,"  Processing Both Student no. "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
         if ayytprsp->prstuipdsc == 0.0
@@ -2350,7 +2350,7 @@ ayytprsp->(dbgotop())
 do while ! ayytprsp->(eof())
    if memvar->cstud == "A" .and. cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .and. ayytprsp->prscolcod $ "MT,MV,MA,MM,MI,MR,PA,MP,CS" .or. ;
       memvar->cstud == "U" .and. !cyytenrp->(dbseek(right(ayytprsp->prsidno,8))) .or. ;
-      memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+      memvar->cstud == "B" .and. !ayytprsp->prscolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
         fask(10,"  Processing student no. "+ayytprsp->prsidno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
         if ! left(ayytprsp->prscode,1) == "X"
                 cpercent := if(ayytprsp->prstuipdsc > 0,str(ayytprsp->prstuipdsc * 100,3),"FF ")

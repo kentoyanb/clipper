@@ -108,7 +108,7 @@ do while .t.
                         exit
                 endif
                 
-                if ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+                if ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Forwarding of BasicED ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "College Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -582,7 +582,7 @@ do while .t.
                 endif
 
                 a999accp->(dbseek(cacctno))
-                if a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+                if a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Recomputing of BasicEd ("+a999accp->acccolcod+") is NOT ALLOWED in  ;"+;
                         "College Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -729,7 +729,7 @@ do while .t.
                         loop
                 endif
 
-                if  ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+                if  ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Recomputing of BasicED codes ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "College Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -1021,7 +1021,7 @@ do while .t.
                         loop
                 endif
 
-                if  a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+                if  a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Forwarding of BasicEd ("+a999accp->acccolcod+") is NOT ALLOWED in  ;"+;
                         "College Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop

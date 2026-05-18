@@ -402,7 +402,7 @@ do while .t.
                 endif
 
                 a999accp->(dbseek(cacctno))
-                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" 
+                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Record Entry of College ("+a999accp->acccolcod+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -417,11 +417,7 @@ do while .t.
                         endif
                 endif
 
-                /*if a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA" .and. alltrim(substr(cterm,3,1)) != "1"
-                      fask(10,"Payment Entry of Elem/JH ("+a999accp->acccolcod+") is ALLOWED during;"+;
-                        "1ST SEMESTERS ONLY. Please Enter Adjustment in 1st Semester.",{" Ok "},memvar->colorarray[05],.t.,nil)
-                        loop
-                endif*/
+               
 
                 if a999ctrl->(dbseek(cterm+a999accp->acccolcod)) .and. a999ctrl->status == _CLOSED
                         fask(10,"  Transaction for "+alltrim(term->name)+" was suspended.  ;"+;
@@ -642,7 +638,7 @@ do while .t.
                 endif
 
                 a999accp->(dbseek(cacctno))
-                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" 
+                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Record Entry of College ("+a999accp->acccolcod+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -909,7 +905,7 @@ do while .t.
                         loop
                 endif
 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" 
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Record Entry of College ("+ccolcode+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -1066,7 +1062,7 @@ do while .t.
                         loop
                 endif
 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Creating of College ("+ccolcode+") Subsidy is NOT ALLOWED ;"+;
                         "in Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop

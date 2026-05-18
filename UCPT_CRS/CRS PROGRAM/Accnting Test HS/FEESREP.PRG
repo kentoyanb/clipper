@@ -166,7 +166,7 @@ cyytenrp->(dbgotop())
 do while ! cyytenrp->(eof())
         
         
-        if  cyytenrp->enrcolcod $ "K1K2N1G1G2G3G4G5G6G7G8G9GAAGGSSTHUOOICAM"
+        if  cyytenrp->enrcolcod $ "K1K2N1G1G2G3G4G5G6G7G8G9GAAGGSSTHUOOICAMHEABAHETPSHTTT"
           fask(10,"  Processing student no. "+cyytenrp->enridno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
                   if ayytassp->(dbseek("1"+cyytenrp->enridno))
                       idno = "1"+cyytenrp->enridno
@@ -779,7 +779,7 @@ cyytenrp->(dbgotop())
 do while ! cyytenrp->(eof())
         
         
-        if  cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+        if  cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
           fask(10,"  Processing student no. "+cyytenrp->enridno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
                   if ayytassp->(dbseek("1"+cyytenrp->enridno))
                       idno = "1"+cyytenrp->enridno

@@ -81,7 +81,7 @@ do while .t.
                 loop
         endif
 
-        if memvar->ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU" 
+        if memvar->ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,ST,HU,AG,OO,IC,GS,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Fee Entry of BasicEd ("+memvar->ccolcode+") is not ALLOWED ;"+;
                         "in College Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -315,7 +315,7 @@ do while .t.
                 loop
         endif
 
-        if memvar->ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU" 
+        if memvar->ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,ST,HU,AG,OO,IC,GS,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Fee Entry of BasicEd ("+memvar->ccolcode+") is not ALLOWED ;"+;
                         "in College Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -545,7 +545,7 @@ do while .t.
                 endif
 
                 a999accp->(dbseek(cacctno))
-                if a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU" 
+                if a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,ST,HU,AG,OO,IC,GS,AM,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Fee Year Entry of BasicEd ("+a999accp->acccolcod+") is not ALLOWED ;"+;
                         "in College Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
