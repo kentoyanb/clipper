@@ -169,7 +169,7 @@ aadd( aelements, { ncurrline++, 02,  " ~Payment and Adjustment for BasicEd    "
         { || SelectMenu( { { 06, 15, " ~Payment Entry                   ",,, { || rights( "[1,2,1]" ) }, {|| payentry()},, }, ;
                            { 07, 15, " ~Adjustment Entry                ",,, { || rights( "[1,2,2]" ) }, {|| adjentry()},,},;
                            { 08, 15, " ~Update Payment Records          ",,, { || rights( "[1,2,4]" ) }, {|| payupdate()},,},;
-                           { 09, 15, " ~Subsidy Entry                   ",,, { || rights( "[1,2,4]" ) }, {|| paymentsubsidy()},,},;
+                           { 09, 15, " ~Subsidy Entry                   ",,, { || rights( "[1,2,4]" ) }, {|| subsidyentry()},,},;
                            { 10, 15, " P~ost Payment Records            ",,, { || rights( "[1,2,5]" ) }, {|| postpay()},,}},;
         { || draw_box2(05,14,11,48,memvar->colorarray[30],memvar->colorarray[31])},,,memvar->colorarray[32] , , , , , ;
         gettrigger( memvar->colorarray[32] ) ) },, } )

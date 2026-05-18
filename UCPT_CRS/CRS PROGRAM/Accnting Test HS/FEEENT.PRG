@@ -90,7 +90,7 @@ do while .t.
                 loop
         endif
 
-        if ! memvar->ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AM,GS,AG,ST,HU,OO,IC" 
+        if ! memvar->ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AM,GS,AG,ST,HU,OO,IC,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Fee Entry of College ("+memvar->ccolcode+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -548,7 +548,7 @@ do while .t.
 
                 a999accp->(dbseek(cacctno))
 
-                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AM,GS,AG,ST,HU,OO,IC" 
+                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AM,GS,AG,ST,HU,OO,IC,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Fee Year Entry of College ("+a999accp->acccolcod+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -656,7 +656,7 @@ do while .t.
                 loop
         endif
 
-        if ! memvar->cstrndbcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AM,GS,AG,ST,HU,OO,IC" 
+        if ! memvar->cstrndbcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AM,GS,AG,ST,HU,OO,IC,HE,AB,AH,ET,PS,HT,TT" 
                         fask(10,"Fee Entry of College ("+memvar->cstrndbcod+") is not ALLOWED ;"+;
                         "in BasicEd Accounting Program.",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -771,7 +771,7 @@ do while .t.
                 loop
         endif
        
-        if ! memvar->promostrnd $ "GS,AG,ST,HU,OO,IC" 
+        if ! memvar->promostrnd $ "ST,HU,AG,OO,IC,GS,AM,HE,AB,AH,ET,PS,HT" 
                         fask(10,"Promotional Discount Entry ("+memvar->promostrnd+") is not ALLOWED ;"+;
                         "if not Senior High",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop

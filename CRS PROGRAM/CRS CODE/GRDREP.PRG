@@ -3027,8 +3027,8 @@ do while ! navtor->(eof())
                 outexpr(prow()+01,02,"COMPLETED  CLASSROOM INSTRUCTION  OF THE COURSE LEADING TO THE")
                 outexpr(prow()+01,02,"DEGREE  OF  BACHELOR  OF  SCIENCE  IN "+alltrim(c999colp->colnamcol)+" "+if(alltrim(c999colp->colcod)=="MT"," (B.S.M.T.)",if(alltrim(c999colp->colcod)=="MA"," (B.S.MAR.E)","("+alltrim(c999colp->colnamabr2)+")")))
                 outexpr(prow()+01,02,"AS   REQUIRED  BY  THE   COMMISSION  ON  HIGHER  EDUCATION  (CHED)  AND")
-                outexpr(prow()+01,02,"UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+". PACUCOA ACCREDITED EXEMPTED FROM THE")
-                outexpr(prow()+01,02,"ISSUANCE OF SPECIAL ORDER.")
+                outexpr(prow()+01,02,"UNIVERSITY OF CEBU AS OF "+format_date(cdategrad)+".")
+               
 
          
   

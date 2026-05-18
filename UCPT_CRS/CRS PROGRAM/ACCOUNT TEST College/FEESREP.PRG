@@ -143,7 +143,7 @@ do while ! cyytenrp->(eof())
         
         //cyytenrp->(dbseek(right(ayytassp->assidno,8))) 
         fask(10,"  Processing student no. "+cyytenrp->enridno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
-        if ! cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" .and. cyytenrp->enrenrst == "C"
+        if ! cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" .and. cyytenrp->enrenrst == "C"
 
 
           if ayytassp->(dbseek("1"+cyytenrp->enridno))
@@ -789,7 +789,7 @@ do while ! cyytenrp->(eof())
         
         //cyytenrp->(dbseek(right(ayytassp->assidno,8))) 
        
-        if ! cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM" .and. cyytenrp->enrenrst == "C"
+        if ! cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT" .and. cyytenrp->enrenrst == "C"
 
 
           if ayytassp->(dbseek("1"+cyytenrp->enridno))

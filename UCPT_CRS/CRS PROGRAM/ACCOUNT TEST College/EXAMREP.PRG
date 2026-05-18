@@ -576,7 +576,7 @@ do while .t.
                         loop
                 endif
 
-                if ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+                if ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
                         fask(10,"Viewing of BasicEd ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "College Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -636,7 +636,7 @@ do while ! cyytenrp->(eof())
         testresetrecord(accntnum)
          //-----ADDED 11092017 TO RECOMPUTE-------------
          */
-         if !cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM"
+         if !cyytenrp->enrcolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
             fask(10,"  Processing student no. "+cyytenrp->enridno+"  "+cyytenrp->enrcolcod+" "+cyytenrp->enryrlevl+" ",{" Ok "},memvar->colorarray[06],.f.,nil)
             c999colp->(dbseek(cyytenrp->enrcolcod))
             student->(dbappend())
