@@ -114,7 +114,7 @@ do while .t.
                 endif
 
                 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Forwarding of College ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -131,15 +131,6 @@ do while .t.
                 endif
 
 
-                /*
-                if alltrim(substr(cterm,3,1)) != "1" .and. ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA"
-                           fask(10,"Forwarding of Elem/JuniorHigh/SeniorHigh ("+ccolcode+")  is PROHIBITED ;"+;
-                            "at this moment. ",{" Ok "},memvar->colorarray[05],.t.,nil)
-                            loop
-                endif
-                */
-
-                
 
                 if a999ctrl->(dbseek(cterm+ccolcode)) .and. a999ctrl->fflag == _FORWARDED
                         if ! fask(10,"  Transaction for "+alltrim(term->name)+" was already  ;"+;
@@ -607,7 +598,7 @@ do while .t.
                         loop
                 endif*/
 
-                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Recomputing of College ("+a999accp->acccolcod+") is NOT ALLOWED in  ;"+;
                         "Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -752,17 +743,13 @@ do while .t.
                         loop
                 endif
 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Recomputing of College ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
                 endif
 
-                /*if ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA," .and. alltrim(substr(cterm,3,1)) != "1"
-                        fask(10,"Recomputing  of Elem/JH ("+ccolcode+") is ALLOWED during;"+;
-                        "1ST SEMESTERS ONLY.",{" Ok "},memvar->colorarray[05],.t.,nil)
-                        loop
-                endif*/
+            
 
                 if a999ctrl->(dbseek(cterm+ccolcode)) .and. a999ctrl->status == _CLOSED
                         fask(10,"   Transaction of "+alltrim(term->name)+" was already closed.   ;"+;
@@ -1028,7 +1015,7 @@ do while .t.
                         loop
                 endif
 
-                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Forwarding of College ("+a999accp->acccolcod+") is NOT ALLOWED in  ;"+;
                         "Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
