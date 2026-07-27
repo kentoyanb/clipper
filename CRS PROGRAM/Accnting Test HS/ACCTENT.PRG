@@ -270,6 +270,7 @@ do while .t.
 
                                 para->(dbcommit())
                                 para->(dbunlock())
+                        /*
                         else
 
                                 a999accp->(reclock())
@@ -331,6 +332,7 @@ do while .t.
 
                                 para->(dbcommit())
                                 para->(dbunlock())
+                        */
 
                         endif
                         a999accp->(dbskip())
@@ -1151,6 +1153,7 @@ do while .t.
 
                         para->(dbcommit())
                         para->(dbunlock())
+                /*
                 else
                         a999accp->(reclock())
 
@@ -1213,6 +1216,7 @@ do while .t.
 
                         para->(dbcommit())
                         para->(dbunlock())
+                */
                 endif
 
                 fask(18,"   Processing finished.   ",{" Ok "},memvar->colorarray[05],.t.,nil)

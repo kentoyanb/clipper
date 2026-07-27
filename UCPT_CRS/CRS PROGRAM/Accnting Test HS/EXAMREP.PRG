@@ -415,7 +415,7 @@ if a999accp->acccolcod == "GA"
     @ prow()+00,10 say alltrim(c999sm1p->sm1lstnam)+", "+alltrim(c999sm1p->sm1fstnam)+" "+c999sm1p->sm1midnam +"    " + "GRADE 10"   
 else
     @ prow()+00,10 say alltrim(c999sm1p->sm1lstnam)+", "+alltrim(c999sm1p->sm1fstnam)+" "+c999sm1p->sm1midnam +"    " + if(a999accp->accyrlevl == "2","GRADE 12","GRADE 11")
-    @ prow()+01,00 say "TRACK - STRAND: "+if(cyytenrp->enrcolcod == "TM","TECHVOC - ","ACADEMICS - ") + alltrim(c999colp->coldesabr)
+    @ prow()+01,00 say "TRACK - STRAND: "+if((cyytenrp->enrcolcod == "TM" .or. cyytenrp->enrcolcod == "HT" .or. cyytenrp->enrcolcod == "IC"),"TECHVOC - ","ACADEMICS - ") + alltrim(c999colp->coldesabr)
     @ prow(),36 say "GRANT:  "+ ngrant
 endif
 

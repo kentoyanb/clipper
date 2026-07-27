@@ -211,7 +211,7 @@ do while .t.
                                 para->(dbgoto(1))
                                 para->(reclock())
 
-                                //ayytpayp->(dbsetorder(4)) 
+  
 
                                 if ayytpayp->(dbseek(a999accp->accidno+_FORWARDED))
                                         ayytpayp->(reclock()) //update
@@ -219,7 +219,7 @@ do while .t.
                                         ayytpayp->(recycle()) //insert
                                 endif
                                 
-                               // ayytpayp->(dbsetorder(1)) 
+                               
 
                                 ayytpayp->payrefno      := alltrim(str(++para->seriesno,8))
                                 ayytpayp->payidno       := a999accp->accidno
@@ -254,6 +254,9 @@ do while .t.
 
                                 para->(dbcommit())
                                 para->(dbunlock())
+
+                        /*
+
                         else
 
                                 a999accp->(reclock())
@@ -319,6 +322,7 @@ do while .t.
 
                                 para->(dbcommit())
                                 para->(dbunlock())
+                        */
 
 
                         endif
@@ -1152,6 +1156,7 @@ do while .t.
 
                         para->(dbcommit())
                         para->(dbunlock())
+                /*
                 else
                         a999accp->(reclock())
 
@@ -1214,6 +1219,7 @@ do while .t.
 
                         para->(dbcommit())
                         para->(dbunlock())
+                */
                 endif
 
                 fask(18,"   Processing finished.   ",{" Ok "},memvar->colorarray[05],.t.,nil)
