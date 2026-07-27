@@ -91,7 +91,7 @@ do while .t.
                 endif
 
                 a999accp->(dbseek(cacctno))
-                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+                if ! a999accp->acccolcod $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Creating of College ("+a999accp->acccolcod+") Assessment is NOT ALLOWED ;"+;
                         "in Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -231,7 +231,7 @@ memvar->ccourseyr := a999accp->acccolcod
 
 
 //check if ang student ky grade 11 or 12 sa enrp ( g11 = GB , g12 = GC)
-    if (cyytenrp->enrcolcod == "PB" .OR. cyytenrp->enrcolcod == "ST" .OR. cyytenrp->enrcolcod == "HU" .OR. cyytenrp->enrcolcod == "GS" .OR. cyytenrp->enrcolcod == "TM")
+    if (cyytenrp->enrcolcod == "PB" .OR. cyytenrp->enrcolcod == "ST" .OR. cyytenrp->enrcolcod == "HU" .OR. cyytenrp->enrcolcod == "GS" .OR. cyytenrp->enrcolcod == "TM" .OR. cyytenrp->enrcolcod == "AG" .OR. cyytenrp->enrcolcod == "OO" .OR. cyytenrp->enrcolcod == "IC" .OR. cyytenrp->enrcolcod == "AM" .OR. cyytenrp->enrcolcod == "HE" .OR. cyytenrp->enrcolcod == "AB" .OR. cyytenrp->enrcolcod == "AH" .OR. cyytenrp->enrcolcod == "ET" .OR. cyytenrp->enrcolcod == "PS" .OR. cyytenrp->enrcolcod == "HT")
         if(cyytenrp->enrcolcod2 == "GB")
             memvar->yrlvl = "11"
         elseif(cyytenrp->enrcolcod2 == "GC")
@@ -514,7 +514,7 @@ do while .t.
                         loop
                 endif
 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Creating of College ("+ccolcode+") Assessment is NOT ALLOWED ;"+;
                         "in Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -614,7 +614,8 @@ do while ! cyytenrp->(eof())
             yrlvl = "10"
         endif*/
 
-        if (cyytenrp->enrcolcod == "PB" .OR. cyytenrp->enrcolcod == "ST" .OR. cyytenrp->enrcolcod == "HU" .OR. cyytenrp->enrcolcod == "GS" .OR. cyytenrp->enrcolcod == "TM")
+        if (cyytenrp->enrcolcod == "PB" .OR. cyytenrp->enrcolcod == "ST" .OR. cyytenrp->enrcolcod == "HU" .OR. cyytenrp->enrcolcod == "GS" .OR. cyytenrp->enrcolcod == "TM" .OR. cyytenrp->enrcolcod == "AG" .OR. cyytenrp->enrcolcod == "OO" .OR. cyytenrp->enrcolcod == "IC" .OR. cyytenrp->enrcolcod == "AM" .OR. cyytenrp->enrcolcod == "HE" .OR. cyytenrp->enrcolcod == "AB" .OR. cyytenrp->enrcolcod == "AH" .OR. cyytenrp->enrcolcod == "ET" .OR. cyytenrp->enrcolcod == "PS" .OR. cyytenrp->enrcolcod == "HT")
+
             if(cyytenrp->enrcolcod2 == "GB")
                 memvar->yrlvl = "11"
             elseif(cyytenrp->enrcolcod2 == "GC")
@@ -805,7 +806,7 @@ do while .t.
                         loop
                 endif
 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Posting of College ("+ccolcode+") Assessment is NOT ALLOWED ;"+;
                         "in Basic Ed Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop

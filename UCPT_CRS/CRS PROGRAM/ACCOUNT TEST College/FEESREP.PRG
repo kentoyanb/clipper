@@ -81,7 +81,7 @@ return(nil)
 static function pfeesincome()
 local abtext := {}, ncol, nmaxcol := 80, npage := 0, nctr := 0,;
       afile,ntotstud := 0, ntottui := 0, ntotreg := 0, ntotmisc := 0,;
-      ntotlab := 0, ntotdisc := 0, ndiscount := 0, ntotpayment := 0, ntotadj :=0, ntotoa := 0, totalpayable := 0, totalpaid := 0, ntotalpayable :=0, ntotalpaid :=0
+      ntotlab := 0, ntotdisc := 0, ndiscount := 0, ntotpayment := 0, ntotadj :=0, ntotoa := 0, totalpayable := 0, totalpaid := 0, ntotalpayable :=0, ntotalpaid :=0,ntotassessment:=0, totresibabol:=0, ntotresibabol :=0,ntotpayable:=0,ntotpaid:=0
 
 fask(10,"   Initializing File(s)...   ",{" Ok "},memvar->colorarray[06],.f.,nil)
 
@@ -124,18 +124,7 @@ aadd(abtext,{||""+chr(15)})
 aadd(abtext,{||" Course    #Student    Tuition Fees    Registration     Misc. Fees      Lab. Fees       Total Fees      Old Accounts      Discounts     Adjustments     Payments Made     Account Rcvbls"})
 aadd(abtext,{||"---------  --------  --------------    --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------    --------------"})
 
-/*
-aadd(abtext,{||" Course    #Student    Tuition Fees    Registration     Misc. Fees      Lab. Fees       Total Fees      Discounts     Payments Made     Account Rcvbls"})
-aadd(abtext,{||"---------  --------  --------------    --------------  --------------  --------------  --------------  --------------  --------------  --------------"})
-*/
-/* WAY LABOT ----------------------------------------------------------------------------------------------------------------------
- Course    #Student   Tuition Fees    Registration     Misc. Fees      Lab. Fees       Total Fees      Discounts     Account Rcvbls
----------  --------  --------------  --------------  --------------  --------------  --------------  --------------  --------------
-12-123456  1234,123  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12
-           --------  --------------  --------------  --------------  --------------  --------------  --------------  --------------
-TOTALS     1234,123  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12  123,123,123.12
-WAY LABOT -----------------------------------------------------------------------------------------------------------------------------------
-*/
+
 
 **filtering data**
 cyytenrp->(dbgotop())
@@ -157,7 +146,6 @@ do while ! cyytenrp->(eof())
           ayytassp->(dbseek(idno))
           ayytpayp->(dbseek(idno+"OA"))
           a999accp->(dbseek(idno))
-
                       if ! fees->(dbseek(cyytenrp->enrcolcod))
                                  c999colp->(dbseek(cyytenrp->enrcolcod))
                                   fees->(dbappend())
@@ -193,8 +181,6 @@ do while ! cyytenrp->(eof())
                                   fees->(dbcommit())
                                   fees->(dbunlock())    
                       endif
-
-                         
         endif
         if nextkey() == K_ESC
                 exit
@@ -207,9 +193,22 @@ enddo
 pageprint(abtext)
 fees->(dbgotop())
 do while ! fees->(eof())
+        
+                      totalassessment = fees->tuifee  + fees->regfee + fees->miscfee + fees->labfee
 
-        totalpayable = fees->tuifee  + fees->regfee + fees->miscfee + fees->labfee + fees->oa
-        totalpaid = fees->discnt + fees->payment + (fees->adjsment)
+                        if fees->adjsment < 0
+                           totalpayable = totalassessment + fees->oa   - (fees->adjsment*-1)
+                        else
+                           totalpayable = totalassessment + fees->oa  + fees->adjsment
+                        endif
+
+                    
+                        totalpaid = fees->discnt + fees->payment
+
+                        totresibabol = totalpayable - totalpaid
+
+
+       
 
         fask(10,"  Printing college "+fees->colcode+"-"+alltrim(fees->coldesc)+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
         @ prow()+01,00 say fees->colcode+"-"+fees->coldesc+"  "+;
@@ -218,16 +217,14 @@ do while ! fees->(eof())
                            transform(fees->regfee,"999,999,999.99")+"  "+;
                            transform(fees->miscfee,"999,999,999.99")+"  "+;
                            transform(fees->labfee,"999,999,999.99")+"  "+;
-                           transform(fees->tuifee  + fees->regfee +;
-                                     fees->miscfee + fees->labfee,"999,999,999.99")+"  "+;
+                           transform(totalassessment,"999,999,999.99")+"  "+;
                            transform(fees->oa,"999,999,999.99")+"  "+;
                            transform(fees->discnt,"999,999,999.99")+"  "+;
                            transform(fees->adjsment,"999,999,999.99")+"  "+;
                            transform(fees->payment,"999,999,999.99")+"  "+;
-                           transform(totalpayable - totalpaid ,"999,999,999.99") //account receivables
+                           transform(totresibabol ,"999,999,999.99") //account receivables
 
-                           /*transform(fees->tuifee  + fees->regfee +;
-                                     fees->miscfee + fees->labfee +fees->oa - if(fees->adjsment < 0, fees->adjsment*-1, fees->adjsment) - fees->discnt - fees->payment,"999,999,999.99"+"  ")*/
+                         
 
 
         ntotstud += fees->student
@@ -239,6 +236,12 @@ do while ! fees->(eof())
         ntotadj  += fees->adjsment
         ntotpayment += fees->payment
         ntotoa += fees->oa
+
+        ntotpayable += totalpayable
+        ntotpaid += totalpaid
+        ntotassessment += totalassessment
+        ntotresibabol += totresibabol
+
 
 
 
@@ -252,24 +255,20 @@ enddo
 //@ prow()+01,00 say "           --------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------"
 @ prow()+01,00 say "           --------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------    --------------  "
 
-ntotalpayable = ntottui + ntotreg + ntotmisc + ntotlab +  ntotoa
-ntotalpaid    = ntotdisc + ntotpayment + (ntotadj)
+
 
 @ prow()+01,00 say "ETOTALS  "+transform(ntotstud,"9999,999")+"  "+; 
                                  transform(ntottui ,"999,999,999.99")+"  "+;
                                  transform(ntotreg ,"999,999,999.99")+"  "+;
                                  transform(ntotmisc,"999,999,999.99")+"  "+;
                                  transform(ntotlab ,"999,999,999.99")+"  "+;
-                                 transform(ntottui + ntotreg + ntotmisc +;
-                                           ntotlab,"999,999,999.99")+"  "+;
+                                 transform(ntotassessment,"999,999,999.99")+"  "+;
                                  transform(ntotoa ,"999,999,999.99")+"  "+;
                                  transform(ntotdisc ,"999,999,999.99")+"  "+;
                                  transform(ntotadj ,"999,999,999.99")+"  "+;
                                  transform(ntotpayment ,"999,999,999.99")+"  "+;
-                                 transform(ntotalpayable - ntotalpaid  ,"999,999,999.99") //account receivables
-                                 /*
-                                 transform(ntottui + ntotreg + ntotmisc +;
-                                           ntotlab + ntotoa - if(ntotadj<0,ntotadj*-1,ntotadj ) - ntotdisc - ntotpayment,"999,999,999.99")*/
+                                 transform(ntotresibabol ,"999,999,999.99") //account receivables
+                                 
                                                    
 
 @ prow()+00,00 say chr(18)
@@ -1256,5 +1255,233 @@ field colcode
 private cdummyfile := alias()
 index on colcode tag (memvar->cdummyfile+"1") of (memvar->cdummyfile)
 return(nil)
+
+
+
+function studfeesincome() //todo
+local getlist := {}, alastscr, nlastcursor := setcursor(),;
+      clastcolor := setcolor(memvar->colorarray[11]), lconfirm := set(_SET_CONFIRM),;
+      aopenfiles,cprocsts,ccolcode:="UC",aentryscr
+
+private cdummy := "sterm"+strzero(memvar->naccess,2),sterm
+
+if(aopen1files := openwcheck({{,,"term",,_DBF_SHARED,,1,"/crunlib"}}))==nil
+        return(nil)
+endif
+memvar->cterm := space(len(term->code))
+alastscr := savescr(01,00,24,79)
+do while .t.
+        restscr(alastscr)
+        boxshadow(01,00,24,79,"лплллмлл ",memvar->colorarray[11],"  Print School Fees Income by Student ")
+        commandline("Г           F4 - View Term             Г           ESC - Previous              Г")
+        @ 03,01 say replicate("Ф",78)
+        setkey(K_F4,{||viewterm({||__keyboard(chr(K_CTRL_LEFT)+term->code+chr(K_ENTER))},cprocsts,memvar->colorarray[10])})
+        setcursor(1);set(_SET_CONFIRM,.t.)
+        @ 02,02 say "School Term :";
+                color memvar->colorarray[02];
+                get memvar->cterm pict "@!";
+                valid ! empty(memvar->cterm)
+        read
+        setcursor(nlastcursor);set(_SET_CONFIRM,lconfirm);setkey(K_F4,nil)
+        if lastkey() == K_ESC
+                exit
+        endif
+        if ! term->(dbseek(memvar->cterm))
+                fask(10,"  Term "+memvar->cterm+" not yet created...  ",{" Ok "},memvar->colorarray[05],.t.,nil)
+                loop
+        endif
+        if ! file("/crunlib/"+"c"+memvar->cterm+"enrp.dbf")
+                fask(10,"  C"+memvar->cterm+"ENRP.DBF not yet created.   ",{" Ok "},memvar->colorarray[05],.t.,nil)
+                loop
+        endif
+        if ! file("a"+memvar->cterm+"payp.dbf")
+                fask(10,"  A"+memvar->cterm+"PAYP.DBF not yet created.   ",{" Ok "},memvar->colorarray[05],.t.,nil)
+                loop
+        endif
+        memvar->cdesc := term->name
+        @ 02,20 say "- "+term->name
+
+        cyytenrp := "c"+memvar->cterm+"enrp"
+        ayytpayp := "a"+memvar->cterm+"payp"
+        ayytassp := "a"+memvar->cterm+"assp"
+        if(aopen2files := openwcheck({{,,"a999accp",,_DBF_SHARED,,1},;
+                                      {,, cyytenrp ,"cyytenrp",_DBF_SHARED,,2,"/crunlib"},;
+                                      {,, ayytpayp ,"ayytpayp",_DBF_SHARED,,10},;
+                                      {,, ayytassp ,"ayytassp",_DBF_SHARED,,1},;
+                                      {,,"c999colp",,_DBF_SHARED,,1,"/crunlib"}})) == nil
+                return(nil)
+        endif
+        memvar->ccourse := space(len(c999colp->colnamcol))
+
+        commandline("Г          F4 - View College           Г          ESC - Previous               Г")
+        aentryscr := savescr(01,00,24,79)
+
+        do while .t.
+                restscr(aentryscr)
+                setkey(K_F4,{||vcolcode({||__keyboard(chr(K_CTRL_LEFT)+c999colp->colcod+chr(K_ENTER))},cprocsts,memvar->colorarray[10])})
+                setcursor(1);set(_SET_CONFIRM,.t.)
+      
+                @ 04,02 say "College Code :";
+                        get ccolcode pict "@!";
+                        valid ! empty(ccolcode)
+                read
+                setcursor(nlastcursor);set(_SET_CONFIRM,lconfirm);setkey(K_F4,nil)
+                if lastkey() == K_ESC
+                        exit
+                endif
+                if ! c999colp->(dbseek(ccolcode))
+                        fask(10,"  College code not found in file.  ",{" Ok "},memvar->colorarray[05],.t.,nil)
+                        loop
+                endif
+
+                if  ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,AG,GS,ST,HU,OO,IC,AM,HE,AB,AH,ET,PS,HT,TT"
+                        fask(10,"Viewing of BasicEd ("+ccolcode+") is NOT ALLOWED in  ;"+;
+                        "College Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
+                        loop
+                endif
+
+                c999colp->(dbseek(ccolcode))
+                memvar->ccourse := c999colp->colnamcol
+                if whereprint({||pstudfeesincome(ccolcode)}) == 1
+                        __keyboard(alltrim(memvar->cspooltxt)+".PRN"+chr(K_ENTER))
+                        viewtextfile()
+                endif
+        enddo
+        closewcheck(aopen2files)
+
+enddo
+restscr(alastscr)
+closewcheck(aopen1files)
+return(nil)
+
+function pstudfeesincome(ccolcode)
+local abtext := {}, ncol, nmaxcol := 80, npage := 0, ccourse := space(06),;
+        nOA:=nAssess:=nTuition:=0,ntottui := 0, ntotreg := 0, ntotmisc := 0,;
+      ntotlab := 0, ntotdisc := 0, ndiscount := 0, ntotpayment := 0, ntotadj :=0, ntotoa := 0, totalpayable := 0, totalpaid := 0, ntotalpayable :=0, ntotalpaid :=0, totrecvbles :=0, asstui:=0, assreg:=0,assmisc:=0,asslab:=0,asstotal:=0,payamt:=0,accsytadsc:=0,accadj:=0,accamtpd:=0
+
+ncol := titlepos(alltrim(memvar->ccompanyname),nmaxcol)
+aadd(abtext,{||"Date: "+displaydate(date())+space(ncol-16)+alltrim(memvar->ccompanyname)+space(nmaxcol-ncol-len(alltrim(memvar->ccompanyname))-10)+"Page "+str(++npage,3)})
+aadd(abtext,{||"Time: "+Time()+space(titlepos("Pardo - Talisay",nmaxcol)-14)+"Pardo - Talisay"})
+aadd(abtext,{||space(titlepos("Bulacao, Cebu City",nmaxcol))+"Bulacao, Cebu City"})
+aadd(abtext,{||""})
+
+aadd(abtext,{||space(titlepos(alltrim(memvar->ccourse),nmaxcol))+alltrim(memvar->ccourse)})
+aadd(abtext,{||space(titlepos(alltrim(term->name),nmaxcol))+alltrim(term->name)})
+aadd(abtext,{||""})
+aadd(abtext,{||"  ID No.   Last Name         First Name          M  Tuition Fees     Registration    Misc. Fees       Lab. Fees      Total Fees      Old Accounts      Discounts     Adjustments     Payments Made     Account Rcvbls"})
+aadd(abtext,{||"--------- --------------- ---------------------- -  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------    --------------"})
+
+
+pageprint(abtext)
+
+
+cyytenrp->(sx_setscope(_TOP_SCOPE   ,ccolcode))
+cyytenrp->(sx_setscope(_BOTTOM_SCOPE,ccolcode))
+
+cyytenrp->(dbgotop())
+do while ! cyytenrp->(eof())
+        
+        //cyytenrp->(dbseek(right(ayytassp->assidno,8))) 
+        fask(10,"  Processing student no. "+cyytenrp->enridno+"  ",{" Ok "},memvar->colorarray[06],.f.,nil)
+        if cyytenrp->enrenrst == "C"
+
+
+          if ayytassp->(dbseek("1"+cyytenrp->enridno))
+              idno = "1"+cyytenrp->enridno
+          elseif ayytassp->(dbseek("2"+cyytenrp->enridno))
+              idno = "2"+cyytenrp->enridno
+          elseif ayytassp->(dbseek("3"+cyytenrp->enridno))
+               idno = "3"+cyytenrp->enridno
+          endif
+
+         
+          ayytpayp->(dbseek(idno+"OA"))
+          a999accp->(dbseek(idno))
+
+                        pageeject(if(npage == 0, _PAGE_FIRST, _PAGE_CONTINUE), ;
+                                abtext, prow() + 1, _MAX_LINE, {||__eject()})
+                        if c999colp->(dbseek(a999accp->acccolcod))
+                                ccourse := c999colp->coldesabr
+                        elseif a999stcp->(dbseek(a999accp->acccolcod))
+                                ccourse := a999stcp->stcdesabr
+                        endif
+
+                       
+                        if a999accp->accadj < 0
+                           totalpayable = ayytassp->asstotal + ayytpayp->payamt - (a999accp->accadj*-1)
+                        else
+                           totalpayable = ayytassp->asstotal + ayytpayp->payamt + a999accp->accadj
+                        endif
+
+                    
+                        totalpaid = a999accp->accsytadsc + a999accp->accamtpd 
+
+                        asstui:= ayytassp->asstui
+                        assreg:= ayytassp->assreg
+                        assmisc:= ayytassp->assmisc
+                        asslab:= ayytassp->asslab
+                        asstotal:= ayytassp->asstotal
+                        payamt:= ayytpayp->payamt
+                        accsytadsc:= a999accp->accsytadsc
+                        accadj:= a999accp->accadj
+                        accamtpd:= a999accp->accamtpd
+
+
+  
+                        @ prow()+01,00 say a999accp->accidno+" "+;
+                                           a999accp->acclname+" "+;
+                                           a999accp->accfname+" "+;
+                                           a999accp->accmname+"  "+;
+                                           transform(asstui,"999,999.99")+"      "+;
+                                           transform(assreg,"999,999.99")+"      "+;
+                                           transform(assmisc,"999,999.99")+"    "+;
+                                           transform(asslab,"999,999.99")+"      "+;
+                                           transform(asstotal,"999,999.99")+"     "+;
+                                           transform(payamt,"999,999.99")+"      "+; // OLD ACCOUNT
+                                           transform(accsytadsc,"999,999.99")+"      "+; //discount
+                                           transform(accadj,"999,999.99")+"       "+; //adjustment
+                                           transform(accamtpd,"99,999,999.99")+"     "+;//payments made
+                                           transform(totalpayable - totalpaid ,"999,999,999.99")
+
+                        ntottui += asstui
+                        ntotreg += assreg
+                        ntotmisc += assmisc
+                        ntotlab  += asslab
+                        nAssess += asstotal
+                        nOA     += payamt
+                        ntotdisc += accsytadsc
+                        ntotadj += accadj
+                        ntotpayment += accamtpd
+                        totrecvbles += totalpayable - totalpaid
+
+        endif
+        if nextkey() == K_ESC
+                exit
+        endif
+        cyytenrp->(dbskip())
+enddo
+
+
+
+
+@ prow()+01,00 say replicate("-",220)
+@ prow()+01,00 say replicate(" ",50)+;
+                   transform(ntottui,"999,999,999.99")+"   "+;
+                   transform(ntotreg,"999,999,999.99")+"  "+;
+                   transform(ntotmisc,"999,999,999.99")+" "+;
+                   transform(ntotlab,"999,999,999.99")+" "+;
+                   transform(nAssess,"999,999,999.99")+" "+;
+                   transform(nOA,"999,999,999.99")+" "+;
+                   transform(ntotdisc,"999,999,999.99")+"  "+;
+                   transform(ntotadj,"999,999,999.99")+"     "+;
+                   transform(ntotpayment,"999,999,999.99")+"     "+;
+                   transform(totrecvbles,"999,999,999.99")
+
+@ prow()+00,00 say chr(18)
+__eject()
+//closewcheck(afile)
+return(nil)
+
+
 
 *------------------------------------------------------------------------------*

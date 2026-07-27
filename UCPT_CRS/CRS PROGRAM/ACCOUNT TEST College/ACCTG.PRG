@@ -238,6 +238,9 @@ aadd( aelements, { ncurrline++, 11, " ~Payments and Adjustments Report   ",,, {
                            { 07, 25, " BPI Payments *~Detailed ",,, { || rights( "[2,2,2]" ) }, {|| nil },,}},;
         { || draw_box2(05,24,08,49,memvar->colorarray[30],memvar->colorarray[31])},,, memvar->colorarray[32] , , , , , ;
         gettrigger( memvar->colorarray[32] ) ) },, } )
+
+        { 13, 25, " Summary of ~Special Courses Collections ",,, { || rights( "[2,4,3]" ) }, {|| trainingollections()},,},;
+        { 13, 25, " Summary of S~pecial Courses Income ",,, { || rights( "[2,4,4]" ) }, {|| specialincome()},,}
 */
 
 aadd( aelements, { ncurrline++, 11, " ~Students Assessment Report        ",,, { || rights( "[2,3]" ) }, ;
@@ -246,12 +249,11 @@ aadd( aelements, { ncurrline++, 11, " ~Students Assessment Report        ",,, {
         { || draw_box2(06,24,09,61,memvar->colorarray[30],memvar->colorarray[31])},,, memvar->colorarray[32] , , , , , ;
         gettrigger( memvar->colorarray[32] ) ) },, } )
 aadd( aelements, { ncurrline++, 11, " School ~Fees, Fee Rates & Charges  ",,, { || rights( "[2,4]" ) }, ;
-        { || SelectMenu( { { 08, 25, " Summary of ~School Fees Income     ",,, { || rights( "[2,4,1]" ) }, {|| feesincome()},, }, ;
-                           { 09, 25, " Summary of ~Miscellaneous Fees     ",,, { || rights( "[2,4,2]" ) }, {|| miscfees() },,},;
-                           { 10, 25, " Summary of ~Laboratory Fees        ",,, { || rights( "[2,4,3]" ) }, {|| laboratoryfees()},,},;
-                           { 11, 25, " Summary of ~Tuition and Collections ",,, { || rights( "[2,4,3]" ) }, {|| collegecollections()},,},;
-                           { 12, 25, " Summary of ~Special Courses Collections ",,, { || rights( "[2,4,3]" ) }, {|| trainingollections()},,},;
-                           { 13, 25, " Summary of S~pecial Courses Income ",,, { || rights( "[2,4,4]" ) }, {|| specialincome()},,}},;
+        { || SelectMenu( { { 08, 25, " Summary of ~School Fees Income     ",,, { || rights( "[2,4,1]" ) }, {|| feesincome()},, },;
+                           { 09, 25, " Summary of School Fees Income ~by Student" ,,, { || rights( "[2,4,1]" ) }, {|| studfeesincome()},, },;
+                           { 10, 25, " Summary of ~Miscellaneous Fees     ",,, { || rights( "[2,4,2]" ) }, {|| miscfees() },,},;
+                           { 11, 25, " Summary of ~Laboratory Fees        ",,, { || rights( "[2,4,3]" ) }, {|| laboratoryfees()},,},;
+                           { 12, 25, " Summary of ~Tuition and Collections ",,, { || rights( "[2,4,3]" ) }, {|| collegecollections()},,}},;
         { || draw_box2(07,24,12,60,memvar->colorarray[30],memvar->colorarray[31])},,, memvar->colorarray[32] , , , , , ;
         gettrigger( memvar->colorarray[32] ) ) },, } )
 aadd( aelements, { ncurrline++, 11, " Scholarships & Pri~vileges Report  ",,, { || rights( "[2,5]" ) }, ;

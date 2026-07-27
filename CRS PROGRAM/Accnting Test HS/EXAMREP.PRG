@@ -662,7 +662,7 @@ do while .t.
                 sectcod = ""
 
                
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,UC"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,UC,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Viewing of College ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "BasicEd Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
@@ -933,7 +933,7 @@ do while .t.
                         loop
                 endif
 
-                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,UC"
+                if ! ccolcode $ "K1,K2,N1,G1,G2,G3,G4,G5,G6,G7,G8,G9,GA,TM,GS,PB,ST,HU,UC,AG,OO,IC,AM,HE,AB,AH,ET,PS,HT"
                         fask(10,"Viewing of College ("+ccolcode+") is NOT ALLOWED in  ;"+;
                         "BasicEd Accounting Program",{" Ok "},memvar->colorarray[05],.t.,nil)
                         loop
